@@ -3,7 +3,7 @@
 // ===== ARGS ===================================
 function getScriptArgs(ns) {
     var scriptArgs = {
-        hackingTarget : ns.args[0]
+        destination : ns.args[0]
     };
     
     return scriptArgs;
@@ -35,13 +35,17 @@ export async function main(ns) {
 	}
 	
 	// - Real Script Logic ----------------------
-	ns.print("Starting script...");
+    ns.print("Starting script...");
     
-    await ns.wget("https://raw.githubusercontent.com/FlawlessCow/BitBurner/master/home/scripts/character/hacknet/hashmanager/ns2_hashmanager_run.js", "/beta/hashmanager.js");
+    await ns.wget("https://raw.githubusercontent.com/FlawlessCow/BitBurner/master/home/scripts/character/hacknet/hashmanager/ns2_hashmanager_run.js", "/pull.js");
+
+    pullBeta(ns)
 }
 
 // ===== FUNCTIONS ==============================
-
+async function pullBeta(ns){
+    await ns.wget("https://raw.githubusercontent.com/FlawlessCow/BitBurner/master/home/scripts/character/hacknet/hashmanager/ns2_hashmanager_run.js", "/beta/character/hacknet/hashmanager/run.js");
+}
 
 // ===== TESTS ==================================
 function executeTests(ns) {
