@@ -44,7 +44,8 @@ export async function main(ns) {
 
 // ===== TESTS ==================================
 function executeTests(ns) {
-	if (tests.testEnabled_exampleFunction) { test_exampleFunction(ns); }
+	if (tests.testEnabled_exampleFunction)
+		test_exampleFunction(ns);
 }
 
 function test_exampleFunction(ns) {
