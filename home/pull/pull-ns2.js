@@ -40,7 +40,7 @@ export async function main(ns) {
     await ns.wget("https://raw.githubusercontent.com/FlawlessCow/BitBurner/master/home/pull/pull_scripts-ns2.js", "/pull/pull_scripts-ns2.js");
 
     if(sArgs.destination === "beta" || sArgs.destination === "master") {
-		ns.run("/pull/pull_scripts-ns2.js", 1, sArgs.destination);
+		await ns.run("/pull/pull_scripts-ns2.js", 1, sArgs.destination);
 	}
 	else {
 		ns.tprint("===== ALERT ===== Not a valid argument");
