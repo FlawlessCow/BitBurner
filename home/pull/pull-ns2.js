@@ -37,25 +37,18 @@ export async function main(ns) {
 	// - Real Script Logic ----------------------
     ns.print("Starting script...");
     
-    await ns.wget("https://raw.githubusercontent.com/FlawlessCow/BitBurner/master/home/scripts/character/hacknet/hashmanager/ns2_hashmanager_run.js", "/pull.js");
+    await ns.wget("https://raw.githubusercontent.com/FlawlessCow/BitBurner/master/home/pull/pull_scripts-ns2.js", "/pull/pull_scripts-ns2.js");
 
-	if(sArgs.destination === "beta")	{
-		pullBeta(ns);
-	}
-	else if(sArgs.destination === "master")	{
-		pullMaster(ns);
+    if(sArgs.destination === "beta" || sArgs.destination === "master") {
+		run("pull/pull_scripts-ns2.js", 1, sArgs.destination);
 	}
 	else {
 		ns.tprint("===== ALERT ===== Not a valid argument");
 		ns.tprint("===== ALERT ===== sArgs.destination: " + sArgs.destination);
 	}
-    
 }
 
 // ===== FUNCTIONS ==============================
-async function pullBeta(ns){
-    await ns.wget("https://raw.githubusercontent.com/FlawlessCow/BitBurner/master/home/scripts/character/hacknet/hashmanager/ns2_hashmanager_run.js", "/beta/character/hacknet/hashmanager/run.js");
-}
 
 // ===== TESTS ==================================
 function executeTests(ns) {
