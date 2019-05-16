@@ -45,6 +45,7 @@ export async function main(ns) {
 	else {
 		ns.tprint("===== ALERT ===== Not a valid argument");
 		ns.tprint("===== ALERT ===== sArgs.destination: " + sArgs.destination);
+		ns.tprint("===== ALERT ===== Valid values: master, beta");
 	}
 }
 
