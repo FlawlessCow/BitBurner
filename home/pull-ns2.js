@@ -39,7 +39,17 @@ export async function main(ns) {
     
     await ns.wget("https://raw.githubusercontent.com/FlawlessCow/BitBurner/master/home/scripts/character/hacknet/hashmanager/ns2_hashmanager_run.js", "/pull.js");
 
-    pullBeta(ns)
+	if(sArgs.destination === "beta")	{
+		pullBeta(ns);
+	}
+	else if(sArgs.destination === "master")	{
+		pullMaster(ns);
+	}
+	else {
+		ns.tprint("===== ALERT ===== Not a valid argument");
+		ns.tprint("===== ALERT ===== sArgs.destination: " + sArgs.destination);
+	}
+    
 }
 
 // ===== FUNCTIONS ==============================
