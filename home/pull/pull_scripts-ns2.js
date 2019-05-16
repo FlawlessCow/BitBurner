@@ -36,7 +36,7 @@ export async function main(ns) {
 	
 	// - Real Script Logic ----------------------
     if(sArgs.destination === "beta" || sArgs.destination === "master") {
-		pull(ns, sArgs.destination);
+		await pull(ns, sArgs.destination);
 	}
 	else {
 		ns.tprint("===== ALERT ===== Not a valid argument");
