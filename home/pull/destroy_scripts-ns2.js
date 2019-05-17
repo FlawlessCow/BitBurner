@@ -62,6 +62,8 @@ async function destroy(ns, branch){
 		"/functions/getNumOpenablePorts-ns2.js",
 		"/functions/getRootAccess-ns1.script",
 		"/functions/getRootAccess-ns2.js",
+		// restart_run
+		"/restart_run/restart_run-ns1.script",
 		// templates
 		"/templates/ns1_template.js",
 		"/templates/ns2_template.js",
