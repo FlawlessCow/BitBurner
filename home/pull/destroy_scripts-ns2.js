@@ -63,7 +63,7 @@ async function destroy(ns, branch){
 	// bitBurner setup
 	var bitBurnerBranchPath = "/" + branch;
 	
-	for(i = 0; i < scripts.length; i++) {
+	for(var i = 0; i < scripts.length; i++) {
 		var scriptPath = scripts[i];
 		var destPath = bitBurnerBranchPath + scriptPath;
 

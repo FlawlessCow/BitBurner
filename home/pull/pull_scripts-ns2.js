@@ -67,7 +67,7 @@ async function pull(ns, branch){
 	// bitBurner setup
 	var bitBurnerBranchPath = "/" + branch;
 	
-	for(i = 0; i < scripts.length; i++) {
+	for(var i = 0; i < scripts.length; i++) {
 		var scriptPath = scripts[i];
 		var sourcePath = gitHubPrjectURL + gitHubBranchPath + gitHubScriptsPath + scriptPath
 		var destPath = bitBurnerBranchPath + scriptPath;
