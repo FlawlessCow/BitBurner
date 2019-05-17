@@ -45,19 +45,35 @@ export async function main(ns) {
 }
 
 // ===== FUNCTIONS ==============================
-async function pull(ns, rootPath){
-    rootPath = "/" + rootPath;
-    await ns.wget("https://raw.githubusercontent.com/FlawlessCow/BitBurner/master/home/scripts/buy_server/buy_server-ns1.js", rootPath + "/buy_server/buy_server-ns1.js");
+async function pull(ns, branch){
+	var scripts = [
+		// buy_server
+		"/buy_server/buy_server-ns1.js",
+		// hacknet
+		"/character/hacknet/hashmanager-ns2.js",
+		"/character/hacknet/node_autobuy-ns2.js",
+		"/character/hacknet/server_autobuy-ns2.js",
+		// deploy
+		"/deploy/kill_all-ns2.js",
+		"/deploy/server_teal_basic-ns2.js",
+		// templates
+		"/templates/ns1_template.js",
+		"/templates/ns2_template.js",
+	]
+	// gitHub Setup
+	var gitHubBranchPath = branch;
+	var gitHubPrjectURL = "https://raw.githubusercontent.com/FlawlessCow/BitBurner/";
+	var gitHubScriptsPath = "/home/scripts";
+	// bitBurner setup
+	var bitBurnerBranchPath = "/" + branch;
+	
+	for(i = 0; i < scripts.length; i++) {
+		var scriptPath = scripts[i];
+		var sourcePath = gitHubPrjectURL + gitHubBranchPath + gitHubScriptsPath + scriptPath
+		var destPath = bitBurnerBranchPath + scriptPath;
 
-    await ns.wget("https://raw.githubusercontent.com/FlawlessCow/BitBurner/master/home/scripts/character/hacknet/hashmanager-ns2.js", rootPath + "/character/hacknet/hashmanager-ns2.js");
-    await ns.wget("https://raw.githubusercontent.com/FlawlessCow/BitBurner/master/home/scripts/character/hacknet/node_autobuy-ns2.js", rootPath + "/character/hacknet/node_autobuy-ns2.js");
-    await ns.wget("https://raw.githubusercontent.com/FlawlessCow/BitBurner/master/home/scripts/character/hacknet/server_autobuy-ns2.js", rootPath + "/character/hacknet/server_autobuy-ns2.js");
-    
-    await ns.wget("https://raw.githubusercontent.com/FlawlessCow/BitBurner/master/home/scripts/deploy/kill_all-ns2.js", rootPath + "/deploy/kill_all-ns2.js");
-    await ns.wget("https://raw.githubusercontent.com/FlawlessCow/BitBurner/master/home/scripts/deploy/server_teal_basic-ns2.js", rootPath + "/deploy/server_teal_basic-ns2.js");
-    
-    await ns.wget("https://raw.githubusercontent.com/FlawlessCow/BitBurner/master/home/scripts/templates/ns1_template.js", rootPath + "/templates/ns1_template.js");
-    await ns.wget("https://raw.githubusercontent.com/FlawlessCow/BitBurner/master/home/scripts/templates/ns2_template.js", rootPath + "/templates/ns2_template.js");
+		await ns.wget(sourcePath, destPath);
+	}
 }
 
 // ===== TESTS ==================================
