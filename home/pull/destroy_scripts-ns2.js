@@ -57,11 +57,11 @@ async function destroy(ns, branch){
 		"/deploy/kill_all-ns2.js",
 		"/deploy/server_teal_basic-ns2.js",
 		// functions
-		"/functions/buildServerInfoArray.js",
-		"/functions/enumLib.script",
-		"/functions/getNumOpenablePorts.js",
-		"/functions/getRootAccess.js",
-		"/functions/getRootAccess.script",
+		"/functions/buildServerInfoArray-ns2.js",
+		"/functions/enumLib-ns1.script",
+		"/functions/getNumOpenablePorts-ns2.js",
+		"/functions/getRootAccess-ns1.script",
+		"/functions/getRootAccess-ns2.js",
 		// templates
 		"/templates/ns1_template.js",
 		"/templates/ns2_template.js",
