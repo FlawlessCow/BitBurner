@@ -38,6 +38,7 @@ export async function main(ns) {
     ns.print("Starting script...");
     
     await ns.wget("https://raw.githubusercontent.com/FlawlessCow/BitBurner/master/home/pull/pull_scripts-ns2.js", "/pull/pull_scripts-ns2.js");
+    await ns.wget("https://raw.githubusercontent.com/FlawlessCow/BitBurner/master/home/pull/pull_scripts-ns2.js", "/pull/destroy_scripts-ns2.js");
 
     if(sArgs.destination === "beta" || sArgs.destination === "master") {
 		await ns.run("/pull/pull_scripts-ns2.js", 1, sArgs.destination);
