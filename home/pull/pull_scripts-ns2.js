@@ -56,6 +56,12 @@ async function pull(ns, branch){
 		// deploy
 		"/deploy/kill_all-ns2.js",
 		"/deploy/server_teal_basic-ns2.js",
+		// functions
+		"/functions/buildServerInfoArray.js",
+		"/functions/enumLib.script",
+		"/functions/getNumOpenablePorts.js",
+		"/functions/getRootAccess.js",
+		"/functions/getRootAccess.script",
 		// templates
 		"/templates/ns1_template.js",
 		"/templates/ns2_template.js",

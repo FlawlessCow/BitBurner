@@ -1,0 +1,12 @@
+var ePortIndex_v1 = {
+	HACKING_TARGET: 1,
+};
+
+function getEnumPortIndexVersion (version) {
+	if (version === 1) {
+		return ePortIndex_v1;
+	}
+	else {
+		return ePortIndex_v1;
+	}
+}
