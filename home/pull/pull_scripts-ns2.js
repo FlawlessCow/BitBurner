@@ -59,7 +59,7 @@ async function pull(ns, branch){
 		// templates
 		"/templates/ns1_template.js",
 		"/templates/ns2_template.js",
-	]
+	];
 	// gitHub Setup
 	var gitHubBranchPath = branch;
 	var gitHubPrjectURL = "https://raw.githubusercontent.com/FlawlessCow/BitBurner/";
