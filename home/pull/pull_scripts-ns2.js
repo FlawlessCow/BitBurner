@@ -48,7 +48,7 @@ export async function main(ns) {
 async function pull(ns, branch){
 	var scripts = [
 		// buy_server
-		"/buy_server/buy_server-ns1.js",
+		"/buy_server/buy_server-ns1.script",
 		// hacknet
 		"/character/hacknet/hashmanager-ns2.js",
 		"/character/hacknet/node_autobuy-ns2.js",
@@ -63,7 +63,7 @@ async function pull(ns, branch){
 		"/functions/getRootAccess.js",
 		"/functions/getRootAccess.script",
 		// templates
-		"/templates/ns1_template.js",
+		"/templates/ns1_template.script",
 		"/templates/ns2_template.js",
 	];
 	// gitHub Setup
