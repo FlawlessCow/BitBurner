@@ -69,7 +69,7 @@ async function pull(ns, branch){
 	
 	for(var i = 0; i < scripts.length; i++) {
 		var scriptPath = scripts[i];
-		var sourcePath = gitHubPrjectURL + gitHubBranchPath + gitHubScriptsPath + scriptPath
+		var sourcePath = gitHubPrjectURL + gitHubBranchPath + gitHubScriptsPath + scriptPath;
 		var destPath = bitBurnerBranchPath + scriptPath;
 
 		await ns.wget(sourcePath, destPath);
