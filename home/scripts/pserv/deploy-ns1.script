@@ -1,0 +1,20 @@
+// ARGS
+var installScript = args[0];
+var hackTarget = args[1];
+
+// SETUP
+// build a list of pservs
+var serverList = getPurchasedServers();
+
+// FUNCTIONS
+
+// MAIN LOGIC
+// loop thru seach server
+for(i = 0; i < serverList.length; i++) {
+    
+    // get the server we're doing stuff on
+    thisServer = serverList[i];
+    
+    // run the new script installer
+    run(installScript, 1, thisServer, hackTarget);
+}

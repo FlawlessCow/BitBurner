@@ -57,6 +57,10 @@ export async function getScriptList(){
 		"/functions/getNumOpenablePorts-ns2.js",
 		"/functions/getRootAccess-ns1.script",
 		"/functions/getRootAccess-ns2.js",
+		// pserv
+		"/pserv/deploy-ns1.script",
+		"/pserv/killall_and_deploy-ns1.script",
+		"/pserv/killall-ns1.script",
 		// restart_run
 		"/restart_run/restart_run-ns1.script",
 		// templates
