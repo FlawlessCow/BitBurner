@@ -1,0 +1,83 @@
+// ===== IMPORTS ================================
+
+// ===== ARGS ===================================
+function getScriptArgs(ns) {
+    var scriptArgs = {
+        firstArg : ns.args[0]
+    };
+    
+    return scriptArgs;
+}
+
+// ===== VARS ===================================
+var sVars = {
+
+};
+
+var tests = {
+	enabled : true, // Master override for all tests
+	disableMain : false, // Disables all non-testing logic in main
+	testEnabled_getScriptList : true,
+};
+
+// ===== MAIN ===================================
+export async function main(ns) {
+	var sArgs = getScriptArgs(ns);
+	
+	// - Tests ----------------------------------
+	if (tests.enabled)
+		executeTests(ns);
+	
+	// - Early out ------------------------------
+	if (tests.disableMain) {
+		ns.tprint("WARNING: SCRIPT IS IN TEST ONLY MODE");
+		ns.exit();
+	}
+	
+	// - Real Script Logic ----------------------
+	ns.print("Starting script...");
+	ns.disableLog("ALL");
+}
+
+// ===== FUNCTIONS ==============================
+export async function getScriptList(){
+	var scripts = [
+		// buy_server
+		"/buy_server/buy_server-ns1.js",
+		// hacknet
+		"/character/hacknet/hashmanager-ns2.js",
+		"/character/hacknet/node_autobuy-ns2.js",
+		"/character/hacknet/server_autobuy-ns2.js",
+		// deploy
+		"/deploy/kill_all-ns2.js",
+		"/deploy/server_teal_basic-ns2.js",
+		// functions
+		"/functions/buildServerInfoArray-ns2.js",
+		"/functions/enumLib-ns1.script",
+		"/functions/getNumOpenablePorts-ns2.js",
+		"/functions/getRootAccess-ns1.script",
+		"/functions/getRootAccess-ns2.js",
+		// restart_run
+		"/restart_run/restart_run-ns1.script",
+		// templates
+		"/templates/ns1_template.js",
+		"/templates/ns2_template.js",
+	];
+
+	return scripts;
+}
+
+// ===== TESTS ==================================
+function executeTests(ns) {
+	if (tests.testEnabled_getScriptList)
+		test_getScriptList(ns);
+}
+
+function test_getScriptList(ns) {
+	ns.print("==== TEST: test_getScriptList ====");
+
+	scripts = getScriptList();
+	for (var i = 0; i < scripts.length; i++) {
+		ns.print(scripts[i]);
+	}
+}

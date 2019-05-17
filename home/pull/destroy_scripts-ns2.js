@@ -1,4 +1,5 @@
 // ===== IMPORTS ================================
+import { getScriptList } from "/pull/_getScriptList-ns2.js";
 
 // ===== ARGS ===================================
 function getScriptArgs(ns) {
@@ -46,28 +47,8 @@ export async function main(ns) {
 
 // ===== FUNCTIONS ==============================
 async function destroy(ns, branch){
-	var scripts = [
-		// buy_server
-		"/buy_server/buy_server-ns1.js",
-		// hacknet
-		"/character/hacknet/hashmanager-ns2.js",
-		"/character/hacknet/node_autobuy-ns2.js",
-		"/character/hacknet/server_autobuy-ns2.js",
-		// deploy
-		"/deploy/kill_all-ns2.js",
-		"/deploy/server_teal_basic-ns2.js",
-		// functions
-		"/functions/buildServerInfoArray-ns2.js",
-		"/functions/enumLib-ns1.script",
-		"/functions/getNumOpenablePorts-ns2.js",
-		"/functions/getRootAccess-ns1.script",
-		"/functions/getRootAccess-ns2.js",
-		// restart_run
-		"/restart_run/restart_run-ns1.script",
-		// templates
-		"/templates/ns1_template.js",
-		"/templates/ns2_template.js",
-	];
+	var scripts = getScriptList();
+	
 	// bitBurner setup
 	var bitBurnerBranchPath = "/" + branch;
 	
