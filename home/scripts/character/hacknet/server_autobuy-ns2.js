@@ -344,11 +344,16 @@ function evaluateImprovingCaches(ns) {
 	var ramUpgradeCost = ns.hacknet.getRamUpgradeCost(baseNode, 1);
 	var coreUpgradeCost = ns.hacknet.getCoreUpgradeCost(baseNode, 1);
 	var cacheUpgradeCost = ns.hacknet.getCacheUpgradeCost(baseNode, 1);
+	 // Multipliers on cost to be less than, lower means longer time between buying caches
+	var levelCostModifier = 0.50;
+	var ramCostModifier = 0.50;
+	var coreCostModifier = 0.50;
+	var cacheCostModifier = 0.50;
 	
-	if (cacheUpgradeCost < newNodeCost &&
-		cacheUpgradeCost < levelUpgradeCost &&
-		cacheUpgradeCost < ramUpgradeCost &&
-		cacheUpgradeCost < coreUpgradeCost
+	if (cacheUpgradeCost < newNodeCost*levelCostModifier &&
+		cacheUpgradeCost < levelUpgradeCost*ramCostModifier &&
+		cacheUpgradeCost < ramUpgradeCost*coreCostModifier &&
+		cacheUpgradeCost < coreUpgradeCost*cacheCostModifier 
 	) {
 		shouldBuy = true;
 	}
