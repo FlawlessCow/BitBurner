@@ -43,7 +43,7 @@ export async function main(ns) {
 export function getScriptList(){
 	var scripts = [
 		// buy_server
-		"/buy_server/buy_server-ns1.js",
+		"/buy_server/buy_server-ns1.script",
 		// hacknet
 		"/character/hacknet/hashmanager-ns2.js",
 		"/character/hacknet/node_autobuy-ns2.js",
