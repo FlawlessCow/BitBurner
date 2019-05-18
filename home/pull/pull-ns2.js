@@ -49,6 +49,8 @@ export async function main(ns) {
 		ns.tprint("===== ALERT ===== sArgs.destination: " + sArgs.destination);
 		ns.tprint("===== ALERT ===== Valid values: master, beta");
 	}
+
+	ns.tprint("Pull complete!");
 }
 
 // ===== FUNCTIONS ==============================
