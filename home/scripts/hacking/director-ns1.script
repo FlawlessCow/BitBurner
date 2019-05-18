@@ -1,169 +1,197 @@
-// ========= IMPORTS  ========= 
-import * as enumLib from "/master/functions/enumLib-ns1.script";
-ePortIndex = enumLib.getEnumPortIndexVersion(1);
+// ===== IMPORTS ================================
+import * as bsi from "/master/functions/buildServerInfoArray-ns2.js";
+import * as hpn from "/master/functions/getNumOpenablePorts-ns2.js";
+import * as gra from "/master/functions/getRootAccess-ns2.js";
+import * as enumLib from "/master/functions/enumLib-ns2.js";
+var ePortIndex = enumLib.getEnumPortIndexVersion(1);
 
-// ========== ARGS ============ 
-var sArgs = {
+// ===== ARGS ===================================
+function getScriptArgs(ns) {
+    var scriptArgs = {
+        firstArg : ns.args[0]
+    };
+    
+    return scriptArgs;
+}
 
-};
-
-// ========== VARS ============
+// ===== VARS ===================================
 var sVars = {
 
 };
 
-// ========= FUNCTIONS ========= 
-function getTargetInfo(target) {
-	print("Getting info for " + target + "...");
-	var targetInfo = {
-		name : target,
-		moneyAvailable : getServerMoneyAvailable(target),
-		maxMoney : getServerMaxMoney(target),
-		growth : getServerGrowth(target),
-		securityLevel : getServerSecurityLevel(target),
-		baseSecurityLevel : getServerBaseSecurityLevel(target),
-		minSecurityLevel : getServerMinSecurityLevel(target),
-		requiredHackingLevel : getServerRequiredHackingLevel(target),
-		numPortsRequired : getServerNumPortsRequired(target),
-		ram : getServerRam(target)[0],
-	};
+var tests = {
+	enabled : true, // Master override for all tests
+	disableMain : true, // Disables all non-testing logic in main
+	testEnabled_exampleFunction : false,
+	testEnabled_portPeekObjectTest : false,
+	testEnabled_portReadObjectTest : false,
+	testEnabled_sortTest : false,
+	testEnabled_statDumpTest : true,
+};
+
+// ===== MAIN ===================================
+export async function main(ns) {
+	var sArgs = getScriptArgs(ns);
+
+	var targetList = [
+		bsi.getTargetInfo("foodnstuff"),
+		bsi.getTargetInfo("the-hub"),
+		bsi.getTargetInfo("joesguns"),
+		bsi.getTargetInfo("4sigma"),
+	];
 	
-	return targetInfo;
-}
-
-// ========== LOGIC ==========
-disableLog("ALL");
-
-// Enabling certain sections of the script/testing
-var mainScriptEnabled = false;
-var portPeekObjectTestEnabled = false;
-var portReadObjectTestEnabled = false;
-var statDumpTestEnabled = true;
-var sortTestEnabled = false;
-
-var targetList = [
-	getTargetInfo("foodnstuff"),
-	getTargetInfo("the-hub"),
-	getTargetInfo("joesguns"),
-	getTargetInfo("4sigma"),
-];
-
-if(mainScriptEnabled) {
+	// - Tests ----------------------------------
+	if (tests.enabled)
+		executeTests(ns);
+	
+	// - Early out ------------------------------
+	if (tests.disableMain) {
+		ns.tprint("WARNING: SCRIPT IS IN TEST ONLY MODE");
+		ns.exit();
+	}
+	
+	// - Real Script Logic ----------------------
+	ns.print("Starting script...");
+	ns.disableLog("ALL");
+		
 	var hackTarget = targetList[0].name;
-	print("Setting a default hackTarget: " + hackTarget);
-	write(ePortIndex.PRIMARY_HACKING_TARGET, hackTarget);
+	ns.print("Setting a default hackTarget: " + hackTarget);
+	ns.write(ePortIndex.PRIMARY_HACKING_TARGET, hackTarget);
 	
-	print("Sorting by requiredHackingLevel, low -> high");
+	ns.print("Sorting by requiredHackingLevel, low -> high");
 	targetList.sort(function (a, b) {
 		return a.requiredHackingLevel - b.requiredHackingLevel;
 	});
 	
 	hackTarget = targetList[0].name;
-	print("Setting hack target to the lowest requiredHackingLevel, which is: " + hackTarget);
-	write(ePortIndex.PRIMARY_HACKING_TARGET, hackTarget);
+	ns.print("Setting hack target to the lowest requiredHackingLevel, which is: " + hackTarget);
+	ns.write(ePortIndex.PRIMARY_HACKING_TARGET, hackTarget);
 	
 	
-	print("Sorting by maxMoney...");
+	ns.print("Sorting by maxMoney...");
 	targetList.sort(function (a, b) {
 		return b.maxMoney - a.maxMoney;
 	});
 }
 
-// ========== TESTS ==========
-if(portPeekObjectTestEnabled) {
-    print("running portPeekObjectTest");
+// ===== FUNCTIONS ==============================
 
-    clear(ePortIndex.PRIMARY_HACKING_TARGET);
+// ===== TESTS ==================================
+function executeTests(ns) {
+	if (tests.testEnabled_portPeekObjectTest)
+		test_portPeekObjectTest(ns);
+	if (tests.testEnabled_portReadObjectTest)
+		test_portReadObjectTest(ns);
+	if (tests.testEnabled_sortTest)
+		test_sortTest(ns);
+	if (tests.testEnabled_statDumpTest)
+		test_statDumpTest(ns);
+}
+
+function test_portPeekObjectTest(ns) {
+	ns.print("==== TEST: test_portPeekObjectTest ====");
+
+    ns.print("running portPeekObjectTest");
+
+    ns.clear(ePortIndex.PRIMARY_HACKING_TARGET);
 	
-	write(ePortIndex.PRIMARY_HACKING_TARGET, targetList);
+	ns.write(ePortIndex.PRIMARY_HACKING_TARGET, targetList);
 	
-	print("Peeking at port contents: " + peek(ePortIndex.PRIMARY_HACKING_TARGET));
+	ns.print("Peeking at port contents: " + peek(ePortIndex.PRIMARY_HACKING_TARGET));
 	
-	print("Peeking at port contents.name: " + peek(ePortIndex.PRIMARY_HACKING_TARGET).name);
+	ns.print("Peeking at port contents.name: " + peek(ePortIndex.PRIMARY_HACKING_TARGET).name);
 	
-	print("Peeking again but storing...");
-	peekTargetListA = peek(ePortIndex.PRIMARY_HACKING_TARGET);
+	ns.print("Peeking again but storing...");
+	peekTargetListA = ns.peek(ePortIndex.PRIMARY_HACKING_TARGET);
 	
-	print("targetList Length: " + targetList.length);
-	print("peekTargetListA Length: " + peekTargetListA.length);
+	ns.print("targetList Length: " + targetList.length);
+	ns.print("peekTargetListA Length: " + peekTargetListA.length);
 
 	for (i = 0; i < peekTargetListA.length; i++) {
-		print("name: " + peekTargetListA[i].name);
-		print("moneyAvailable: " + peekTargetListA[i].moneyAvailable);
-		print("maxMoney: " + peekTargetListA[i].maxMoney);
-		print("growth: " + peekTargetListA[i].growth);
-		print("securityLevel: " + peekTargetListA[i].securityLevel);
-		print("baseSecurityLevel: " + peekTargetListA[i].baseSecurityLevel);
-		print("minSecurityLevel: " + peekTargetListA[i].minSecurityLevel);
-		print("requiredHackingLevel: " + peekTargetListA[i].requiredHackingLevel);
-		print("numPortsRequired: " + peekTargetListA[i].numPortsRequired);
-		print("ram: " + peekTargetListA[i].ram);
+		ns.print("name: " + peekTargetListA[i].name);
+		ns.print("moneyAvailable: " + peekTargetListA[i].moneyAvailable);
+		ns.print("maxMoney: " + peekTargetListA[i].maxMoney);
+		ns.print("growth: " + peekTargetListA[i].growth);
+		ns.print("securityLevel: " + peekTargetListA[i].securityLevel);
+		ns.print("baseSecurityLevel: " + peekTargetListA[i].baseSecurityLevel);
+		ns.print("minSecurityLevel: " + peekTargetListA[i].minSecurityLevel);
+		ns.print("requiredHackingLevel: " + peekTargetListA[i].requiredHackingLevel);
+		ns.print("numPortsRequired: " + peekTargetListA[i].numPortsRequired);
+		ns.print("ram: " + peekTargetListA[i].ram);
 	}
+
 }
 
-if(portReadObjectTestEnabled) {
+function test_portReadObjectTest(ns) {
+	ns.print("==== TEST: test_portReadObjectTest ====");
+
 	//10:30pm notes: Peek is working, but read is not. Weird. Not sure what's up. Sigh.
 
-	print("running portReadObjectTest");
-	write(ePortIndex.PRIMARY_HACKING_TARGET, targetList);
-	print(peek(ePortIndex.PRIMARY_HACKING_TARGET));
-	readTargetList = read(ePortIndex.PRIMARY_HACKING_TARGET);
-	print("targetList Length: " + targetList.length);
-	print("readTargetList Length: " + readTargetList.length);
+	ns.print("running portReadObjectTest");
+	ns.write(ePortIndex.PRIMARY_HACKING_TARGET, targetList);
+	ns.print(peek(ePortIndex.PRIMARY_HACKING_TARGET));
+	readTargetList = ns.read(ePortIndex.PRIMARY_HACKING_TARGET);
+	ns.print("targetList Length: " + targetList.length);
+	ns.print("readTargetList Length: " + readTargetList.length);
 
 	for (i = 0; i < readTargetList.length; i++) {
-		print("name: " + readTargetList[i].name);
-		print("moneyAvailable: " + readTargetList[i].moneyAvailable);
-		print("maxMoney: " + readTargetList[i].maxMoney);
-		print("growth: " + readTargetList[i].growth);
-		print("securityLevel: " + readTargetList[i].securityLevel);
-		print("baseSecurityLevel: " + readTargetList[i].baseSecurityLevel);
-		print("minSecurityLevel: " + readTargetList[i].minSecurityLevel);
-		print("requiredHackingLevel: " + readTargetList[i].requiredHackingLevel);
-		print("numPortsRequired: " + readTargetList[i].numPortsRequired);
-		print("ram: " + readTargetList[i].ram);
+		ns.print("name: " + readTargetList[i].name);
+		ns.print("moneyAvailable: " + readTargetList[i].moneyAvailable);
+		ns.print("maxMoney: " + readTargetList[i].maxMoney);
+		ns.print("growth: " + readTargetList[i].growth);
+		ns.print("securityLevel: " + readTargetList[i].securityLevel);
+		ns.print("baseSecurityLevel: " + readTargetList[i].baseSecurityLevel);
+		ns.print("minSecurityLevel: " + readTargetList[i].minSecurityLevel);
+		ns.print("requiredHackingLevel: " + readTargetList[i].requiredHackingLevel);
+		ns.print("numPortsRequired: " + readTargetList[i].numPortsRequired);
+		ns.print("ram: " + readTargetList[i].ram);
 	}
 }
 
-if(sortTestEnabled) {
+function test_sortTest(ns) {
+	ns.print("==== TEST: test_sortTest ====");
+
 	for (i = 0; i < targetList.length; i++) {
-		print("name: " + targetList[i].name);
-		print("maxMoney: " + targetList[i].maxMoney);
-		print("requiredHackingLevel: " + targetList[i].requiredHackingLevel);
-		print("numPortsRequired: " + targetList[i].numPortsRequired);
+		ns.print("name: " + targetList[i].name);
+		ns.print("maxMoney: " + targetList[i].maxMoney);
+		ns.print("requiredHackingLevel: " + targetList[i].requiredHackingLevel);
+		ns.print("numPortsRequired: " + targetList[i].numPortsRequired);
 	}
 	
-	print("sorting...");
+	ns.print("sorting...");
 	targetList.sort(function (a, b) {
 		return b.maxMoney - a.maxMoney;
 	});
 	
 	for (i = 0; i < targetList.length; i++) {
-		print("name: " + targetList[i].name);
-		print("maxMoney: " + targetList[i].maxMoney);
-		print("requiredHackingLevel: " + targetList[i].requiredHackingLevel);
-		print("numPortsRequired: " + targetList[i].numPortsRequired);
+		ns.print("name: " + targetList[i].name);
+		ns.print("maxMoney: " + targetList[i].maxMoney);
+		ns.print("requiredHackingLevel: " + targetList[i].requiredHackingLevel);
+		ns.print("numPortsRequired: " + targetList[i].numPortsRequired);
 	}
+
 }
 
-if(statDumpTestEnabled) {
+function test_statDumpTest(ns) {
+	ns.print("==== TEST: test_statDumpTest ====");
+
 	for (i = 0; i < targetList.length; i++) {
-		print("name: " + targetList[i].name);
-		print("moneyAvailable: " + targetList[i].moneyAvailable);
-		print("maxMoney: " + targetList[i].maxMoney);
-		print("growth: " + targetList[i].growth);
-		print("securityLevel: " + targetList[i].securityLevel);
-		print("baseSecurityLevel: " + targetList[i].baseSecurityLevel);
-		print("minSecurityLevel: " + targetList[i].minSecurityLevel);
-		print("requiredHackingLevel: " + targetList[i].requiredHackingLevel);
-		print("numPortsRequired: " + targetList[i].numPortsRequired);
-		print("ram: " + targetList[i].ram);
+		ns.print("name: " + targetList[i].name);
+		ns.print("moneyAvailable: " + targetList[i].moneyAvailable);
+		ns.print("maxMoney: " + targetList[i].maxMoney);
+		ns.print("growth: " + targetList[i].growth);
+		ns.print("securityLevel: " + targetList[i].securityLevel);
+		ns.print("baseSecurityLevel: " + targetList[i].baseSecurityLevel);
+		ns.print("minSecurityLevel: " + targetList[i].minSecurityLevel);
+		ns.print("requiredHackingLevel: " + targetList[i].requiredHackingLevel);
+		ns.print("numPortsRequired: " + targetList[i].numPortsRequired);
+		ns.print("ram: " + targetList[i].ram);
 	}
 }
 
-/* Reference
-write()
-tryWrite()
+/* ===== REFERENCE ==============================
+ns.write()
+ns.trywrite()
 read()
 peek()
 clear()

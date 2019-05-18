@@ -54,6 +54,7 @@ export function getScriptList(){
 		// functions
 		"/functions/buildServerInfoArray-ns2.js",
 		"/functions/enumLib-ns1.script",
+		"/functions/enumLib-ns2.js",
 		"/functions/getNumOpenablePorts-ns2.js",
 		"/functions/getRootAccess-ns1.script",
 		"/functions/getRootAccess-ns2.js",
