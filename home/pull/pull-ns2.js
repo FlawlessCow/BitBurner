@@ -37,7 +37,7 @@ export async function main(ns) {
 	// - Real Script Logic ----------------------
     ns.print("Starting script...");
     
-    await ns.wget("https://raw.githubusercontent.com/FlawlessCow/BitBurner/master/home/pull/_getScriptsList-ns2.js", "/pull/_getScriptsList-ns2.js");
+    await ns.wget("https://raw.githubusercontent.com/FlawlessCow/BitBurner/master/home/pull/_getScriptList-ns2.js", "/pull/_getScriptList-ns2.js");
     await ns.wget("https://raw.githubusercontent.com/FlawlessCow/BitBurner/master/home/pull/pull_scripts-ns2.js", "/pull/pull_scripts-ns2.js");
     await ns.wget("https://raw.githubusercontent.com/FlawlessCow/BitBurner/master/home/pull/destroy_scripts-ns2.js", "/pull/destroy_scripts-ns2.js");
 
