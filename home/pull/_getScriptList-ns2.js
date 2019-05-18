@@ -50,7 +50,7 @@ export function getScriptList(){
 		"/character/hacknet/server_autobuy-ns2.js",
 		// deploy
 		"/deploy/kill_all-ns2.js",
-		"/deploy/server_teal_basic-ns2.js",
+		"/deploy/server_steal_basic-ns2.js",
 		// functions
 		"/functions/buildServerInfoArray-ns2.js",
 		"/functions/enumLib-ns1.script",
