@@ -16,6 +16,7 @@ var sVars = {
 	nodeCoresLimit: 16,
 	nodeCacheLimit: 5,
 	moneySpendLimitPercent: 0.90,
+	recoupTimeCap: 6*60*60, // 6 hours in seconds
 };
 
 var buy = {
@@ -69,7 +70,7 @@ export async function main(ns) {
 
 	while (!done) {
 		// check to see what to buy
-		thingToBuy = evaluateHacknetPurchaseOptions(ns, sVars.nodeCountLimit, sVars.nodeLevelLimit, sVars.nodeRamLimit, sVars.nodeCoresLimit, playerMultipliers);
+		thingToBuy = evaluateHacknetPurchaseOptions(ns, sVars.nodeCountLimit, sVars.nodeLevelLimit, sVars.nodeRamLimit, sVars.nodeCoresLimit, playerMultipliers, sVars.recoupTimeCap);
 
 		// buy the right thing
 		switch(thingToBuy){
@@ -248,7 +249,7 @@ function getAllLowestHacknetNodeStats(ns) {
     return allLowestNodeStats;
 }
 
-function evaluateHacknetPurchaseOptions(ns, maxNodes, maxLevel, maxRam, maxCores, playerMultipliers) {
+function evaluateHacknetPurchaseOptions(ns, maxNodes, maxLevel, maxRam, maxCores, playerMultipliers, recoupTimeCap) {
     ns.print("Evaluationg what to buy...");
 	// we're just going to go off the first node, assuming all others are updgraded
 	var currentNodeCount = ns.hacknet.numNodes();
@@ -306,27 +307,27 @@ function evaluateHacknetPurchaseOptions(ns, maxNodes, maxLevel, maxRam, maxCores
 	ns.print("--- coresRecoupTime:" + ns.nFormat(coresRecoupTime, "0,0"));
 	var minRecoupTime = Math.min(bareNodeRecoupTime, upgradedNodeRecoupTime, levelRecoupTime, ramRecoupTime, coresRecoupTime);
 	
-	if (bareNodeRecoupTime === minRecoupTime)
+	if (bareNodeRecoupTime === minRecoupTime && bareNodeRecoupTime < recoupTimeCap)
 	{
         ns.print("Choosing to buy a node");
         return buy.node;
 	}	
-	else if (upgradedNodeRecoupTime === minRecoupTime)
+	else if (upgradedNodeRecoupTime === minRecoupTime && upgradedNodeRecoupTime < recoupTimeCap)
 	{
         ns.print("Choosing to buy a node");
         return buy.node;
 	}	
-    else if (levelRecoupTime === minRecoupTime)
+    else if (levelRecoupTime === minRecoupTime && levelRecoupTime < recoupTimeCap)
     {
         ns.print("Choosing to buy a level");
         return buy.level;
     }
-    else if (ramRecoupTime === minRecoupTime)
+    else if (ramRecoupTime === minRecoupTime && ramRecoupTime < recoupTimeCap)
     {
         ns.print("Choosing to buy ram");
         return buy.ram;
     }
-    else if (coresRecoupTime === minRecoupTime)
+    else if (coresRecoupTime === minRecoupTime && coresRecoupTime < recoupTimeCap)
     {
         ns.print("Choosing to buy cores");
         return buy.cores;
