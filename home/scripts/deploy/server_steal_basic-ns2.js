@@ -1,7 +1,7 @@
 // ===== IMPORTS ==============
-import * as bsi from "/scripts/functions/buildServerInfoArray.js";
-import * as hpn from "/scripts/functions/getNumOpenablePorts.js";
-import * as gra from "/scripts/functions/getRootAccess.js";
+import * as bsi from "/master/functions/buildServerInfoArray-ns2.js";
+import * as hpn from "/master/functions/getNumOpenablePorts-ns2.js";
+import * as gra from "/master/functions/getRootAccess-ns2.js";
 
 // ===== ARGS =================
 function getScriptArgs(ns)
@@ -15,7 +15,7 @@ function getScriptArgs(ns)
 
 // ===== VARS =================
 var sVars = {
-    installScript : "/scripts/hacking/basic/install_and_run.script",
+    installScript : "/master/hacking/basic/install_and_run-ns1.script",
 };
 
 var tests = {

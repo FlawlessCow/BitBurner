@@ -4,14 +4,14 @@ var hackTargetServ = args[1];
 
 // files to copy over
 var scripts = [
-    "/scripts/functions/getRootAccess.script",
-    "/scripts/hacking_2_0/run.script",
-    "/scripts/hacking_2_0/helpers/grow_target.script",
-    "/scripts/hacking_2_0/helpers/hack_target.script",
-    "/scripts/hacking_2_0/helpers/weaken_target.script"
+    "/master/functions/getRootAccess-ns1.script",
+    "/master/hacking/advanced/run-ns1.script",
+    "/master/hacking/helpers/grow_target-ns1.script",
+    "/master/hacking/helpers/hack_target-ns1.script",
+    "/master/hacking/helpers/weaken_target-ns1.script"
     ];
 
-var primaryScript = "/scripts/hacking_2_0/run.script";
+var primaryScript = "/master/hacking/advanced/run-ns1.script";
 
 var sourceServer = "home";
 

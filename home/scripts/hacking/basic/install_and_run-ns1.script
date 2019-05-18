@@ -11,10 +11,10 @@ var sArgs = {
 var sVars = {
 	threadLimit : 100, //If this gets too high, server security can get out of control
 	scriptsToCopy : [
-			"/scripts/functions/getRootAccess.script",
-			"/scripts/hacking/basic/run.script",
+			"/master/functions/getRootAccess-ns1.script",
+			"/master/hacking/basic/run-ns1.script",
 		],
-	scriptToRun : "/scripts/hacking/basic/run.script",
+	scriptToRun : "/master/hacking/basic/run-ns1.script",
 	sourceServer : "home",
 };
 

@@ -1,5 +1,5 @@
 // ========= IMPORTS  ========= 
-import * as enumLib from "/scripts/functions/enumLib.script";
+import * as enumLib from "/master/functions/enumLib-ns1.script";
 ePortIndex = enumLib.getEnumPortIndexVersion(1);
 
 // ========== ARGS ============ 

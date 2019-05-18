@@ -8,7 +8,7 @@ var hackTarget = args[0];
 var desiredRam = args[1];
 var availableCashMod = 0.70;
 var ramIncreaseFactor = 16;
-var setupScriptName = "/scripts/hacking/basic/install_and_run.script";
+var setupScriptName = "/master/hacking/basic/install_and_run-ns1.script";
 
 if(desiredRam > getPurchasedServerMaxRam()) {
 	tprint("buy_server.script: desiredRam (args[1]) exceeds getPurchasedServerMaxRam. Exiting.");

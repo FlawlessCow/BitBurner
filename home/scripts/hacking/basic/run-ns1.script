@@ -1,5 +1,5 @@
 // ===== IMPORTS ==============
-import {getRootAccess} from "/scripts/functions/getRootAccess.script";
+import {getRootAccess} from "/master/functions/getRootAccess-ns1.script";
 
 // ===== ARGS =================
 var sArgs = {
