@@ -88,8 +88,8 @@ function setup1PortBasicHacks(serverList, hackingScript, hackingScriptTarget) {
 
 // ========== LOGIC ==========
 run("/master/character/hacknet/server_autobuy-ns2.js");
-run("/master/character/hacknet/hashManager-ns2.js");
-run("/master/buy_server-ns1.script", 1, sVars.pservHackTarget, sVars.pservStartingRamAmount);
+run("/master/character/hacknet/hashmanager-ns2.js");
+run("/master/buy_server/buy_server-ns1.script", 1, sVars.pservHackTarget, sVars.pservStartingRamAmount);
 // run("/master/hacking/advanced/run-ns1.script", 1, sVars.homeHackTarget);
 setup0PortBasicHacks(sVars.servers0Port, sVars.basicHackingScript, sVars.basicHackingScriptTarget);
 setup1PortBasicHacks(sVars.servers1Port, sVars.basicHackingScript, sVars.basicHackingScriptTarget);
