@@ -1,11 +1,14 @@
-// ===== IMPORTS ==============
+// ===== IMPORTS ================================
 
-// ===== ARGS ================= 
-var sArgs = {
-
-};
-
-// ===== VARS =================
+// ===== ARGS ===================================
+function getScriptArgs(ns) {
+    var scriptArgs = {
+        firstArg : ns.args[0]
+    };
+    
+    return scriptArgs;
+}
+// ===== VARS ===================================
 var sVars = {
 	nodeCountLimit: 24,
 	nodeLevelLimit: 200,
@@ -24,8 +27,27 @@ var buy = {
 	cache: 4,
 };
 
-// ===== MAIN =================
+var tests = {
+	enabled : false, // Master override for all tests
+	disableMain : false, // Disables all non-testing logic in main
+	testEnabled_exampleFunction : false,
+};
+
+// ===== MAIN ===================================
 export async function main(ns) {
+	var sArgs = getScriptArgs(ns);
+	
+	// - Tests ----------------------------------
+	if (tests.enabled)
+		executeTests(ns);
+	
+	// - Early out ------------------------------
+	if (tests.disableMain) {
+		ns.tprint("WARNING: SCRIPT IS IN TEST ONLY MODE");
+		ns.exit();
+	}
+	
+	// - Real Script Logic ----------------------
 	ns.print("Starting main function");
 	ns.disableLog("getServerMoneyAvailable");
 	ns.disableLog("sleep");
@@ -85,7 +107,7 @@ export async function main(ns) {
 	}
 }
 
-// ===== FUNCTIONS ============
+// ===== FUNCTIONS ==============================
 function getMyMoney(ns) {
     return ns.getServerMoneyAvailable("home");
 }
@@ -597,4 +619,15 @@ async function upgradeAllToMatchBaseNodeAsync(ns) {
 		await upgradeNodeToDesiredCoresAsync(ns, nodeIndex, desiredCores);
 	await upgradeNodeToDesiredCacheAsync(ns, newNodeIndex, desiredCache);
     }
+}
+
+// ===== TESTS ==================================
+function executeTests(ns) {
+	if (tests.testEnabled_exampleFunction)
+		test_exampleFunction(ns);
+}
+
+function test_exampleFunction(ns) {
+	ns.print("==== TEST: test_exampleFunction ====");
+
 }
