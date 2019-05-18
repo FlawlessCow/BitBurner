@@ -51,7 +51,7 @@ var targetList = [
 if(mainScriptEnabled) {
 	var hackTarget = targetList[0].name;
 	print("Setting a default hackTarget: " + hackTarget);
-	write(ePortIndex.HACKING_TARGET, hackTarget);
+	write(ePortIndex.PRIMARY_HACKING_TARGET, hackTarget);
 	
 	print("Sorting by requiredHackingLevel, low -> high");
 	targetList.sort(function (a, b) {
@@ -60,7 +60,7 @@ if(mainScriptEnabled) {
 	
 	hackTarget = targetList[0].name;
 	print("Setting hack target to the lowest requiredHackingLevel, which is: " + hackTarget);
-	write(ePortIndex.HACKING_TARGET, hackTarget);
+	write(ePortIndex.PRIMARY_HACKING_TARGET, hackTarget);
 	
 	
 	print("Sorting by maxMoney...");
@@ -73,16 +73,16 @@ if(mainScriptEnabled) {
 if(portPeekObjectTestEnabled) {
     print("running portPeekObjectTest");
 
-    clear(ePortIndex.HACKING_TARGET);
+    clear(ePortIndex.PRIMARY_HACKING_TARGET);
 	
-	write(ePortIndex.HACKING_TARGET, targetList);
+	write(ePortIndex.PRIMARY_HACKING_TARGET, targetList);
 	
-	print("Peeking at port contents: " + peek(ePortIndex.HACKING_TARGET));
+	print("Peeking at port contents: " + peek(ePortIndex.PRIMARY_HACKING_TARGET));
 	
-	print("Peeking at port contents.name: " + peek(ePortIndex.HACKING_TARGET).name);
+	print("Peeking at port contents.name: " + peek(ePortIndex.PRIMARY_HACKING_TARGET).name);
 	
 	print("Peeking again but storing...");
-	peekTargetListA = peek(ePortIndex.HACKING_TARGET);
+	peekTargetListA = peek(ePortIndex.PRIMARY_HACKING_TARGET);
 	
 	print("targetList Length: " + targetList.length);
 	print("peekTargetListA Length: " + peekTargetListA.length);
@@ -105,9 +105,9 @@ if(portReadObjectTestEnabled) {
 	//10:30pm notes: Peek is working, but read is not. Weird. Not sure what's up. Sigh.
 
 	print("running portReadObjectTest");
-	write(ePortIndex.HACKING_TARGET, targetList);
-	print(peek(ePortIndex.HACKING_TARGET));
-	readTargetList = read(ePortIndex.HACKING_TARGET);
+	write(ePortIndex.PRIMARY_HACKING_TARGET, targetList);
+	print(peek(ePortIndex.PRIMARY_HACKING_TARGET));
+	readTargetList = read(ePortIndex.PRIMARY_HACKING_TARGET);
 	print("targetList Length: " + targetList.length);
 	print("readTargetList Length: " + readTargetList.length);
 
