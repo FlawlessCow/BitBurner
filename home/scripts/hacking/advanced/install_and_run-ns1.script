@@ -1,0 +1,19 @@
+// args
+var destServ = args[0];
+var hackTargetServ = args[1];
+
+// files to copy over
+var scripts = [
+    "/scripts/functions/getRootAccess.script",
+    "/scripts/hacking_2_0/run.script",
+    "/scripts/hacking_2_0/helpers/grow_target.script",
+    "/scripts/hacking_2_0/helpers/hack_target.script",
+    "/scripts/hacking_2_0/helpers/weaken_target.script"
+    ];
+
+var primaryScript = "/scripts/hacking_2_0/run.script";
+
+var sourceServer = "home";
+
+scp(scripts, sourceServer, destServ);
+exec(primaryScript, destServ, 1, hackTargetServ);

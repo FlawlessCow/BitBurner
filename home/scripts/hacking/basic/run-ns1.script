@@ -1,0 +1,63 @@
+// ===== IMPORTS ==============
+import {getRootAccess} from "/scripts/functions/getRootAccess.script";
+
+// ===== ARGS =================
+var sArgs = {
+	target : args[0],	// Target to hack
+};
+
+// ===== VARS =================
+var sVars = {
+	moneyThreshModPcnt : 0.75,
+	securityThreshModAdd : 5,
+};
+
+var tests = {
+	enabled : false, // Master override for all tests
+	testExampleEnabled : false,
+};
+
+// ===== MAIN =================
+main();
+
+function main() {
+	// Setting up some thresholds
+	var moneyThresh = getServerMaxMoney(sArgs.target) * sVars.moneyThreshModPcnt;
+	var securityThresh = getServerMinSecurityLevel(sArgs.target) + sVars.securityThreshModAdd;
+
+	// Get root access if I don't have it
+	if (hasRootAccess(sArgs.target) === false) {
+		getRootAccess(sArgs.target);
+	}
+
+	while(true) {
+		if (getServerSecurityLevel(sArgs.target) > securityThresh) {
+			// If the server's security level is above our threshold, weaken it
+			weaken(sArgs.target);
+		} else if (getServerMoneyAvailable(sArgs.target) < moneyThresh) {
+			// If the server's money is less than our threshold, grow it
+			grow(sArgs.target);
+		} else {
+			// Otherwise, hack it
+			hack(sArgs.target);
+		}
+	}
+	
+	// Tests
+	if (tests.enabled)
+		executeTests();
+}
+
+// ===== FUNCTIONS ============
+
+
+// ===== TESTS ================
+function executeTests(ns) {
+	if (tests.testExampleEnabled)
+		testExample(ns);
+}
+
+function testExample(ns) {
+	ns.print("==== TEST: testExample ====");
+
+}

@@ -1,0 +1,106 @@
+// TODO Update number of weaken threads:
+//      Returns: The amount by which the target server’s security level was decreased. This is equivalent to 0.05 multiplied by the number of script threads
+// TODO Create v3.0: Better farm out the work
+//      Spawn child scripts that sit and loop on the server
+//          Maybe these just sit and constantly weaken/grow?
+//      Use ports to communicate with remote PServers?
+//          Shoudl be able to use growthAnalyze() to figure out how many grow calls we need
+//          Should be able to math out how many weaken threads we need
+//          Could farm out just what's needed to deal with grow, so not doubling up?
+//          Use 2-3 ports; one to state the action, one to state the number of calls/threads
+//          Can ports pass arrays or objects around?
+//      Auto-select what server to targe based on hacking level and available money
+
+
+// Imports
+import {getRootAccess} from "/scripts/functions/getRootAccess.script";
+
+// Defines the "target server", which is the server, via the first arg
+var target = args[0];
+
+// Amount of RAM to keep free if on the home PC
+var reserverHomeRamGb = 16;
+
+// Scripts being used
+var hackScript = "/scripts/hacking/helpers/hack_target.script";
+var growScript = "/scripts/hacking/helpers/grow_target.script";
+var weakenScript = "/scripts/hacking/helpers/weaken_target.script";
+
+// Defines how much money a server should have before we hack it
+// In this case, it is set to 75% of the server's max money
+var targetMaxMoney = getServerMaxMoney(target);
+var targetMoneyThresh = targetMaxMoney * 0.75;
+
+// Defines the maximum security level the target server can
+// have. If the target's security level is higher than this,
+// we'll weaken it before doing anything else
+var securityThresh = getServerMinSecurityLevel(target) + 5;
+
+//how much ram do the helper scripts take?
+var hackRam = getScriptRam(hackScript);
+var growRam = getScriptRam(growScript);
+var weakenRam = getScriptRam(weakenScript);
+
+//how much free ram does this server have?
+function thisServFreeRam()
+{
+    var thisServRam = getServerRam(getHostname());
+    var thisServMaxRam = thisServRam[0];
+    var thisServUsedRam = thisServRam[1];
+    var thisServFreeRam = thisServMaxRam - thisServUsedRam;
+    
+    // If it's the hom PC, indicate the free RAM is less based on how much
+    // is being reserved (defined earlier in the script); otherwise return
+    // the true free amount
+    if(getHostname() == "home")
+        return thisServFreeRam - reserverHomeRamGb;
+    else
+        return thisServFreeRam;
+}
+
+// Get root access
+getRootAccess(target);
+
+// Infinite loop that continously hacks/grows/weakens the target server
+while(true) {
+    if (getServerSecurityLevel(target) > securityThresh) {
+        // If the server's security level is above our threshold, weaken it
+        var maxWeakenThreads = Math.floor(thisServFreeRam()/weakenRam);
+        
+        print("Weakening");
+        run(weakenScript, maxWeakenThreads, target);
+        
+        //wait for the script to finish
+        sleep(getWeakenTime(target)*1000);
+        while (isRunning(weakenScript, getHostname(), target))
+            sleep(1000);
+    } else if (getServerMoneyAvailable(target) < targetMoneyThresh) {
+        // If the server's money is less than our threshold, grow it
+        var maxGrowThreads = Math.floor(thisServFreeRam()/growRam);
+        
+        print("Growing");
+        run(growScript, maxGrowThreads, target);
+        
+        //wait for the script to finish
+        sleep(getGrowTime(target)*1000);
+        while (isRunning(growScript, getHostname(), target))
+            sleep(1000);
+    } else {
+        // Otherwise, hack it
+        var maxHackThreads = Math.floor(thisServFreeRam()/hackRam);
+        var desiredHackThreads = Math.floor(hackAnalyzeThreads(target, targetMaxMoney*0.10));
+        
+        print("Hacking");
+        if (desiredHackThreads < 1)
+            run(hackScript, 1, target);
+        else if (desiredHackThreads <= maxHackThreads)
+            run(hackScript, desiredHackThreads, target);
+        else
+            run(hackScript, maxHackThreads, target);
+        
+        //wait for the script to finish
+        sleep(getHackTime(target)*1000);
+        while (isRunning(hackScript, getHostname(), target))
+            sleep(1000);
+    }
+}

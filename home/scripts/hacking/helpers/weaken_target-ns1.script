@@ -1,0 +1,3 @@
+serv = args[0];
+
+weaken(serv);

@@ -57,6 +57,18 @@ export async function getScriptList(){
 		"/functions/getNumOpenablePorts-ns2.js",
 		"/functions/getRootAccess-ns1.script",
 		"/functions/getRootAccess-ns2.js",
+		// hacking
+		"/hacking/advanced/install_and_run-ns1.script",
+		"/hacking/advanced/run-ns1.script",
+		"/hacking/basic/install_and_run-ns1.script",
+		"/hacking/basic/run-ns1.script",
+		"/hacking/early/early_hack_harakiri-sushi-ns1.script",
+		"/hacking/early/early_hack_joesguns-ns1.script",
+		"/hacking/early/early_hack_template-ns1.script",
+		"/hacking/helpers/grow_target-ns1.script",
+		"/hacking/helpers/hack_target-ns1.script",
+		"/hacking/helpers/weaken_target-ns1.script",
+		"/hacking/director-ns1.script",
 		// pserv
 		"/pserv/deploy-ns1.script",
 		"/pserv/killall_and_deploy-ns1.script",
