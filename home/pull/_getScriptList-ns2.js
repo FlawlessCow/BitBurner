@@ -40,7 +40,7 @@ export async function main(ns) {
 }
 
 // ===== FUNCTIONS ==============================
-export async function getScriptList(){
+export function getScriptList(){
 	var scripts = [
 		// buy_server
 		"/buy_server/buy_server-ns1.js",
