@@ -8,10 +8,6 @@ function getScriptArgs(ns) {
     
     return scriptArgs;
 }
-var sArgs = {
-
-};
-
 // ===== VARS ===================================
 var sVars = {
 	nodeCountLimit: 24,
@@ -19,6 +15,7 @@ var sVars = {
 	nodeRamLimit: 64,
 	nodeCoresLimit: 16,
 	moneySpendLimitPercent: 0.90,
+	recoupTimeCap: 6*60*60, // 6 hours in seconds
 };
 
 var buy = {
@@ -27,6 +24,12 @@ var buy = {
 	level: 1,
 	ram: 2,
 	cores: 3,
+};
+
+var tests = {
+	enabled : false, // Master override for all tests
+	disableMain : false, // Disables all non-testing logic in main
+	testEnabled_exampleFunction : false,
 };
 
 // ===== MAIN ===================================
@@ -65,7 +68,7 @@ export async function main(ns) {
 
 	while (!done) {
 		// check to see what to buy
-		thingToBuy = evaluateHacknetPurchaseOptions(ns, sVars.nodeCountLimit, sVars.nodeLevelLimit, sVars.nodeRamLimit, sVars.nodeCoresLimit, playerMultipliers);
+		thingToBuy = evaluateHacknetPurchaseOptions(ns, sVars.nodeCountLimit, sVars.nodeLevelLimit, sVars.nodeRamLimit, sVars.nodeCoresLimit, playerMultipliers, sVars.recoupTimeCap);
 
 		// buy the right thing
 		switch(thingToBuy){
@@ -235,24 +238,17 @@ function getAllLowestHacknetNodeStats(ns) {
     return allLowestNodeStats;
 }
 
-function evaluateHacknetPurchaseOptions(ns, maxNodes, maxLevel, maxRam, maxCores, playerMultipliers) {
+function evaluateHacknetPurchaseOptions(ns, maxNodes, maxLevel, maxRam, maxCores, playerMultipliers, recoupTimeCap) {
     ns.print("Evaluationg what to buy...");
 	// we're just going to go off the first node, assuming all others are updgraded
 	var currentNodeCount = ns.hacknet.numNodes();
 	var baseNodeIndex = 0;
-	var baseNodeStats = ns.hacknet.getNodeStats(baseNodeIndex);
 	var allLowestHacknetNodeStats = getAllLowestHacknetNodeStats(ns);
 	var lowestLevelNodeStats = allLowestHacknetNodeStats.lowestLevelNodeStats;
 	var lowestRamNodeStats = allLowestHacknetNodeStats.lowestRamNodeStats;
 	var lowestCoresNodeStats = allLowestHacknetNodeStats.lowestCoresNodeStats;
 	var newNodeCost = ns.hacknet.getPurchaseNodeCost();
-	
-	var bareNodeRecoupTime = Number.MAX_VALUE;
-	var upgradedNodeRecoupTime = Number.MAX_VALUE;
-	var levelRecoupTime = Number.MAX_VALUE;
-	var ramRecoupTime = Number.MAX_VALUE;
-	var coresRecoupTime = Number.MAX_VALUE;
-    
+	    
 	// the math to truely evaluate a new node would be a PITA so instead,
 	// if we aren't at the max, and it's cheaper than the cost to upgrade
 	// the 1st node we just say fuck it and buy a new node
@@ -268,6 +264,64 @@ function evaluateHacknetPurchaseOptions(ns, maxNodes, maxLevel, maxRam, maxCores
 	}
 	
 	// get the recoup time of buying a node w/o upgrading it
+	var bareNodeRecoupTime = getBareNodeRecoupTime(ns, maxNodes, playerMultipliers);	
+	
+	// get the recoup time of buying a node and upgrading it to match node zero
+    var upgradedNodeRecoupTime = getUpgradedNodeRecoupTime(ns, maxNodes, playerMultipliers);
+	
+	// get the recoup time of buying a level
+	var levelRecoupTime = getLevelRecoupTime(ns, lowestLevelNodeStats, maxLevel, playerMultipliers);
+	
+	// get the recoup time of buying RAM
+    var ramRecoupTime = getRamRecoupTime(ns, lowestRamNodeStats, maxRam, playerMultipliers);
+	
+	// get the recoup time of buying a core
+	var coresRecoupTime = getCoresRecoupTime(ns, lowestCoresNodeStats, maxCores, playerMultipliers);
+	
+	// Do comparisons to see what to buy
+	ns.print("=== Ready to make a decision ===");
+	ns.print("Getting the minimum of: ");
+	ns.print("--- bareNodeRecoupTime:" + ns.nFormat(bareNodeRecoupTime, "0,0"));
+	ns.print("--- upgradedNodeRecoupTime:" + ns.nFormat(upgradedNodeRecoupTime, "0,0"));
+	ns.print("--- levelRecoupTime:" + ns.nFormat(levelRecoupTime, "0,0"));
+	ns.print("--- ramRecoupTime:" + ns.nFormat(ramRecoupTime, "0,0"));
+	ns.print("--- coresRecoupTime:" + ns.nFormat(coresRecoupTime, "0,0"));
+	var minRecoupTime = Math.min(bareNodeRecoupTime, upgradedNodeRecoupTime, levelRecoupTime, ramRecoupTime, coresRecoupTime);
+	
+	if (bareNodeRecoupTime === minRecoupTime && bareNodeRecoupTime < recoupTimeCap)
+	{
+        ns.print("Choosing to buy a node");
+        return buy.node;
+	}	
+	else if (upgradedNodeRecoupTime === minRecoupTime && upgradedNodeRecoupTime < recoupTimeCap)
+	{
+        ns.print("Choosing to buy a node");
+        return buy.node;
+	}	
+    else if (levelRecoupTime === minRecoupTime && levelRecoupTime < recoupTimeCap)
+    {
+        ns.print("Choosing to buy a level");
+        return buy.level;
+    }
+    else if (ramRecoupTime === minRecoupTime && ramRecoupTime < recoupTimeCap)
+    {
+        ns.print("Choosing to buy ram");
+        return buy.ram;
+    }
+    else if (coresRecoupTime === minRecoupTime && coresRecoupTime < recoupTimeCap)
+    {
+        ns.print("Choosing to buy cores");
+        return buy.cores;
+    }
+    
+    return buy.nothing;
+}
+
+function getBareNodeRecoupTime(ns, maxNodes, playerMultipliers) {
+	var bareNodeRecoupTime = Number.MAX_VALUE;
+	var newNodeCost = ns.hacknet.getPurchaseNodeCost();
+	var currentNodeCount = ns.hacknet.numNodes();
+	
     if (currentNodeCount < maxNodes) {
 		ns.print("=== Determining bareNodeRecoupTime ===");
 		
@@ -280,7 +334,16 @@ function evaluateHacknetPurchaseOptions(ns, maxNodes, maxLevel, maxRam, maxCores
 		ns.print("bareNodeRecoupTime: " + bareNodeRecoupTime);
 	}
 	
-	// get the recoup time of buying a node and upgrading it to match node zero
+	return bareNodeRecoupTime;
+}
+
+function  getUpgradedNodeRecoupTime(ns, maxNodes, playerMultipliers) {
+	var upgradedNodeRecoupTime = Number.MAX_VALUE;
+	var newNodeCost = ns.hacknet.getPurchaseNodeCost();
+	var currentNodeCount = ns.hacknet.numNodes();
+	var baseNodeIndex = 0;
+	var baseNodeStats = ns.hacknet.getNodeStats(baseNodeIndex);
+	
     if (currentNodeCount < maxNodes) {
 		ns.print("=== Determining upgradedNodeRecoupTime ===");
 		
@@ -306,7 +369,12 @@ function evaluateHacknetPurchaseOptions(ns, maxNodes, maxLevel, maxRam, maxCores
 		
 	}
 	
-	// get the recoup time of buying a level
+	return upgradedNodeRecoupTime;
+}
+
+function  getLevelRecoupTime(ns, lowestLevelNodeStats, maxLevel, playerMultipliers) {
+	var levelRecoupTime = Number.MAX_VALUE;
+	
     if (lowestLevelNodeStats.level < maxLevel) {
 		ns.print("=== Determining levelRecoupTime ===");
 		
@@ -325,8 +393,14 @@ function evaluateHacknetPurchaseOptions(ns, maxNodes, maxLevel, maxRam, maxCores
 		ns.print("levelRecoupTime:" + levelRecoupTime);
 	}
 	
-	// get the recoup time of buying RAM
+	return levelRecoupTime;
+}
+
+function  getRamRecoupTime(ns, lowestRamNodeStats, maxRam, playerMultipliers) {
+	var ramRecoupTime = Number.MAX_VALUE;
+	
     if (lowestRamNodeStats.ram < maxRam) {
+		ns.print("=== Determining ramRecoupTime ===");
 		ns.print("lowestRamNodeStats.production: " + lowestRamNodeStats.production);
 	
         var nextRamProduction = getHacknetNodeProduction(lowestRamNodeStats.level, lowestRamNodeStats.ram+1, lowestRamNodeStats.cores, playerMultipliers);
@@ -342,16 +416,24 @@ function evaluateHacknetPurchaseOptions(ns, maxNodes, maxLevel, maxRam, maxCores
 		ns.print("ramRecoupTime:" + ramRecoupTime);
 	}
 	
-	// get the recoup time of buying a core
+	return ramRecoupTime;
+}
+
+function  getCoresRecoupTime(ns, lowestCoresNodeStats, maxCores, playerMultipliers) {
+	var coresRecoupTime = Number.MAX_VALUE;
+	
     if (lowestCoresNodeStats.cores < maxCores) {
 		ns.print("=== Determining coresRecoupTime ===");
 		
 		ns.print("lowestCoresNodeStats.production: " + lowestCoresNodeStats.production);
+		ns.print("lowestCoresNodeStats.level: " + lowestCoresNodeStats.level);
+		ns.print("lowestCoresNodeStats.ram: " + lowestCoresNodeStats.ram);
+		ns.print("lowestCoresNodeStats.cores: " + lowestCoresNodeStats.cores);
 		
         var nextCoreProduction = getHacknetNodeProduction(lowestCoresNodeStats.level, lowestCoresNodeStats.ram, lowestCoresNodeStats.cores+1, playerMultipliers);
         ns.print("nextCoreProduction: " + nextCoreProduction);
         
-        var nextCoreProductionDelta = nextCoreProduction - lowestCoresNodeStats.production;
+		var nextCoreProductionDelta = nextCoreProduction - lowestCoresNodeStats.production;
         ns.print("nextCoreProductionDelta: " + nextCoreProductionDelta);
         
 		var nextCoreCost = ns.hacknet.getCoreUpgradeCost(lowestCoresNodeStats.nodeIndex, 1);
@@ -361,43 +443,7 @@ function evaluateHacknetPurchaseOptions(ns, maxNodes, maxLevel, maxRam, maxCores
 		ns.print("coresRecoupTime:" + coresRecoupTime);
 	}
 	
-	// Do comparisons to see what to buy
-	ns.print("=== Ready to make a decision ===");
-	ns.print("Getting the minimum of: ");
-	ns.print("--- bareNodeRecoupTime:" + bareNodeRecoupTime);
-	ns.print("--- upgradedNodeRecoupTime:" + upgradedNodeRecoupTime);
-	ns.print("--- levelRecoupTime:" + levelRecoupTime);
-	ns.print("--- ramRecoupTime:" + ramRecoupTime);
-	ns.print("--- coresRecoupTime:" + coresRecoupTime);
-	var minRecoupTime = Math.min(bareNodeRecoupTime, upgradedNodeRecoupTime, levelRecoupTime, ramRecoupTime, coresRecoupTime);
-	
-	if (bareNodeRecoupTime === minRecoupTime)
-	{
-        ns.print("Choosing to buy a node");
-        return buy.node;
-	}	
-	else if (upgradedNodeRecoupTime === minRecoupTime)
-	{
-        ns.print("Choosing to buy a node");
-        return buy.node;
-	}	
-    else if (levelRecoupTime === minRecoupTime)
-    {
-        ns.print("Choosing to buy a level");
-        return buy.level;
-    }
-    else if (ramRecoupTime === minRecoupTime)
-    {
-        ns.print("Choosing to buy ram");
-        return buy.ram;
-    }
-    else if (coresRecoupTime === minRecoupTime)
-    {
-        ns.print("Choosing to buy cores");
-        return buy.cores;
-    }
-    
-    return buy.nothing;
+	return coresRecoupTime;
 }
 
 async function upgradeAllHacknetNodeLevelAsync(ns) {
