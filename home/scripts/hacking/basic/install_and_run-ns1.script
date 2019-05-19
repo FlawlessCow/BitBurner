@@ -41,6 +41,11 @@ function main() {
 		threadCount = sVars.threadLimit;
 	}
 
+	if (threadCount <= 0) {
+		tprint("ERROR: Desired thread count to low to run exec()! threadCount: " + threadCount + "sArgs.destServ: " + sArgs.destServ)
+		exit();
+	}
+
 	// Run the script on the tartget server
 	exec(sVars.scriptToRun, sArgs.destServ, threadCount, sArgs.hackTargetServ);
 	
