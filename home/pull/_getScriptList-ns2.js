@@ -69,7 +69,8 @@ export function getScriptList(){
 		"/hacking/helpers/grow_target-ns1.script",
 		"/hacking/helpers/hack_target-ns1.script",
 		"/hacking/helpers/weaken_target-ns1.script",
-		"/hacking/director-ns1.script",
+		"/hacking/director-ns1.script", //deprecated
+		"/hacking/director-ns2.js",
 		// pserv
 		"/pserv/deploy-ns1.script",
 		"/pserv/killall_and_deploy-ns1.script",

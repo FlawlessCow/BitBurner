@@ -60,17 +60,53 @@ export async function buildServerInfoArray(ns) {
     return serverInfoArray;
 }
 
+export async function buildHackableServerInfoArray(ns) {
+    // Start with the home server
+	var serverInfoArray = [getTargetInfo(ns, ns.getHostname(), null, 0)];
+	
+	var serverListArray = ns.scan(ns.getHostname());
+	
+	var returnedServerInfo = await processScanResultsRecursive(ns, serverListArray, getTargetInfo(ns, ns.getHostname()), 0);
+		
+	for (var i=0; i < returnedServerInfo.length; i++) {
+		if (returnedServerInfo[i].isHackable === true) {
+			serverInfoArray.push(returnedServerInfo[i]);
+		}
+	}
+    
+    return serverInfoArray;
+}
+
 export function getTargetInfo(ns, target, parent, depth) {
 	//ns.print("Getting info for " + target + "...");
 	var targetIsHacknet = target.startsWith("hacknet");
     var targetInfo;
 	
-	if (targetIsHacknet) {
+	if (target.name === "home") {
+		targetInfo = {
+			name : target,
+			parent : parent,
+			depth : depth,
+			isHacknet : false,
+			isHackable : false,
+			ram : ns.getServerRam(target)[0],
+			moneyAvailable : ns.getServerMoneyAvailable(target),
+			maxMoney : ns.getServerMaxMoney(target),
+			growth : ns.getServerGrowth(target),
+			securityLevel : ns.getServerSecurityLevel(target),
+			baseSecurityLevel : ns.getServerBaseSecurityLevel(target),
+			minSecurityLevel : ns.getServerMinSecurityLevel(target),
+			requiredHackingLevel : ns.getServerRequiredHackingLevel(target),
+			numPortsRequired : ns.getServerNumPortsRequired(target),
+		};
+	}
+	else if (targetIsHacknet) {
 		targetInfo = {
 			name : target,
 			parent : parent,
 			depth : depth,
 			isHacknet : true,
+			isHackable : false,
 			ram : ns.getServerRam(target)[0],
 		};
 	}
@@ -80,6 +116,7 @@ export function getTargetInfo(ns, target, parent, depth) {
 			parent : parent,
 			depth : depth,
 			isHacknet : false,
+			isHackable : true,
 			ram : ns.getServerRam(target)[0],
 			moneyAvailable : ns.getServerMoneyAvailable(target),
 			maxMoney : ns.getServerMaxMoney(target),
