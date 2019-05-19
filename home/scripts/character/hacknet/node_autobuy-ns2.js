@@ -1,11 +1,18 @@
-// ========= IMPORTS  ========= 
+// ===== IMPORTS ================================
 
-// ========== ARGS ============ 
+// ===== ARGS ===================================
+function getScriptArgs(ns) {
+    var scriptArgs = {
+        firstArg : ns.args[0]
+    };
+    
+    return scriptArgs;
+}
 var sArgs = {
 
 };
 
-// ========== VARS ============
+// ===== VARS ===================================
 var sVars = {
 	nodeCountLimit: 24,
 	nodeLevelLimit: 200,
@@ -22,8 +29,21 @@ var buy = {
 	cores: 3,
 };
 
-// ========== LOGIC ==========
+// ===== MAIN ===================================
 export async function main(ns) {
+	var sArgs = getScriptArgs(ns);
+	
+	// - Tests ----------------------------------
+	if (tests.enabled)
+		executeTests(ns);
+	
+	// - Early out ------------------------------
+	if (tests.disableMain) {
+		ns.tprint("WARNING: SCRIPT IS IN TEST ONLY MODE");
+		ns.exit();
+	}
+	
+	// - Real Script Logic ----------------------
 	ns.print("Starting main function");
 	ns.disableLog("getServerMoneyAvailable");
 	ns.disableLog("sleep");
@@ -79,7 +99,7 @@ export async function main(ns) {
 	}
 }
 
-// ========= FUNCTIONS ========= 
+// ===== FUNCTIONS ==============================
 function getMyMoney(ns) {
     return ns.getServerMoneyAvailable("home");
 }
@@ -485,4 +505,15 @@ async function upgradeAllToMatchBaseNodeAsync(ns) {
 		await upgradeNodeToDesiredRamAsync(ns, nodeIndex, desiredRam);
 		await upgradeNodeToDesiredCoresAsync(ns, nodeIndex, desiredCores);
     }
+}
+
+// ===== TESTS ==================================
+function executeTests(ns) {
+	if (tests.testEnabled_exampleFunction)
+		test_exampleFunction(ns);
+}
+
+function test_exampleFunction(ns) {
+	ns.print("==== TEST: test_exampleFunction ====");
+
 }
