@@ -14,7 +14,7 @@ var sVars = {
 	nodeLevelLimit: 200,
 	nodeRamLimit: 64,
 	nodeCoresLimit: 16,
-	moneySpendLimitPercent: 0.90,
+	moneySpendLimitPercent: 0.20,
 	recoupTimeCap: 6*60*60, // 6 hours in seconds
 };
 
