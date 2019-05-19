@@ -61,8 +61,9 @@ export async function main(ns) {
 		var currentBestTarget = getBestHackableTarget(serverListArray, hackingSkillLevel, portBreakingLevel);
 
 		// 3c. If the best option is different from our current option, update the port
-		if (currentBestTarget !== ns.peek(ePortIndex.PRIMARY_HACKING_TARGET))
+		if (currentBestTarget !== primaryHackTarget)
 		{
+			primaryHackTarget = currentBestTarget;
 			ns.clear(ePortIndex.PRIMARY_HACKING_TARGET);
 			ns.write(ePortIndex.PRIMARY_HACKING_TARGET, currentBestTarget);
 		}
