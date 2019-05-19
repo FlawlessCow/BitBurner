@@ -1,12 +1,14 @@
-// ===== IMPORTS ==============
+// ===== IMPORTS ================================
 import {getRootAccess} from "/master/functions/getRootAccess-ns1.script";
+var ePortIndex = enumLib.getEnumPortIndexVersion(1);
+var portEmpty = "NULL PORT DATA";
 
-// ===== ARGS =================
+// ===== ARGS ===================================
 var sArgs = {
-	target : args[0],	// Target to hack
+	initialHackTarget : args[0],	// Initial to hack
 };
 
-// ===== VARS =================
+// ===== VARS ===================================
 var sVars = {
 	moneyThreshModPcnt : 0.75,
 	securityThreshModAdd : 5,
@@ -17,41 +19,51 @@ var tests = {
 	testExampleEnabled : false,
 };
 
-// ===== MAIN =================
+// ===== MAIN ===================================
 main();
 
 function main() {
+	var sArgs = getScriptArgs();
+	
+	// - Tests ----------------------------------
+	if (tests.enabled)
+		executeTests();
+	
+	// - Early out ------------------------------
+	if (tests.disableMain) {
+		tprint("WARNING: SCRIPT IS IN TEST ONLY MODE");
+		exit();
+	}
+
+	// - Real Script Logic ----------------------
+
 	// Setting up some thresholds
-	var moneyThresh = getServerMaxMoney(sArgs.target) * sVars.moneyThreshModPcnt;
-	var securityThresh = getServerMinSecurityLevel(sArgs.target) + sVars.securityThreshModAdd;
+	var moneyThresh = getServerMaxMoney(sArgs.initialHackTarget) * sVars.moneyThreshModPcnt;
+	var securityThresh = getServerMinSecurityLevel(sArgs.initialHackTarget) + sVars.securityThreshModAdd;
 
 	// Get root access if I don't have it
-	if (hasRootAccess(sArgs.target) === false) {
-		getRootAccess(sArgs.target);
+	if (hasRootAccess(sArgs.initialHackTarget) === false) {
+		getRootAccess(sArgs.initialHackTarget);
 	}
 
 	while(true) {
-		if (getServerSecurityLevel(sArgs.target) > securityThresh) {
+		if (getServerSecurityLevel(sArgs.initialHackTarget) > securityThresh) {
 			// If the server's security level is above our threshold, weaken it
-			weaken(sArgs.target);
-		} else if (getServerMoneyAvailable(sArgs.target) < moneyThresh) {
+			weaken(sArgs.initialHackTarget);
+		} else if (getServerMoneyAvailable(sArgs.initialHackTarget) < moneyThresh) {
 			// If the server's money is less than our threshold, grow it
-			grow(sArgs.target);
+			grow(sArgs.initialHackTarget);
 		} else {
 			// Otherwise, hack it
-			hack(sArgs.target);
+			hack(sArgs.initialHackTarget);
 		}
 	}
-	
-	// Tests
-	if (tests.enabled)
-		executeTests();
 }
 
-// ===== FUNCTIONS ============
+// ===== FUNCTIONS ==============================
 
 
-// ===== TESTS ================
+// ===== TESTS ==================================
 function executeTests(ns) {
 	if (tests.testExampleEnabled)
 		testExample(ns);
