@@ -22,6 +22,7 @@ var tests = {
 	enabled : true, // Master override for all tests
 	disableMain : true, // Disables all non-testing logic in main
 	testEnabled_exampleFunction : false,
+	test_serverArrayBuilder : true,
 };
 
 // ===== MAIN ===================================
@@ -93,6 +94,21 @@ function executeTests(ns) {
 function test_exampleFunction(ns) {
 	ns.print("==== TEST: test_exampleFunction ====");
 
+}
+
+function test_serverArrayBuilder(ns) {
+	ns.print("==== TEST: test_serverArrayBuilder ====");
+
+	var serverListArray = bsi.buildHackableServerInfoArray(ns);
+	print(typeof serverListArray);
+
+    serverListArray.sort(function(a, b) {
+        return a.requiredHackingLevel - b.requiredHackingLevel;
+    });
+
+    for (var i=0; i < serverListArray.length; i++) {
+		ns.tprint("Index: " + i + " / RequiredHackingLevel: " + serverListArray[i].requiredHackingLevel + " / MaxMoney: " + ns.nFormat(serverListArray[i].maxMoney, "0,0") + " / SeverName: " + serverListArray[i].name);
+	}
 }
 
 /* ===== REFERENCE ==============================
