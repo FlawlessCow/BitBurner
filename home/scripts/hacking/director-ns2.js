@@ -22,7 +22,7 @@ var tests = {
 	enabled : true, // Master override for all tests
 	disableMain : true, // Disables all non-testing logic in main
 	testEnabled_exampleFunction : false,
-	test_serverArrayBuilder : true,
+	testEnabled_serverArrayBuilder : true,
 };
 
 // ===== MAIN ===================================
@@ -89,6 +89,8 @@ function getBestHackableTarget(serverListArray, hackingSkillLevel, portBreakingL
 function executeTests(ns) {
 	if (tests.testEnabled_exampleFunction)
 		test_exampleFunction(ns);
+	if (testEnabled_serverArrayBuilder)
+		test_serverArrayBuilder(ns);
 }
 
 function test_exampleFunction(ns) {
