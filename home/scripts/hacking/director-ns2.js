@@ -77,7 +77,7 @@ export async function main(ns) {
 // ===== FUNCTIONS ==============================
 function getBestHackableTarget(serverListArray, hackingSkillLevel, portBreakingLevel) {
 	for (var i=0; i<serverListArray.length; i++) {
-		server = serverListArray[i];
+		var server = serverListArray[i];
 
 		if(hackingSkillLevel >= server.requiredHackingLevel && portBreakingLevel >= server.numPortsRequired) {
 			return server.name;
