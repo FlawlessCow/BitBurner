@@ -19,7 +19,7 @@ var sVars = {
 };
 
 var tests = {
-	enabled : flase, // Master override for all tests
+	enabled : false, // Master override for all tests
 	disableMain : false, // Disables all non-testing logic in main
 	testEnabled_exampleFunction : false,
 	testEnabled_serverArrayBuilder : false,
