@@ -19,10 +19,10 @@ var sVars = {
 };
 
 var tests = {
-	enabled : true, // Master override for all tests
-	disableMain : true, // Disables all non-testing logic in main
+	enabled : flase, // Master override for all tests
+	disableMain : false, // Disables all non-testing logic in main
 	testEnabled_exampleFunction : false,
-	testEnabled_serverArrayBuilder : true,
+	testEnabled_serverArrayBuilder : false,
 };
 
 // ===== MAIN ===================================
@@ -31,7 +31,7 @@ export async function main(ns) {
 	
 	// - Tests ----------------------------------
 	if (tests.enabled)
-		executeTests(ns);
+		await executeTests(ns);
 	
 	// - Early out ------------------------------
 	if (tests.disableMain) {
@@ -44,7 +44,7 @@ export async function main(ns) {
 	ns.disableLog("ALL");
 
 	// 1. Build a server list
-	var serverListArray = bsi.buildHackableServerInfoArray(ns);
+	var serverListArray = await bsi.buildHackableServerInfoArray(ns);
 	var primaryHackTarget = ns.peek(ePortIndex.PRIMARY_HACKING_TARGET); // Could start out as NULL PORT DATA; that's ok. Other scripts need to deal with that.
 
 	// 2. Sort the server list by money, high -> low
@@ -86,11 +86,11 @@ function getBestHackableTarget(serverListArray, hackingSkillLevel, portBreakingL
 }
 
 // ===== TESTS ==================================
-function executeTests(ns) {
+async function executeTests(ns) {
 	if (tests.testEnabled_exampleFunction)
 		test_exampleFunction(ns);
-	if (testEnabled_serverArrayBuilder)
-		test_serverArrayBuilder(ns);
+	if (tests.testEnabled_serverArrayBuilder)
+		await test_serverArrayBuilder(ns);
 }
 
 function test_exampleFunction(ns) {
@@ -98,10 +98,10 @@ function test_exampleFunction(ns) {
 
 }
 
-function test_serverArrayBuilder(ns) {
+async function test_serverArrayBuilder(ns) {
 	ns.print("==== TEST: test_serverArrayBuilder ====");
 
-	var serverListArray = bsi.buildHackableServerInfoArray(ns);
+	var serverListArray = await bsi.buildHackableServerInfoArray(ns);
 	print(typeof serverListArray);
 
     serverListArray.sort(function(a, b) {
