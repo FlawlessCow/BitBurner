@@ -42,7 +42,7 @@ function main() {
 	}
 
 	if (threadCount <= 0) {
-		tprint("ERROR: Desired thread count to low to run exec()! threadCount: " + threadCount + "sArgs.destServ: " + sArgs.destServ)
+		tprint("ERROR: Desired thread count to low to run exec()! threadCount: " + threadCount + ", sArgs.destServ: " + sArgs.destServ)
 		exit();
 	}
 
