@@ -48,12 +48,20 @@ export async function main(ns) {
 // ===== FUNCTIONS ==============================
 async function destroy(ns, branch){
 	var scripts = getScriptList();
+	var deprecatedScripts = getDrecatedScriptList();
 	
-	// bitBurner setup
+	// bitBurner path setup
 	var bitBurnerBranchPath = "/" + branch;
 	
 	for(var i = 0; i < scripts.length; i++) {
 		var scriptPath = scripts[i];
+		var destPath = bitBurnerBranchPath + scriptPath;
+
+		await ns.rm(destPath);
+	}
+	
+	for(var i = 0; i < deprecatedScripts.length; i++) {
+		var scriptPath = deprecatedScripts[i];
 		var destPath = bitBurnerBranchPath + scriptPath;
 
 		await ns.rm(destPath);

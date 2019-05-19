@@ -69,7 +69,6 @@ export function getScriptList(){
 		"/hacking/helpers/grow_target-ns1.script",
 		"/hacking/helpers/hack_target-ns1.script",
 		"/hacking/helpers/weaken_target-ns1.script",
-		"/hacking/director-ns1.script", //deprecated
 		"/hacking/director-ns2.js",
 		// pserv
 		"/pserv/deploy-ns1.script",
@@ -80,6 +79,15 @@ export function getScriptList(){
 		// templates
 		"/templates/ns1_template.js",
 		"/templates/ns2_template.js",
+	];
+
+	return scripts;
+}
+
+export function getDrecatedScriptList(){
+	var scripts = [
+		// hacking
+		"/hacking/director-ns1.script",
 	];
 
 	return scripts;
