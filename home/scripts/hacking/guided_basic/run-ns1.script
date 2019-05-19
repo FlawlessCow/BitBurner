@@ -1,5 +1,6 @@
 // ===== IMPORTS ================================
 import {getRootAccess} from "/master/functions/getRootAccess-ns1.script";
+import * as enumLib from "/master/functions/enumLib-ns1.script";
 var ePortIndex = enumLib.getEnumPortIndexVersion(1);
 var portEmpty = "NULL PORT DATA";
 
@@ -24,6 +25,8 @@ main();
 
 function main() {
 	var sArgs = getScriptArgs();
+
+	var hackTarget = sArgs.initialHackTarget;
 	
 	// - Tests ----------------------------------
 	if (tests.enabled)
@@ -38,30 +41,55 @@ function main() {
 	// - Real Script Logic ----------------------
 
 	// Setting up some thresholds
-	var moneyThresh = getServerMaxMoney(sArgs.initialHackTarget) * sVars.moneyThreshModPcnt;
-	var securityThresh = getServerMinSecurityLevel(sArgs.initialHackTarget) + sVars.securityThreshModAdd;
+	var moneyThresh = getServerMaxMoney(hackTarget) * sVars.moneyThreshModPcnt;
+	var securityThresh = getServerMinSecurityLevel(hackTarget) + sVars.securityThreshModAdd;
 
 	// Get root access if I don't have it
-	if (hasRootAccess(sArgs.initialHackTarget) === false) {
-		getRootAccess(sArgs.initialHackTarget);
+	if (hasRootAccess(hackTarget) === false) {
+		getRootAccess(hackTarget);
 	}
 
 	while(true) {
-		if (getServerSecurityLevel(sArgs.initialHackTarget) > securityThresh) {
+		var updateResults = updateHackTarget(hackTarget);
+		if(updateResults.updated === true) {
+			hackTarget = updateResults.hackTarget;
+			moneyThresh = getServerMaxMoney(hackTarget) * sVars.moneyThreshModPcnt;
+			securityThresh = getServerMinSecurityLevel(hackTarget) + sVars.securityThreshModAdd;
+
+			if (hasRootAccess(hackTarget) === false) {
+				getRootAccess(hackTarget);
+			}
+		}
+
+		if (getServerSecurityLevel(hackTarget) > securityThresh) {
 			// If the server's security level is above our threshold, weaken it
-			weaken(sArgs.initialHackTarget);
-		} else if (getServerMoneyAvailable(sArgs.initialHackTarget) < moneyThresh) {
+			weaken(hackTarget);
+		} else if (getServerMoneyAvailable(hackTarget) < moneyThresh) {
 			// If the server's money is less than our threshold, grow it
-			grow(sArgs.initialHackTarget);
+			grow(hackTarget);
 		} else {
 			// Otherwise, hack it
-			hack(sArgs.initialHackTarget);
+			hack(hackTarget);
 		}
 	}
 }
 
 // ===== FUNCTIONS ==============================
+function updateHackTarget(currentTarget) {
+	var results = {
+		updated: false,
+		hackTarget: currentTarget,
+	}
 
+	primaryHackTarget = peek(ePortIndex.PRIMARY_HACK_TARGET);
+
+	if(primaryHackTarget !== portEmpty && currentTarget !== primaryHackTarget) {
+
+		results.hackTarget = primaryHackTarget;
+	}
+
+	return results;
+}
 
 // ===== TESTS ==================================
 function executeTests(ns) {

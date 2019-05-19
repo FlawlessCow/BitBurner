@@ -12,9 +12,10 @@ var sVars = {
 	threadLimit : 100, //If this gets too high, server security can get out of control
 	scriptsToCopy : [
 			"/master/functions/getRootAccess-ns1.script",
-			"/master/hacking/basic/run-ns1.script",
+			"/master/functions/enumLib-ns1.script",
+			"/master/hacking/guided_basic/run-ns1.script",
 		],
-	scriptToRun : "/master/hacking/basic/run-ns1.script",
+	scriptToRun : "/master/hacking/guided_basic/run-ns1.script",
 	sourceServer : "home",
 };
 
