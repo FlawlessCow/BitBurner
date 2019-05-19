@@ -79,7 +79,7 @@ function updateHackTarget(currentTarget) {
 	var results = {
 		updated: false,
 		hackTarget: currentTarget,
-	}
+	};
 
 	primaryHackTarget = peek(ePortIndex.PRIMARY_HACK_TARGET);
 
