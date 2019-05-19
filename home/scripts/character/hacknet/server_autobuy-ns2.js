@@ -61,8 +61,11 @@ export async function main(ns) {
 	if (ns.hacknet.numNodes() === 0) {
 		ns.print("Buying the first node");
 		var nodeCost = ns.hacknet.getPurchaseNodeCost();
+
+		ns.print("Waiting for more money to buy a node!");
+		ns.print("Want: $" + ns.nFormat(nodeCost/sVars.moneySpendLimitPercent, "0,0.00"))
+
 		while(nodeCost > getMyMoney(ns) * sVars.moneySpendLimitPercent) {
-			ns.print("Waiting for more money to buy a node!");
 			await ns.sleep(5000);
 		}
 		ns.hacknet.purchaseNode();
@@ -76,8 +79,11 @@ export async function main(ns) {
 		switch(thingToBuy){
 			case buy.node:
 				var nodeCost = ns.hacknet.getPurchaseNodeCost();
+
+				ns.print("Waiting for more money to buy a node!");
+				ns.print("Want: $" + ns.nFormat(nodeCost/sVars.moneySpendLimitPercent, "0,0.00"))
+				
 				while(nodeCost > getMyMoney(ns) * sVars.moneySpendLimitPercent) {
-					ns.print("Waiting for more money to buy a node!");
 					await ns.sleep(5000);
 				}
 				ns.print("Buying a node");
@@ -537,8 +543,9 @@ async function upgradeNodeToDesiredLevelAsync(ns, nodeIndex, desiredLevel) {
         var cost = ns.hacknet.getLevelUpgradeCost(nodeIndex, 1);
         
         // Wait to have enough money to buy the next level
+		ns.print("Waiting for more money to buy a level");
+		ns.print("Want: $" + ns.nFormat(cost/sVars.moneySpendLimitPercent, "0,0.00"))
         while (cost > getMyMoney(ns) * sVars.moneySpendLimitPercent) {
-            ns.print("Waiting for more money to buy a level");
             await ns.sleep(5000);
         }
         
@@ -552,8 +559,9 @@ async function upgradeNodeToDesiredRamAsync(ns, nodeIndex, desiredRam) {
         var cost = ns.hacknet.getRamUpgradeCost(nodeIndex, 1);
         
         // Wait to have enough money to buy the next ram
+		ns.print("Waiting for more money to buy a RAM");
+		ns.print("Want: $" + ns.nFormat(cost/sVars.moneySpendLimitPercent, "0,0.00"))
         while (cost > getMyMoney(ns) * sVars.moneySpendLimitPercent) {
-            ns.print("Waiting for more money to buy a RAM");
             await ns.sleep(5000);
         }
         
@@ -567,8 +575,9 @@ async function upgradeNodeToDesiredCoresAsync(ns, nodeIndex, desiredCores) {
         var cost = ns.hacknet.getCoreUpgradeCost(nodeIndex, 1);
         
         // Wait to have enough money to buy the next cores
+		ns.print("Waiting for more money to buy a core");
+		ns.print("Want: $" + ns.nFormat(cost/sVars.moneySpendLimitPercent, "0,0.00"))
         while (cost > getMyMoney(ns) * sVars.moneySpendLimitPercent) {
-            ns.print("Waiting for more money to buy a core");
             await ns.sleep(5000);
         }
         
