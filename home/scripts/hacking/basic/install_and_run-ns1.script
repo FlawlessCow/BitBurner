@@ -28,8 +28,8 @@ main();
 
 function main() {
 	// Get root access on the destServ & hackTargetServ
-	getRootAccess(destServ);
-	getRootAccess(hackTargetServ);
+	getRootAccess(sArgs.destServ);
+	getRootAccess(sArgs.hackTargetServ);
 
 	// Copy the scripts over
 	scp(sVars.scriptsToCopy, sVars.sourceServer, sArgs.destServ);
