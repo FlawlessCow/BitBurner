@@ -69,7 +69,7 @@ export async function main(ns) {
 		}
 
 		// 3d. Sleep for like...a minute or something.
-		ns.sleep(sVars.scanFrequency);
+		await ns.sleep(sVars.scanFrequency);
 	}
 }
 
