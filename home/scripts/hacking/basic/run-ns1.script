@@ -1,5 +1,5 @@
 // ===== IMPORTS ==============
-import {getRootAccess} from "/master/functions/getRootAccess-ns1.script";
+
 
 // ===== ARGS =================
 var sArgs = {
@@ -24,11 +24,6 @@ function main() {
 	// Setting up some thresholds
 	var moneyThresh = getServerMaxMoney(sArgs.target) * sVars.moneyThreshModPcnt;
 	var securityThresh = getServerMinSecurityLevel(sArgs.target) + sVars.securityThreshModAdd;
-
-	// Get root access if I don't have it
-	if (hasRootAccess(sArgs.target) === false) {
-		getRootAccess(sArgs.target);
-	}
 
 	while(true) {
 		if (getServerSecurityLevel(sArgs.target) > securityThresh) {

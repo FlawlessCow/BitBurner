@@ -1,23 +1,25 @@
 function getRootAccess (target)
 {
-    // If we have the various port oepning program, use them to open ports
-    // on the target server
-    if (fileExists("BruteSSH.exe", "home")) {
-        brutessh(target);
+	if (hasRootAccess(target) === false) {
+        // If we have the various port oepning program, use them to open ports
+        // on the target server
+        if (fileExists("BruteSSH.exe", "home")) {
+            brutessh(target);
+        }
+        if (fileExists("FTPCrack.exe", "home")) {
+            ftpcrack(target);
+        }
+        if (fileExists("relaySMTP.exe", "home")) {
+            relaysmtp(target);
+        }
+        if (fileExists("HTTPWorm.exe", "home")) {
+            httpworm(target);
+        }
+        if (fileExists("SQLInject.exe", "home")) {
+            sqlinject(target);
+        }
+        
+        // Get root access to target server
+        nuke(target);
     }
-    if (fileExists("FTPCrack.exe", "home")) {
-        ftpcrack(target);
-    }
-    if (fileExists("relaySMTP.exe", "home")) {
-        relaysmtp(target);
-    }
-    if (fileExists("HTTPWorm.exe", "home")) {
-        httpworm(target);
-    }
-    if (fileExists("SQLInject.exe", "home")) {
-        sqlinject(target);
-    }
-    
-    // Get root access to target server
-    nuke(target);
 }

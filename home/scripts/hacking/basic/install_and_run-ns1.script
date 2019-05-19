@@ -1,5 +1,5 @@
 // ===== IMPORTS ==============
-
+import {getRootAccess} from "/master/functions/getRootAccess-ns1.script";
 
 // ===== ARGS =================
 var sArgs = {
@@ -27,6 +27,10 @@ var tests = {
 main();
 
 function main() {
+	// Get root access on the destServ & hackTargetServ
+	getRootAccess(destServ);
+	getRootAccess(hackTargetServ);
+
 	// Copy the scripts over
 	scp(sVars.scriptsToCopy, sVars.sourceServer, sArgs.destServ);
 
