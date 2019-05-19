@@ -63,6 +63,8 @@ export function getScriptList(){
 		"/hacking/advanced/run-ns1.script",
 		"/hacking/basic/install_and_run-ns1.script",
 		"/hacking/basic/run-ns1.script",
+		"/hacking/guided_basic/install_and_run-ns1.script",
+		"/hacking/guided_basic/run-ns1.script",
 		"/hacking/early/early_hack_harakiri-sushi-ns1.script",
 		"/hacking/early/early_hack_joesguns-ns1.script",
 		"/hacking/early/early_hack_template-ns1.script",

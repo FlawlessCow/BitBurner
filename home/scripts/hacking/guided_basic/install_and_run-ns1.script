@@ -1,0 +1,90 @@
+// ===== IMPORTS ==============
+
+
+// ===== ARGS =================
+var sArgs = {
+	destServ : args[0],
+	hackTargetServ : args[1],
+};
+
+// ===== VARS =================
+var sVars = {
+	threadLimit : 100, //If this gets too high, server security can get out of control
+	scriptsToCopy : [
+			"/master/functions/getRootAccess-ns1.script",
+			"/master/hacking/basic/run-ns1.script",
+		],
+	scriptToRun : "/master/hacking/basic/run-ns1.script",
+	sourceServer : "home",
+};
+
+var tests = {
+	enabled : false, // Master override for all tests
+	testExampleEnabled : false,
+};
+
+// ===== MAIN =================
+main();
+
+function main() {
+	// Copy the scripts over
+	scp(sVars.scriptsToCopy, sVars.sourceServer, sArgs.destServ);
+
+	// See how many threads we can run on the target server
+	var maxThreadCapactity = getMaxThreadCapacity(sArgs.destServ, sVars.scriptToRun);
+	var threadCount = 1;
+
+	if(maxThreadCapactity < sVars.threadLimit) {
+		threadCount = maxThreadCapactity;
+	}
+	else if(maxThreadCapactity >= sVars.threadLimit){
+		threadCount = sVars.threadLimit;
+	}
+
+	// Run the script on the tartget server
+	exec(sVars.scriptToRun, sArgs.destServ, threadCount, sArgs.hackTargetServ);
+	
+	// Tests
+	if (tests.enabled)
+		executeTests();
+}
+
+// ===== FUNCTIONS ============
+// Returns free RAM on the target server
+function getServFreeRam(target, reservedRam) {
+    // Get the server's RAM, max and used
+    var targetServRam = getServerRam(target);
+    var targetServMaxRam = targetServRam[0];
+    var targetServUsedRam = targetServRam[1];
+
+    // Use the RAM info to get the free ram
+    var targetServFreeRam = targetServMaxRam - targetServUsedRam;
+
+    // Return the free RAM, less the resvered amount
+    return targetServFreeRam - reservedRam;
+}
+
+function getMaxThreadCapacity(target, script) {
+    // Figure out how much RAM we can use
+    targetFreeRam = getServFreeRam(target, 0);
+
+    // Get the RAM needed for the script (per thread)
+    scriptRamPerThread = getScriptRam(script);
+
+    // Calculate the max number of threads
+    maxThreadCapacity = Math.floor(targetFreeRam / scriptRamPerThread);
+
+    // Return that
+    return maxThreadCapacity;
+}
+
+// ===== TESTS ================
+function executeTests() {
+	if (tests.testExampleEnabled)
+		testExample();
+}
+
+function testExample() {
+	print("==== TEST: testExample ====");
+
+}
