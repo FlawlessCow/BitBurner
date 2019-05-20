@@ -54,12 +54,7 @@ export async function main(ns) {
 
 	// 3. Start loopin' to find & update target
 	while(true) {
-		// 3a. Figure out my hacking ability & port opening ability
-		var hackingSkillLevel = ns.getHackingLevel();
-		var portBreakingLevel = hpn.getNumOpenablePorts(ns);
-
-		// 3b. Iterate thru the list, finding the first option that can be hacked (skill & ports opening
-		var currentBestTarget = getBestHackableTarget(serverListArray, hackingSkillLevel, portBreakingLevel);
+		var currentBestTarget = getBestHackableTarget(ns, serverListArray);
 
 		// 3c. If the best option is different from our current option, update the port
 		if (currentBestTarget !== primaryHackTarget)
@@ -75,7 +70,12 @@ export async function main(ns) {
 }
 
 // ===== FUNCTIONS ==============================
-function getBestHackableTarget(serverListArray, hackingSkillLevel, portBreakingLevel) {
+function getBestHackableTarget(ns, serverListArray) {
+	// 3a. Figure out my hacking ability & port opening ability
+	var hackingSkillLevel = ns.getHackingLevel();
+	var portBreakingLevel = hpn.getNumOpenablePorts(ns);
+
+	// 3b. Iterate thru the list, finding the first option that can be hacked (skill & ports opening
 	for (var i=0; i<serverListArray.length; i++) {
 		var server = serverListArray[i];
 
