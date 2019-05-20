@@ -43,20 +43,20 @@ export async function main(ns) {
 	ns.print("Starting script...");
 	ns.disableLog("ALL");
 
-	// 1. Build a server list
+	// Build a server list
 	var serverListArray = await bsi.buildHackableServerInfoArray(ns);
 	var primaryHackTarget = ns.peek(ePortIndex.PRIMARY_HACKING_TARGET); // Could start out as NULL PORT DATA; that's ok. Other scripts need to deal with that.
 
-	// 2. Sort the server list by money, high -> low
+	// Sort the server list by money, high -> low
     serverListArray.sort(function(a, b) {
         return b.maxMoney - a.maxMoney;
     });
 
-	// 3. Start loopin' to find & update target
+	// Start loopin' to find & update target
 	while(true) {
 		var currentBestTarget = getBestHackableTarget(ns, serverListArray);
 
-		// 3c. If the best option is different from our current option, update the port
+		// If the best option is different from our current option, update the port
 		if (currentBestTarget !== primaryHackTarget)
 		{
 			primaryHackTarget = currentBestTarget;
@@ -64,18 +64,18 @@ export async function main(ns) {
 			ns.write(ePortIndex.PRIMARY_HACKING_TARGET, currentBestTarget);
 		}
 
-		// 3d. Sleep for like...a minute or something.
+		// Sleep for like...a minute or something.
 		await ns.sleep(sVars.scanFrequency);
 	}
 }
 
 // ===== FUNCTIONS ==============================
 function getBestHackableTarget(ns, serverListArray) {
-	// 3a. Figure out my hacking ability & port opening ability
+	// Figure out my hacking ability & port opening ability
 	var hackingSkillLevel = ns.getHackingLevel();
 	var portBreakingLevel = hpn.getNumOpenablePorts(ns);
 
-	// 3b. Iterate thru the list, finding the first option that can be hacked (skill & ports opening
+	// Iterate thru the list, finding the first option that can be hacked (skill & ports opening
 	for (var i=0; i<serverListArray.length; i++) {
 		var server = serverListArray[i];
 
