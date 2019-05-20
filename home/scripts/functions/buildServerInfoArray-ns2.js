@@ -241,6 +241,6 @@ function test_sortByRequiredHackShowMaxMoney(ns, serverListArray) {
     });
 
     for (var i=0; i < serverListArray.length; i++) {
-		ns.tprint("Index: " + i + " / RequiredHackingLevel: " + serverListArray[i].requiredHackingLevel + " / MaxMoney: " + ns.nFormat(serverListArray[i].maxMoney, "0,0") + " / SeverName: " + serverListArray[i].name);
+		ns.tprint("Index: " + i + " / RequiredHackingLevel: " + serverListArray[i].requiredHackingLevel + " / numPortsRequired: " + serverListArray[i].numPortsRequired + " / MaxMoney: " + ns.nFormat(serverListArray[i].maxMoney, "0,0") + " / SeverName: " + serverListArray[i].name);
 	}
 }
