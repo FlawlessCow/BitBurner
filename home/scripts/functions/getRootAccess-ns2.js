@@ -1,6 +1,6 @@
 export function getRootAccess (ns, target)
 {
-	if (hasRootAccess(target) === false) {
+	if (ns.hasRootAccess(target) === false) {
         // If we have the various port oepning program, use them to open ports
         // on the target server
         if (ns.fileExists("BruteSSH.exe", "home")) {
