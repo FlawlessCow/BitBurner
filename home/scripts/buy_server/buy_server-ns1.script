@@ -30,7 +30,15 @@ while(getPurchasedServers().length < getPurchasedServerLimit())
         var servName = "pserv-" + desiredRam + "GB";
         
         // buy a server
-        var hostname = purchaseServer(servName, desiredRam);
+        var hostname = ""
+        while (hostname === "") {
+            while(getServerMoneyAvailable("home")*availableCashMod < getPurchasedServerCost(desiredRam))
+            {
+                print("DEBUG: Not enough money! Have/Need:" + Math.floor(getServerMoneyAvailable("home")) + "/" + getPurchasedServerCost(desiredRam));
+                sleep(60*1000);
+            }
+            hostname = purchaseServer(servName, desiredRam);
+        }
         
         // copy and run script
         run(setupScriptName, 1, hostname, hackTarget);
@@ -72,7 +80,17 @@ while (desiredRam <= getPurchasedServerMaxRam())
             
             // buy a server
             var servName = "pserv-" + desiredRam + "GB";
-            var newHostname = purchaseServer(servName, desiredRam);
+            var newHostname = ""
+
+            while (newHostname === "") {
+                while(getServerMoneyAvailable("home")*availableCashMod < getPurchasedServerCost(desiredRam))
+                {
+                    print("DEBUG: Not enough money! Have/Need:" + Math.floor(getServerMoneyAvailable("home")) + "/" + getPurchasedServerCost(desiredRam));
+                    sleep(60*1000);
+                }
+                newHostname = purchaseServer(servName, desiredRam);
+                sleep(1000);
+            }
             print("DEBUG: New server named: " + newHostname);
             
             // copy and run scripts
