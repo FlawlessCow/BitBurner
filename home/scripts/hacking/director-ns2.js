@@ -107,16 +107,16 @@ async function deployHackBots(ns, deployServerListArray, hackTargetServer) {
 	var portBreakingLevel = hpn.getNumOpenablePorts(ns);
 
 	for (var i = 0; i < deployServerListArray.length; i++) {
-		var deployServer = deployServerListArray[i].name;
-		ns.print("Evaluating server: " + deployServer);
+		var deployServer = deployServerListArray[i];
+		ns.print("Evaluating server: " + deployServer.name);
 
 		if (portBreakingLevel >= deployServer.numPortsRequired) {
-			ns.print("Preparing to deploy the hackBots to: " + deployServer);
-			gra.getRootAccess(ns, deployServer);
+			ns.print("Preparing to deploy the hackBots to: " + deployServer.name);
+			gra.getRootAccess(ns, deployServer.name);
 
 			// ns.killall returns true if any scripts were killed, false if not. We're ready to move on if we haven't killed anything
-			while (!ns.killall(deployServer)) {
-				ns.print("Sleeping after trying to killall on " + deployServer);
+			while (!ns.killall(deployServer.name)) {
+				ns.print("Sleeping after trying to killall on " + deployServer.name);
 				sleep(1000);
 			}
 
@@ -135,15 +135,15 @@ async function deployHackBots(ns, deployServerListArray, hackTargetServer) {
 
 			// Copy the scripts
 			ns.print("Copying scripts...");
-			ns.scp(hackHelperScript, "home", deployServer);
-			ns.scp(growHelperScript, "home", deployServer);
-			ns.scp(weakenHelperScript, "home", deployServer);
+			ns.scp(hackHelperScript, "home", deployServer.name);
+			ns.scp(growHelperScript, "home", deployServer.name);
+			ns.scp(weakenHelperScript, "home", deployServer.name);
 
 			// Run the scripts
 			ns.print("Launching the hackbots!");
-			await ns.exec(weakenHelperScript, deployServer, weakenThreads, hackTargetServer);
-			await ns.exec(growHelperScript, deployServer, growThreads, hackTargetServer);
-			await ns.exec(hackHelperScript, deployServer, hackThreads, hackTargetServer);
+			await ns.exec(weakenHelperScript, deployServer.name, weakenThreads, hackTargetServer);
+			await ns.exec(growHelperScript, deployServer.name, growThreads, hackTargetServer);
+			await ns.exec(hackHelperScript, deployServer.name, hackThreads, hackTargetServer);
 		}
 	}
 }
