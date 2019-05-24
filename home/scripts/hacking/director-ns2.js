@@ -120,9 +120,9 @@ async function deployHackBots(ns, deployServerListArray, hackTargetServer) {
 				sleep(1000);
 			}
 
-			var hackHelperScript = "/master/scripts/hacking/helpers/hack_target_loop-ns1.script";
-			var growHelperScript = "/master/scripts/hacking/helpers/grow_target_loop-ns1.script";
-			var weakenHelperScript = "/master/scripts/hacking/helpers/weaken_target_loop-ns1.script";
+			var hackHelperScript = "/master/hacking/helpers/hack_target_loop-ns1.script";
+			var growHelperScript = "/master/hacking/helpers/grow_target_loop-ns1.script";
+			var weakenHelperScript = "/master/hacking/helpers/weaken_target_loop-ns1.script";
 
 			var freeRam = gsr.getServerRamObject.freeRam;
 			var ramPerHelperThread = 1.7;
