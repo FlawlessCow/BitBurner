@@ -135,17 +135,17 @@ async function deployHackBots(ns, deployServerListArray, hackTargetServer) {
 
 			ns.print("========== Starting Debug Dump ==========");
 			ns.print("freeRam: " + freeRam);
-			ns.print("ramPerHelperThread: " + freeRam);
-			ns.print("hackThreads: " + freeRam);
-			ns.print("weakenAndGrowRamPool: " + freeRam);
-			ns.print("weakenAndGrowAvailableThreads: " + freeRam);
-			ns.print("weakenThreads: " + freeRam);
-			ns.print("growAvailableRamPool: " + freeRam);
-			ns.print("growThreads: " + freeRam);
+			ns.print("ramPerHelperThread: " + ramPerHelperThread);
+			ns.print("hackThreads: " + hackThreads);
+			ns.print("weakenAndGrowRamPool: " + weakenAndGrowRamPool);
+			ns.print("weakenAndGrowAvailableThreads: " + weakenAndGrowAvailableThreads);
+			ns.print("weakenThreads: " + weakenThreads);
+			ns.print("growAvailableRamPool: " + growAvailableRamPool);
+			ns.print("growThreads: " + growThreads);
 			ns.print("=========== Thread Count Dump ===========");
-			ns.print("weakenThreads: " + freeRam);
-			ns.print("growThreads: " + freeRam);
-			ns.print("hackThreads: " + freeRam);
+			ns.print("weakenThreads: " + weakenThreads);
+			ns.print("growThreads: " + growThreads);
+			ns.print("hackThreads: " + hackThreads);
 			ns.print("============= End Debug Dump ============");
 
 			// Copy the scripts
