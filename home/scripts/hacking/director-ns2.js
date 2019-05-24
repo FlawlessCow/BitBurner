@@ -124,7 +124,7 @@ async function deployHackBots(ns, deployServerListArray, hackTargetServer) {
 			var growHelperScript = "/master/hacking/helpers/grow_target_loop-ns1.script";
 			var weakenHelperScript = "/master/hacking/helpers/weaken_target_loop-ns1.script";
 
-			var freeRam = gsr.getServerRamObject(deployServer.name).freeRam;
+			var freeRam = gsr.getServerRamObject(ns, deployServer.name).freeRam;
 			var ramPerHelperThread = 1.7;
 			var hackThreads = 1;
 			var weakenAndGrowRamPool = freeRam - (hackThreads * ramPerHelperThread); // Reserved for 1 hack thread
