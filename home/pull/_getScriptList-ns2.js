@@ -58,6 +58,7 @@ export function getScriptList(){
 		"/functions/getNumOpenablePorts-ns2.js",
 		"/functions/getRootAccess-ns1.script",
 		"/functions/getRootAccess-ns2.js",
+		"/functions/getServerRamObject-ns2.js",
 		// hacking
 		"/hacking/advanced/install_and_run-ns1.script",
 		"/hacking/advanced/run-ns1.script",
@@ -68,8 +69,11 @@ export function getScriptList(){
 		"/hacking/early/early_hack_harakiri-sushi-ns1.script",
 		"/hacking/early/early_hack_joesguns-ns1.script",
 		"/hacking/early/early_hack_template-ns1.script",
+		"/hacking/helpers/grow_target_loop-ns1.script",
 		"/hacking/helpers/grow_target-ns1.script",
+		"/hacking/helpers/hack_target_loop-ns1.script",
 		"/hacking/helpers/hack_target-ns1.script",
+		"/hacking/helpers/weaken_target_loop-ns1.script",
 		"/hacking/helpers/weaken_target-ns1.script",
 		"/hacking/director-ns2.js",
 		// pserv
