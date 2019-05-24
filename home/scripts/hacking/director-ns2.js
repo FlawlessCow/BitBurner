@@ -133,6 +133,21 @@ async function deployHackBots(ns, deployServerListArray, hackTargetServer) {
 			var growAvailableRamPool = weakenAndGrowRamPool - (weakenThreads * ramPerHelperThread);
 			var growThreads = Math.floor(growAvailableRamPool / ramPerHelperThread);
 
+			ns.print("========== Starting Debug Dump ==========");
+			ns.print("freeRam: " + freeRam);
+			ns.print("ramPerHelperThread: " + freeRam);
+			ns.print("hackThreads: " + freeRam);
+			ns.print("weakenAndGrowRamPool: " + freeRam);
+			ns.print("weakenAndGrowAvailableThreads: " + freeRam);
+			ns.print("weakenThreads: " + freeRam);
+			ns.print("growAvailableRamPool: " + freeRam);
+			ns.print("growThreads: " + freeRam);
+			ns.print("=========== Thread Count Dump ===========");
+			ns.print("weakenThreads: " + freeRam);
+			ns.print("growThreads: " + freeRam);
+			ns.print("hackThreads: " + freeRam);
+			ns.print("============= End Debug Dump ============");
+
 			// Copy the scripts
 			ns.print("Copying scripts...");
 			ns.scp(hackHelperScript, "home", deployServer.name);
