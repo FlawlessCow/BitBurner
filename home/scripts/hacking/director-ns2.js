@@ -117,7 +117,7 @@ async function deployHackBots(ns, deployServerListArray, hackTargetServer) {
 			// ns.killall returns true if any scripts were killed, false if not. We're ready to move on if we haven't killed anything
 			while (!ns.killall(deployServer.name)) {
 				ns.print("Sleeping after trying to killall on " + deployServer.name);
-				ns.sleep(1000);
+				await ns.sleep(1000);
 			}
 
 			var hackHelperScript = "/master/hacking/helpers/hack_target_loop-ns1.script";
@@ -145,6 +145,8 @@ async function deployHackBots(ns, deployServerListArray, hackTargetServer) {
 			await ns.exec(growHelperScript, deployServer.name, growThreads, hackTargetServer);
 			await ns.exec(hackHelperScript, deployServer.name, hackThreads, hackTargetServer);
 		}
+
+		await ns.sleep(1000);
 	}
 }
 
