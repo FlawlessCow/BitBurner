@@ -128,13 +128,15 @@ async function deployHackBots(ns, deployServerListArray, hackTargetServer) {
 			var weakenHelperScript = "/master/hacking/helpers/weaken_target_loop-ns1.script";
 
 			var freeRam = gsr.getServerRamObject(ns, deployServer.name).free;
-			var ramPerHelperThread = 1.7;
+			var ramPerHackHelperThread = ns.getScriptRam(hackHelperScript);
+			var ramPerGrowHelperThread = ns.getScriptRam(growHelperScript);
+			var ramPerWeakenHelperThread = ns.getScriptRam(weakenHelperScript);
 			var hackThreads = 1;
-			var weakenAndGrowRamPool = freeRam - (hackThreads * ramPerHelperThread); // Reserved for 1 hack thread
-			var weakenAndGrowAvailableThreads = weakenAndGrowRamPool / ramPerHelperThread;
+			var weakenAndGrowRamPool = freeRam - (hackThreads * ramPerHackHelperThread); // Reserved for 1 hack thread
+			var weakenAndGrowAvailableThreads = weakenAndGrowRamPool / ramPerGrowHelperThread; // We want weaken based on number of grow threads, so its ram usage is more important here
 			var weakenThreads = Math.ceil(weakenAndGrowAvailableThreads / 10);
-			var growAvailableRamPool = weakenAndGrowRamPool - (weakenThreads * ramPerHelperThread);
-			var growThreads = Math.floor(growAvailableRamPool / ramPerHelperThread);
+			var growAvailableRamPool = weakenAndGrowRamPool - (weakenThreads * ramPerWeakenHelperThread);
+			var growThreads = Math.floor(growAvailableRamPool / ramPerGrowHelperThread);
 
 			ns.print("========== Starting Debug Dump ==========");
 			ns.print("freeRam: " + freeRam);
