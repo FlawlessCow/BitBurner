@@ -80,6 +80,7 @@ export async function buildHackableServerInfoArray(ns) {
 export function getTargetInfo(ns, target, parent, depth) {
 	//ns.print("Getting info for " + target + "...");
 	var targetIsHacknet = target.startsWith("hacknet");
+	var targetIsPserv = target.startsWith("pserv");
     var targetInfo;
 	
 	if (target.name === "home") {
@@ -87,7 +88,10 @@ export function getTargetInfo(ns, target, parent, depth) {
 			name : target,
 			parent : parent,
 			depth : depth,
+			isHome : true,
 			isHacknet : false,
+			isPserv : false,
+			isPlayerOwned : true,
 			isHackable : false,
 			ram : ns.getServerRam(target)[0],
 			moneyAvailable : ns.getServerMoneyAvailable(target),
@@ -105,9 +109,41 @@ export function getTargetInfo(ns, target, parent, depth) {
 			name : target,
 			parent : parent,
 			depth : depth,
+			isHome : false,
 			isHacknet : true,
+			isPserv : false,
+			isPlayerOwned : true,
 			isHackable : false,
 			ram : ns.getServerRam(target)[0],
+			moneyAvailable : 0,
+			maxMoney : 0,
+			growth : 0,
+			securityLevel : Number.MAX_VALUE,
+			baseSecurityLevel : Number.MAX_VALUE,
+			minSecurityLevel : Number.MAX_VALUE,
+			requiredHackingLevel : Number.MAX_VALUE,
+			numPortsRequired : Number.MAX_VALUE,
+		};
+	}
+	else if (targetIsPserv) {
+		targetInfo = {
+			name : target,
+			parent : parent,
+			depth : depth,
+			isHome : false,
+			isHacknet : false,
+			isPserv : true,
+			isPlayerOwned : true,
+			isHackable : false,
+			ram : ns.getServerRam(target)[0],
+			moneyAvailable : ns.getServerMoneyAvailable(target),
+			maxMoney : ns.getServerMaxMoney(target),
+			growth : ns.getServerGrowth(target),
+			securityLevel : ns.getServerSecurityLevel(target),
+			baseSecurityLevel : ns.getServerBaseSecurityLevel(target),
+			minSecurityLevel : ns.getServerMinSecurityLevel(target),
+			requiredHackingLevel : ns.getServerRequiredHackingLevel(target),
+			numPortsRequired : ns.getServerNumPortsRequired(target),
 		};
 	}
 	else {
@@ -115,7 +151,10 @@ export function getTargetInfo(ns, target, parent, depth) {
 			name : target,
 			parent : parent,
 			depth : depth,
+			isHome : false,
 			isHacknet : false,
+			isPserv : false,
+			isPlayerOwned : false,
 			isHackable : true,
 			ram : ns.getServerRam(target)[0],
 			moneyAvailable : ns.getServerMoneyAvailable(target),
