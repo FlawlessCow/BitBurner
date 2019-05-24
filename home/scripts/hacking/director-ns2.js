@@ -140,7 +140,9 @@ async function deployHackBots(ns, deployServerListArray, hackTargetServer) {
 
 			ns.print("========== Starting Debug Dump ==========");
 			ns.print("freeRam: " + freeRam);
-			ns.print("ramPerHelperThread: " + ramPerHelperThread);
+			ns.print("ramPerHackHelperThread: " + ramPerHackHelperThread);
+			ns.print("ramPerGrowHelperThread: " + ramPerGrowHelperThread);
+			ns.print("ramPerWeakenHelperThread: " + ramPerWeakenHelperThread);
 			ns.print("hackThreads: " + hackThreads);
 			ns.print("weakenAndGrowRamPool: " + weakenAndGrowRamPool);
 			ns.print("weakenAndGrowAvailableThreads: " + weakenAndGrowAvailableThreads);
