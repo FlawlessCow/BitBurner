@@ -64,6 +64,7 @@ export async function main(ns) {
 
 	// Start loopin' to find & update target
 	while(true) {
+		ns.print("Scanning for a new target...");
 		var currentBestTarget = getBestHackableTarget(ns, hackableServerListArray);
 
 		// If the best option is different from our current option, update the port
@@ -101,17 +102,21 @@ function getBestHackableTarget(ns, serverListArray) {
 }
 
 async function deployHackBots(ns, deployServerListArray, hackTargetServer) {
+	ns.print("Beggining to deploy the hackbots! Targeting: " + hackTargetServer);
+
 	var portBreakingLevel = hpn.getNumOpenablePorts(ns);
 
 	for (var i = 0; i < deployServerListArray.length; i++) {
 		var deployServer = deployServerListArray[i].name;
+		ns.print("Evaluating server: " + deployServer);
 
 		if (portBreakingLevel >= deployServer.numPortsRequired) {
-			ns.print("Deploying hackBots to: " + deployServer);
+			ns.print("Preparing to deploy the hackBots to: " + deployServer);
 			gra.getRootAccess(ns, deployServer);
 
 			// ns.killall returns true if any scripts were killed, false if not. We're ready to move on if we haven't killed anything
 			while (!ns.killall(deployServer)) {
+				ns.print("Sleeping after trying to killall on " + deployServer);
 				sleep(1000);
 			}
 
@@ -129,11 +134,13 @@ async function deployHackBots(ns, deployServerListArray, hackTargetServer) {
 			var growThreads = Math.floor(growAvailableRamPool / ramPerHelperThread);
 
 			// Copy the scripts
+			ns.print("Copying scripts...");
 			ns.scp(hackHelperScript, "home", deployServer);
 			ns.scp(growHelperScript, "home", deployServer);
 			ns.scp(weakenHelperScript, "home", deployServer);
 
 			// Run the scripts
+			ns.print("Launching the hackbots!");
 			await ns.exec(weakenHelperScript, deployServer, weakenThreads, hackTargetServer);
 			await ns.exec(growHelperScript, deployServer, growThreads, hackTargetServer);
 			await ns.exec(hackHelperScript, deployServer, hackThreads, hackTargetServer);
