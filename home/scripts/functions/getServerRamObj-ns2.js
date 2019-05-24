@@ -42,7 +42,7 @@ export async function main(ns) {
 // ===== FUNCTIONS ==============================
 export function getServerRamObject(ns, server) {
     // Get the server's RAM, total and used
-    var targetServRam = getServerRam(target);
+    var targetServRam = ns.getServerRam(target);
     var targetServTotalRam = targetServRam[0];
     var targetServUsedRam = targetServRam[1];
 
