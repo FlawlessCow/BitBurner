@@ -83,7 +83,7 @@ export function getTargetInfo(ns, target, parent, depth) {
 	var targetIsPserv = target.startsWith("pserv");
     var targetInfo;
 	
-	if (target.name === "home") {
+	if (target === "home") {
 		targetInfo = {
 			name : target,
 			parent : parent,
