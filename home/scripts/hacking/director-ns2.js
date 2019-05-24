@@ -45,10 +45,17 @@ export async function main(ns) {
 	ns.print("Starting script...");
 	ns.disableLog("ALL");
 
-	// Build a server list
+	// Build server lists
 	var hackableServerListArray = await bsi.buildHackableServerInfoArray(ns);
 	var deployServerListArray = await bsi.buildServerInfoArray(ns);
-	var primaryHackTarget = ns.peek(ePortIndex.PRIMARY_HACKING_TARGET); // Could start out as NULL PORT DATA; that's ok. Other scripts need to deal with that.
+
+	// Establish initial target & deploy the hackbots
+	ns.print("Picking initial target and deploying the hackbots");
+	var primaryHackTarget = ns.peek(ePortIndex.PRIMARY_HACKING_TARGET); // Could start out as NULL PORT DATA
+	if(primaryHackTarget !== "NULL PORT DATA") {
+		await deployHackBots(ns, deployServerListArray, primaryHackTarget);
+	}
+	
 
 	// Sort the server list by money, high -> low
     hackableServerListArray.sort(function(a, b) {
@@ -62,18 +69,14 @@ export async function main(ns) {
 		// If the best option is different from our current option, update the port
 		if (currentBestTarget !== primaryHackTarget)
 		{
+			ns.print("Updating primaryHackTarget to: " + currentBestTarget);
 			primaryHackTarget = currentBestTarget;
 			ns.clear(ePortIndex.PRIMARY_HACKING_TARGET);
 			ns.write(ePortIndex.PRIMARY_HACKING_TARGET, currentBestTarget);
 
-			for (var i = 0; i < deployServerListArray.length; i++) {
-				deployServer = deployServerListArray[i];
+			// Re-deploy the hackbots at the new target
+			await deployHackBots(ns, deployServerListArray, primaryHackTarget);
 
-				if (portBreakingLevel >= deployServer.numPortsRequired) {
-					gra.getRootAccess(ns, deployServer);
-					await deployHackBots(ns, deployServer, primaryHackTarget);
-				}
-			}
 		}
 
 		// Sleep for like...a minute or something.
@@ -97,34 +100,45 @@ function getBestHackableTarget(ns, serverListArray) {
 	}
 }
 
-async function deployHackBots(ns, runningServer, hackTargetServer) {
-	// ns.killall returns true if any scripts were killed, false if not. We're ready to move on if we haven't killed anything
-	while(!ns.killall(runningServer)){ 
-		sleep(1000);
+async function deployHackBots(ns, deployServerListArray, hackTargetServer) {
+	var portBreakingLevel = hpn.getNumOpenablePorts(ns);
+
+	for (var i = 0; i < deployServerListArray.length; i++) {
+		var deployServer = deployServerListArray[i].name;
+
+		if (portBreakingLevel >= deployServer.numPortsRequired) {
+			ns.print("Deploying hackBots to: " + deployServer);
+			gra.getRootAccess(ns, deployServer);
+
+			// ns.killall returns true if any scripts were killed, false if not. We're ready to move on if we haven't killed anything
+			while (!ns.killall(deployServer)) {
+				sleep(1000);
+			}
+
+			var hackHelperScript = "/master/scripts/hacking/helpers/hack_target_loop-ns1.script";
+			var growHelperScript = "/master/scripts/hacking/helpers/grow_target_loop-ns1.script";
+			var weakenHelperScript = "/master/scripts/hacking/helpers/weaken_target_loop-ns1.script";
+
+			var freeRam = gsr.getServerRamObject.freeRam;
+			var ramPerHelperThread = 1.7;
+			var hackThreads = 1;
+			var weakenAndGrowRamPool = freeRam - (hackThreads * ramPerHelperThread); // Reserved for 1 hack thread
+			var weakenAndGrowAvailableThreads = weakenAndGrowRamPool / ramPerHelperThread;
+			var weakenThreads = Math.ceil(weakenAndGrowAvailableThreads / 10);
+			var growAvailableRamPool = weakenAndGrowRamPool - (weakenThreads * ramPerHelperThread);
+			var growThreads = Math.floor(growAvailableRamPool / ramPerHelperThread);
+
+			// Copy the scripts
+			ns.scp(hackHelperScript, "home", deployServer);
+			ns.scp(growHelperScript, "home", deployServer);
+			ns.scp(weakenHelperScript, "home", deployServer);
+
+			// Run the scripts
+			await ns.exec(weakenHelperScript, deployServer, weakenThreads, hackTargetServer);
+			await ns.exec(growHelperScript, deployServer, growThreads, hackTargetServer);
+			await ns.exec(hackHelperScript, deployServer, hackThreads, hackTargetServer);
+		}
 	}
-
-	var hackHelperScript = "/master/scripts/hacking/helpers/hack_target_loop-ns1.script";
-	var growHelperScript = "/master/scripts/hacking/helpers/grow_target_loop-ns1.script";
-	var weakenHelperScript = "/master/scripts/hacking/helpers/weaken_target_loop-ns1.script";
-
-	var freeRam = gsr.getServerRamObject.freeRam;
-	var ramPerHelperThread = 1.7;
-	var hackThreads = 1;
-	var weakenAndGrowRamPool = freeRam - (hackThreads * ramPerHelperThread); // Reserved for 1 hack thread
-	var weakenAndGrowAvailableThreads = weakenAndGrowRamPool / ramPerHelperThread;
-	var weakenThreads = Math.ceil(weakenAndGrowAvailableThreads / 10);
-	var growAvailableRamPool = weakenAndGrowRamPool - (weakenThreads * ramPerHelperThread);
-	var growThreads = Math.floor(growAvailableRamPool / ramPerHelperThread);
-
-	// Copy the scripts
-	ns.scp(hackHelperScript, "home", runningServer);
-	ns.scp(growHelperScript, "home", runningServer);
-	ns.scp(weakenHelperScript, "home", runningServer);
-
-	// Run the scripts
-	await ns.exec(weakenHelperScript, runningServer, weakenThreads, hackTargetServer);
-	await ns.exec(growHelperScript, runningServer, growThreads, hackTargetServer);
-	await ns.exec(hackHelperScript, runningServer, hackThreads, hackTargetServer);
 }
 
 // ===== TESTS ==================================
