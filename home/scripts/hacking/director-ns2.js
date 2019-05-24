@@ -1,6 +1,8 @@
 // ===== IMPORTS ================================
 import * as bsi from "/master/functions/buildServerInfoArray-ns2.js";
 import * as hpn from "/master/functions/getNumOpenablePorts-ns2.js";
+import * as gsr from "/master/functions/getServerRamObj-ns2.js";
+import * as gra from "/master/functions/getRootAccess-ns2.js";
 import * as enumLib from "/master/functions/enumLib-ns2.js";
 var ePortIndex = enumLib.getEnumPortIndexVersion(1);
 
@@ -44,17 +46,18 @@ export async function main(ns) {
 	ns.disableLog("ALL");
 
 	// Build a server list
-	var serverListArray = await bsi.buildHackableServerInfoArray(ns);
+	var hackableServerListArray = await bsi.buildHackableServerInfoArray(ns);
+	var deployServerListArray = await bsi.buildServerInfoArray(ns);
 	var primaryHackTarget = ns.peek(ePortIndex.PRIMARY_HACKING_TARGET); // Could start out as NULL PORT DATA; that's ok. Other scripts need to deal with that.
 
 	// Sort the server list by money, high -> low
-    serverListArray.sort(function(a, b) {
+    hackableServerListArray.sort(function(a, b) {
         return b.maxMoney - a.maxMoney;
     });
 
 	// Start loopin' to find & update target
 	while(true) {
-		var currentBestTarget = getBestHackableTarget(ns, serverListArray);
+		var currentBestTarget = getBestHackableTarget(ns, hackableServerListArray);
 
 		// If the best option is different from our current option, update the port
 		if (currentBestTarget !== primaryHackTarget)
@@ -62,6 +65,15 @@ export async function main(ns) {
 			primaryHackTarget = currentBestTarget;
 			ns.clear(ePortIndex.PRIMARY_HACKING_TARGET);
 			ns.write(ePortIndex.PRIMARY_HACKING_TARGET, currentBestTarget);
+
+			for (var i = 0; i < deployServerListArray.length; i++) {
+				deployServer = deployServerListArray[i];
+
+				if (portBreakingLevel >= deployServer.numPortsRequired) {
+					gra.getRootAccess(ns, deployServer);
+					await deployHackBots(ns, deployServer, primaryHackTarget);
+				}
+			}
 		}
 
 		// Sleep for like...a minute or something.
@@ -83,6 +95,36 @@ function getBestHackableTarget(ns, serverListArray) {
 			return server.name;
 		}
 	}
+}
+
+async function deployHackBots(ns, runningServer, hackTargetServer) {
+	// ns.killall returns true if any scripts were killed, false if not. We're ready to move on if we haven't killed anything
+	while(!ns.killall(runningServer)){ 
+		sleep(1000);
+	}
+
+	var hackHelperScript = "/master/scripts/hacking/helpers/hack_target_loop-ns1.script";
+	var growHelperScript = "/master/scripts/hacking/helpers/grow_target_loop-ns1.script";
+	var weakenHelperScript = "/master/scripts/hacking/helpers/weaken_target_loop-ns1.script";
+
+	var freeRam = gsr.getServerRamObject.freeRam;
+	var ramPerHelperThread = 1.7;
+	var hackThreads = 1;
+	var weakenAndGrowRamPool = freeRam - (hackThreads * ramPerHelperThread); // Reserved for 1 hack thread
+	var weakenAndGrowAvailableThreads = weakenAndGrowRamPool / ramPerHelperThread;
+	var weakenThreads = Math.ceil(weakenAndGrowAvailableThreads / 10);
+	var growAvailableRamPool = weakenAndGrowRamPool - (weakenThreads * ramPerHelperThread);
+	var growThreads = Math.floor(growAvailableRamPool / ramPerHelperThread);
+
+	// Copy the scripts
+	ns.scp(hackHelperScript, "home", runningServer);
+	ns.scp(growHelperScript, "home", runningServer);
+	ns.scp(weakenHelperScript, "home", runningServer);
+
+	// Run the scripts
+	await ns.exec(weakenHelperScript, runningServer, weakenThreads, hackTargetServer);
+	await ns.exec(growHelperScript, runningServer, growThreads, hackTargetServer);
+	await ns.exec(hackHelperScript, runningServer, hackThreads, hackTargetServer);
 }
 
 // ===== TESTS ==================================
