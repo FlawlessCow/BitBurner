@@ -112,7 +112,8 @@ async function deployHackBots(ns, deployServerListArray, hackTargetServer) {
 		var deployServer = deployServerListArray[i];
 		ns.print("Evaluating server: " + deployServer.name);
 
-		if (portBreakingLevel >= deployServer.numPortsRequired) {
+		if (portBreakingLevel >= deployServer.numPortsRequired &&
+			deployServer.ram >= 8) {
 			ns.print("Preparing to deploy the hackBots to: " + deployServer.name);
 			gra.getRootAccess(ns, deployServer.name);
 
