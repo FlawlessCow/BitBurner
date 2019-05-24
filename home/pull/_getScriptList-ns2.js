@@ -58,7 +58,7 @@ export function getScriptList(){
 		"/functions/getNumOpenablePorts-ns2.js",
 		"/functions/getRootAccess-ns1.script",
 		"/functions/getRootAccess-ns2.js",
-		"/functions/getServerRamObject-ns2.js",
+		"/functions/getServerRamObj-ns2.js",
 		// hacking
 		"/hacking/advanced/install_and_run-ns1.script",
 		"/hacking/advanced/run-ns1.script",
