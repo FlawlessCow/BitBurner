@@ -103,7 +103,7 @@ export async function deployHackBots(ns, deployServerListArray, hackTargetServer
 			var ramPerHackHelperThread = ns.getScriptRam(hackHelperScript);
 			var hackReservedRamMinimumModifier = 0.10;
 			var hackMaxStealPercent = 0.01;
-			var hackPercentPerThread = hackAnalyzePercent(hackTargetServer)/100;
+			var hackPercentPerThread = ns.hackAnalyzePercent(hackTargetServer)/100;
 			var hackMaxThreadsRaw = hackMaxStealPercent/hackPercentPerThread;
 			var hackMaxThreads = Math.floor(hackMaxThreadsRaw);
 			var hackMinThreads = 1;
