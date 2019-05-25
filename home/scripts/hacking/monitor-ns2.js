@@ -70,7 +70,7 @@ async function monitorModePrint(ns) {
             ns.print("Bad peek results: " + ns.peek(ePortIndex.PRIMARY_HACKING_TARGET));
         }
 
-        await ns.sleep(sargs.scanFrequency * 1000);
+        await ns.sleep(sArgs.scanFrequency * 1000);
     }
 }
 
@@ -91,7 +91,7 @@ async function monitorModeTPrint(ns) {
             ns.print("Bad peek results: " + ns.peek(ePortIndex.PRIMARY_HACKING_TARGET));
         }
 
-        await ns.sleep(sargs.scanFrequency * 1000);
+        await ns.sleep(sArgs.scanFrequency * 1000);
     }
 }
 
