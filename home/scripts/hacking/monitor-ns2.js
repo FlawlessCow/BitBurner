@@ -42,10 +42,10 @@ export async function main(ns) {
     ns.disableLog("ALL");
     
     if (sArgs.mode === "print") {
-        await monitorModePrint(ns);
+        await monitorModePrint(ns, sArgs.scanFrequency);
     }
     else if (sArgs.mode === "tprint") {
-        await monitorModeTPrint(ns);
+        await monitorModeTPrint(ns, sArgs.scanFrequency);
     }
     else {
         await monitorModePrint(ns);
@@ -53,7 +53,7 @@ export async function main(ns) {
 }
 
 // ===== FUNCTIONS ==============================
-async function monitorModePrint(ns) {
+async function monitorModePrint(ns, scanFrequency) {
     while(true) {
         if (ns.peek(ePortIndex.PRIMARY_HACKING_TARGET) !== "NULL PORT DATA") {
             var scanTarget = ns.peek(ePortIndex.PRIMARY_HACKING_TARGET);
@@ -70,11 +70,11 @@ async function monitorModePrint(ns) {
             ns.print("Bad peek results: " + ns.peek(ePortIndex.PRIMARY_HACKING_TARGET));
         }
 
-        await ns.sleep(sArgs.scanFrequency * 1000);
+        await ns.sleep(scanFrequency * 1000);
     }
 }
 
-async function monitorModeTPrint(ns) {
+async function monitorModeTPrint(ns, scanFrequency) {
     while(true) {
         if (ns.peek(ePortIndex.PRIMARY_HACKING_TARGET) !== "NULL PORT DATA") {
             var scanTarget = ns.peek(ePortIndex.PRIMARY_HACKING_TARGET);
@@ -91,7 +91,7 @@ async function monitorModeTPrint(ns) {
             ns.print("Bad peek results: " + ns.peek(ePortIndex.PRIMARY_HACKING_TARGET));
         }
 
-        await ns.sleep(sArgs.scanFrequency * 1000);
+        await ns.sleep(scanFrequency * 1000);
     }
 }
 
