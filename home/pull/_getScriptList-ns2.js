@@ -75,7 +75,9 @@ export function getScriptList(){
 		"/hacking/helpers/hack_target-ns1.script",
 		"/hacking/helpers/weaken_target_loop-ns1.script",
 		"/hacking/helpers/weaken_target-ns1.script",
+		"/hacking/deployHackBots-ns2.js",
 		"/hacking/director-ns2.js",
+		"/hacking/monitor-ns2.js",
 		// pserv
 		"/pserv/deploy-ns1.script",
 		"/pserv/killall_and_deploy-ns1.script",
