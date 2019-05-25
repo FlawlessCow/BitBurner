@@ -71,7 +71,13 @@ export async function deployHackBots(ns, deployServerListArray, hackTargetServer
 		var deployServer = deployServerListArray[i];
 		ns.print("Evaluating server: " + deployServer.name);
 
-		if ((portBreakingLevel >= deployServer.numPortsRequired && deployServer.ram >= sVars.hackbotDeployServerMinRam && deployServer.isHome === false) || deployServer.isPserv) {
+		var hackHelperScript = "/master/hacking/helpers/hack_target_loop-ns1.script";
+		var growHelperScript = "/master/hacking/helpers/grow_target_loop-ns1.script";
+		var weakenHelperScript = "/master/hacking/helpers/weaken_target_loop-ns1.script";
+
+		var minRequiredRam = ns.getScriptRam(hackHelperScript) + ns.getScriptRam(growHelperScript) + ns.getScriptRam(weakenHelperScript);
+
+		if ((portBreakingLevel >= deployServer.numPortsRequired && deployServer.ram >= minRequiredRam && deployServer.isHome === false) || deployServer.isPserv) {
 			ns.print("Preparing to deploy the hack bots to: " + deployServer.name);
 			gra.getRootAccess(ns, deployServer.name);
 
@@ -80,10 +86,6 @@ export async function deployHackBots(ns, deployServerListArray, hackTargetServer
 				ns.print("Sleeping after trying to killall on " + deployServer.name);
 				await ns.sleep(1000);
 			}
-
-			var hackHelperScript = "/master/hacking/helpers/hack_target_loop-ns1.script";
-			var growHelperScript = "/master/hacking/helpers/grow_target_loop-ns1.script";
-			var weakenHelperScript = "/master/hacking/helpers/weaken_target_loop-ns1.script";
 
 			var freeRam = gsr.getServerRamObject(ns, deployServer.name).free;
 			// Algorithm v2
