@@ -92,14 +92,26 @@ export async function deployHackBots(ns, deployServerListArray, hackTargetServer
 			// Weakening and hacking should make up at least 10% of the RAM pool, the remainder goes towards growing
 			var ramPerWeakenHelperThread = ns.getScriptRam(weakenHelperScript);
 			var weakenReservedRamMinimumModifier = 0.10;
+			var weakenMinThreads = 1;
 			var weakenRamMinRequirement = freeRam * weakenReservedRamMinimumModifier;
 			var weakenThreads = Math.ceil(weakenRamMinRequirement / ramPerWeakenHelperThread);
+			if (weakenThreads < weakenMinThreads) {
+				weakenThreads = weakenMinThreads;
+			}
 			var weakenRamUsage = weakenThreads * ramPerWeakenHelperThread;
 
 			var ramPerHackHelperThread = ns.getScriptRam(hackHelperScript);
 			var hackReservedRamMinimumModifier = 0.10;
+			var hackMaxThreads = Math.floor(ns.hackAnalyzeThreads(0.01 * ns.getServerMaxMoney(hackTargetServer)));
+			var hackMinThreads = 1;
 			var hackRamMinRequirement = freeRam * hackReservedRamMinimumModifier;
 			var hackThreads = Math.ceil(hackRamMinRequirement / ramPerHackHelperThread);
+			if (hackThreads > hackMaxThreads) {
+				hackThreads = hackMaxThreads;
+			}
+			if (hackThreads < hackMinThreads) {
+				hackThreads = hackMinThreads;
+			}
 			var hackRamUsage = hackThreads * ramPerHackHelperThread;
 
 			var ramPerGrowHelperThread = ns.getScriptRam(growHelperScript);
