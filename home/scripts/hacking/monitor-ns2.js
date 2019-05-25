@@ -60,7 +60,7 @@ async function monitorModePrint(ns) {
             var securityCurrent = ns.getServerSecurityLevel(scanTarget);
             var securityMinimum = ns.getServerMinSecurityLevel(scanTarget);
             var moneyCurrent = ns.nFormat(ns.getServerMoneyAvailable(scanTarget), "0,0.00");
-            var moneyMax = ns.nFormat(getServerMaxMoney(scanTarget), "0,0.00");
+            var moneyMax = ns.nFormat(ns.getServerMaxMoney(scanTarget), "0,0.00");
 
             ns.print("scanTarget: " + scanTarget);
             ns.print("Security (Minimum): " + securityCurrent + "(" + securityMinimum + ")");
@@ -81,7 +81,7 @@ async function monitorModeTPrint(ns) {
             var securityCurrent = ns.getServerSecurityLevel(scanTarget);
             var securityMinimum = ns.getServerMinSecurityLevel(scanTarget);
             var moneyCurrent = ns.nFormat(ns.getServerMoneyAvailable(scanTarget), "0,0.00");
-            var moneyMax = ns.nFormat(getServerMaxMoney(scanTarget), "0,0.00");
+            var moneyMax = ns.nFormat(ns.getServerMaxMoney(scanTarget), "0,0.00");
 
             ns.tprint("scanTarget: " + scanTarget);
             ns.tprint("Security (Minimum): " + securityCurrent + "(" + securityMinimum + ")");
