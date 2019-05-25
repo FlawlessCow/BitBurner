@@ -62,7 +62,7 @@ export async function deployHackBots(ns, deployServerListArray, hackTargetServer
 	ns.print("Beggining to deploy the hack bots! Targeting: " + hackTargetServer);
 
 	// Ensure we have root access on the hack target
-	gra.getRootAccess(ns, primaryHackTarget);
+	gra.getRootAccess(ns, hackTargetServer);
 
 	var portBreakingLevel = hpn.getNumOpenablePorts(ns);
 
