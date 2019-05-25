@@ -14,7 +14,7 @@ function getScriptArgs() {
 var sVars = {
     availableCashMod : 0.70,
     ramIncreaseFactor : 16,
-    setupScriptName : "/master/hacking/basic/install_and_run-ns1.script",
+    setupScriptName : "/master/hacking/deployhackBots-ns2.js",
 
 };
 
