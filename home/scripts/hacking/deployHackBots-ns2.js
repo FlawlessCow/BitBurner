@@ -52,7 +52,7 @@ export async function main(ns) {
 	}
 
 	// Function is built around a server array, so we build a simple one
-	var serverInfoArray = [bsi.getTargetInfo(ns, sArgs.hackTarget, null, 0)];
+	var serverInfoArray = [bsi.getTargetInfo(ns, sArgs.deployTarget, null, 0)];
 
 	// Deploy the hackbots
 	await deployHackBots(ns, serverInfoArray, bestHackTarget);
