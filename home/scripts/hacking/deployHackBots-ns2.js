@@ -1,5 +1,6 @@
 // ===== IMPORTS ================================
 import * as bsi from "/master/functions/buildServerInfoArray-ns2.js";
+import * as hpn from "/master/functions/getNumOpenablePorts-ns2.js";
 import * as gsr from "/master/functions/getServerRamObj-ns2.js";
 import * as gra from "/master/functions/getRootAccess-ns2.js";
 import * as enumLib from "/master/functions/enumLib-ns2.js";
