@@ -42,13 +42,13 @@ export async function main(ns) {
     ns.disableLog("ALL");
     
     if (mode === "print") {
-        await monitorModePrint(ns)
+        await monitorModePrint(ns);
     }
     else if (mode === "tprint") {
-        await monitorModeTPrint(ns)
+        await monitorModeTPrint(ns);
     }
     else {
-        await monitorModePrint(ns)
+        await monitorModePrint(ns);
     }
 }
 
@@ -70,11 +70,11 @@ async function monitorModePrint(ns) {
             ns.print("Bad peek results: " + ns.peek(ePortIndex.PRIMARY_HACKING_TARGET));
         }
 
-        await ns.sleep(sargs.scanFrequency * 1000)
+        await ns.sleep(sargs.scanFrequency * 1000);
     }
 }
 
-function monitorModeTPrint(ns) {
+async function monitorModeTPrint(ns) {
     while(true) {
         if (ns.peek(ePortIndex.PRIMARY_HACKING_TARGET) !== "NULL PORT DATA") {
             var scanTarget = ns.peek(ePortIndex.PRIMARY_HACKING_TARGET);
@@ -91,7 +91,7 @@ function monitorModeTPrint(ns) {
             ns.print("Bad peek results: " + ns.peek(ePortIndex.PRIMARY_HACKING_TARGET));
         }
 
-        await ns.sleep(sargs.scanFrequency * 1000)
+        await ns.sleep(sargs.scanFrequency * 1000);
     }
 }
 
