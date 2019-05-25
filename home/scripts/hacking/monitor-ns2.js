@@ -41,10 +41,10 @@ export async function main(ns) {
 	ns.print("Starting script...");
     ns.disableLog("ALL");
     
-    if (mode === "print") {
+    if (sArgs.mode === "print") {
         await monitorModePrint(ns);
     }
-    else if (mode === "tprint") {
+    else if (sArgs.mode === "tprint") {
         await monitorModeTPrint(ns);
     }
     else {
