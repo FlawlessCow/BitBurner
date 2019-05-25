@@ -1,6 +1,7 @@
 // ===== IMPORTS ================================
 import * as bsi from "/master/functions/buildServerInfoArray-ns2.js";
 import * as gsr from "/master/functions/getServerRamObj-ns2.js";
+import * as gra from "/master/functions/getRootAccess-ns2.js";
 import * as enumLib from "/master/functions/enumLib-ns2.js";
 var ePortIndex = enumLib.getEnumPortIndexVersion(1);
 
@@ -50,7 +51,7 @@ export async function main(ns) {
 	}
 
 	// Function is built around a server array, so we build a simple one
-	var serverInfoArray = [getTargetInfo(ns, sArgs.hackTarget, null, 0)];
+	var serverInfoArray = [bsi.getTargetInfo(ns, sArgs.hackTarget, null, 0)];
 
 	// Deploy the hackbots
 	await deployHackBots(ns, serverInfoArray, bestHackTarget);
