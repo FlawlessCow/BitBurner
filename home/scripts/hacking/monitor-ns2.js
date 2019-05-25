@@ -5,7 +5,7 @@ var ePortIndex = enumLib.getEnumPortIndexVersion(1);
 // ===== ARGS ===================================
 function getScriptArgs(ns) {
     var scriptArgs = {
-        scanFrequency : ns.arge[0],
+        scanFrequency : ns.args[0],
         mode : ns.args[1],
     };
     
