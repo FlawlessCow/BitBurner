@@ -3,20 +3,18 @@
 // ===== ARGS ===================================
 function getScriptArgs() {
     var scriptArgs = {
-        firstArg : ns.args[0]
+        hackTarget : args[0],
+        desiredRam : args[1],
     };
     
     return scriptArgs;
 }
 
-var hackTarget = args[0];
-var desiredRam = args[1];
-var availableCashMod = 0.70;
-var ramIncreaseFactor = 16;
-var setupScriptName = "/master/hacking/basic/install_and_run-ns1.script";
-
 // ===== VARS ===================================
 var sVars = {
+    availableCashMod : 0.70,
+    ramIncreaseFactor : 16,
+    setupScriptName : "/master/hacking/basic/install_and_run-ns1.script",
 
 };
 
@@ -46,8 +44,8 @@ function main() {
 	print("Starting script...");
     disableLog("ALL");
     
-    if(desiredRam > getPurchasedServerMaxRam()) {
-        tprint("buy_server.script: desiredRam (args[1]) exceeds getPurchasedServerMaxRam. Exiting.");
+    if(sArgs.desiredRam > getPurchasedServerMaxRam()) {
+        tprint("buy_server.script: sArgs.desiredRam (args[1]) exceeds getPurchasedServerMaxRam. Exiting.");
         exit();
     }
     
@@ -57,37 +55,37 @@ function main() {
     print("DEBUG: server limit:" + getPurchasedServerLimit());
     while(getPurchasedServers().length < getPurchasedServerLimit())
     {
-        print("DEBUG: Buying at " + desiredRam +"GB");
+        print("DEBUG: Buying at " + sArgs.desiredRam +"GB");
         
         // wait to have enough money to buy
-        if(getServerMoneyAvailable("home") > getPurchasedServerCost(desiredRam))
+        if(getServerMoneyAvailable("home") > getPurchasedServerCost(sArgs.desiredRam))
         {
             // create a server name
-            var servName = "pserv-" + desiredRam + "GB";
+            var servName = "pserv-" + sArgs.desiredRam + "GB";
             
             // buy a server
             var hostname = ""
             while (hostname === "") {
-                while(getServerMoneyAvailable("home")*availableCashMod < getPurchasedServerCost(desiredRam))
+                while(getServerMoneyAvailable("home")*sVars.availableCashMod < getPurchasedServerCost(sArgs.desiredRam))
                 {
-                    print("DEBUG: Not enough money! Have/Need:" + Math.floor(getServerMoneyAvailable("home")) + "/" + getPurchasedServerCost(desiredRam));
+                    print("DEBUG: Not enough money! Have/Need:" + Math.floor(getServerMoneyAvailable("home")) + "/" + getPurchasedServerCost(sArgs.desiredRam));
                     sleep(60*1000);
                 }
-                hostname = purchaseServer(servName, desiredRam);
+                hostname = purchaseServer(servName, sArgs.desiredRam);
             }
             
             // copy and run script
-            run(setupScriptName, 1, hostname, hackTarget);
+            run(sVars.setupScriptName, 1, hostname, sArgs.hackTarget);
         }
     }
     
     //increase the desireRam count as a one off
-    desiredRam = desiredRam*ramIncreaseFactor;
+    sArgs.desiredRam = sArgs.desiredRam*sVars.ramIncreaseFactor;
     
     // loop to upgrade servers
-    while (desiredRam <= getPurchasedServerMaxRam())
+    while (sArgs.desiredRam <= getPurchasedServerMaxRam())
     {
-        print("DEBUG: Buying at " + desiredRam +"GB");
+        print("DEBUG: Buying at " + sArgs.desiredRam +"GB");
         
         // call get purchased servers
         var purchasedServers = getPurchasedServers();
@@ -97,11 +95,11 @@ function main() {
             var oldHostname = purchasedServers[servIndex];
             print("DEBUG: Evaluating: " + oldHostname);
             
-            if(getServerRam(oldHostname)[0] < desiredRam)
+            if(getServerRam(oldHostname)[0] < sArgs.desiredRam)
             {
-                while(getServerMoneyAvailable("home")*availableCashMod < getPurchasedServerCost(desiredRam))
+                while(getServerMoneyAvailable("home")*sVars.availableCashMod < getPurchasedServerCost(sArgs.desiredRam))
                 {
-                    print("DEBUG: Not enough money! Have/Need:" + Math.floor(getServerMoneyAvailable("home")) + "/" + getPurchasedServerCost(desiredRam));
+                    print("DEBUG: Not enough money! Have/Need:" + Math.floor(getServerMoneyAvailable("home")) + "/" + getPurchasedServerCost(sArgs.desiredRam));
                     sleep(60*1000);
                 }
                 
@@ -115,27 +113,27 @@ function main() {
                 deleteServer(oldHostname);
                 
                 // buy a server
-                var servName = "pserv-" + desiredRam + "GB";
+                var servName = "pserv-" + sArgs.desiredRam + "GB";
                 var newHostname = ""
     
                 while (newHostname === "") {
-                    while(getServerMoneyAvailable("home")*availableCashMod < getPurchasedServerCost(desiredRam))
+                    while(getServerMoneyAvailable("home")*sVars.availableCashMod < getPurchasedServerCost(sArgs.desiredRam))
                     {
-                        print("DEBUG: Not enough money! Have/Need:" + Math.floor(getServerMoneyAvailable("home")) + "/" + getPurchasedServerCost(desiredRam));
+                        print("DEBUG: Not enough money! Have/Need:" + Math.floor(getServerMoneyAvailable("home")) + "/" + getPurchasedServerCost(sArgs.desiredRam));
                         sleep(60*1000);
                     }
-                    newHostname = purchaseServer(servName, desiredRam);
+                    newHostname = purchaseServer(servName, sArgs.desiredRam);
                     sleep(1000);
                 }
                 print("DEBUG: New server named: " + newHostname);
                 
                 // copy and run scripts
-                run(setupScriptName, 1, newHostname, hackTarget);
+                run(sVars.setupScriptName, 1, newHostname, sArgs.hackTarget);
             }
         }
         
         // increase ram for the next loop
-        desiredRam = desiredRam*ramIncreaseFactor;
+        sArgs.desiredRam = sArgs.desiredRam*sVars.ramIncreaseFactor;
         
     }
 }
