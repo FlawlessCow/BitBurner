@@ -77,67 +77,74 @@ export async function deployHackBots(ns, deployServerListArray, hackTargetServer
 
 		var minRequiredRam = ns.getScriptRam(hackHelperScript) + ns.getScriptRam(growHelperScript) + ns.getScriptRam(weakenHelperScript);
 
-		if ((portBreakingLevel >= deployServer.numPortsRequired && deployServer.ram >= minRequiredRam && deployServer.isHome === false) || deployServer.isPserv) {
-			ns.print("Preparing to deploy the hack bots to: " + deployServer.name);
-			gra.getRootAccess(ns, deployServer.name);
+		try {
+			if ((portBreakingLevel >= deployServer.numPortsRequired && deployServer.ram >= minRequiredRam && deployServer.isHome === false) || deployServer.isPserv) {
+				ns.print("Preparing to deploy the hack bots to: " + deployServer.name);
+				gra.getRootAccess(ns, deployServer.name);
 
-			// ns.killall returns true if any scripts were killed, false if not. We're ready to move on if we haven't killed anything
-			while (ns.killall(deployServer.name)) {
-				ns.print("Sleeping after trying to killall on " + deployServer.name);
-				await ns.sleep(1000);
+				// ns.killall returns true if any scripts were killed, false if not. We're ready to move on if we haven't killed anything
+				while (ns.killall(deployServer.name)) {
+					ns.print("Sleeping after trying to killall on " + deployServer.name);
+					await ns.sleep(1000);
+				}
+
+				var freeRam = gsr.getServerRamObject(ns, deployServer.name).free;
+				// Algorithm v2
+				// Weakening and hacking should make up at least 10% of the RAM pool, the remainder goes towards growing
+				var ramPerWeakenHelperThread = ns.getScriptRam(weakenHelperScript);
+				var weakenReservedRamMinimumModifier = 0.10;
+				var weakenMinThreads = 1;
+				var weakenRamMinRequirement = freeRam * weakenReservedRamMinimumModifier;
+				var weakenThreads = Math.ceil(weakenRamMinRequirement / ramPerWeakenHelperThread);
+				if (weakenThreads < weakenMinThreads) {
+					weakenThreads = weakenMinThreads;
+				}
+				var weakenRamUsage = weakenThreads * ramPerWeakenHelperThread;
+
+				var ramPerHackHelperThread = ns.getScriptRam(hackHelperScript);
+				var hackReservedRamMinimumModifier = 0.10;
+				var hackMaxStealPercent = 0.01;
+				var hackPercentPerThread = ns.hackAnalyzePercent(hackTargetServer)/100;
+				var hackMaxThreadsRaw = hackMaxStealPercent/hackPercentPerThread;
+				var hackMaxThreads = Math.floor(hackMaxThreadsRaw);
+				var hackMinThreads = 1;
+				var hackRamMinRequirement = freeRam * hackReservedRamMinimumModifier;
+				var hackThreads = Math.ceil(hackRamMinRequirement / ramPerHackHelperThread);
+				if (hackThreads > hackMaxThreads) {
+					hackThreads = hackMaxThreads;
+				}
+				if (hackThreads < hackMinThreads) {
+					hackThreads = hackMinThreads;
+				}
+				var hackRamUsage = hackThreads * ramPerHackHelperThread;
+
+				var ramPerGrowHelperThread = ns.getScriptRam(growHelperScript);
+				var growRamPool = freeRam - (weakenRamUsage + hackRamUsage);
+				var growThreads = Math.floor(growRamPool / ramPerGrowHelperThread);
+
+				ns.print("=========== Thread Count Dump ===========");
+				ns.print("weakenThreads: " + weakenThreads);
+				ns.print("growThreads: " + growThreads);
+				ns.print("hackThreads: " + hackThreads);
+				ns.print("============= End Debug Dump ============");
+
+				// Copy the scripts
+				ns.print("Copying scripts...");
+				ns.scp(hackHelperScript, "home", deployServer.name);
+				ns.scp(growHelperScript, "home", deployServer.name);
+				ns.scp(weakenHelperScript, "home", deployServer.name);
+
+				// Run the scripts
+				ns.print("Launching the hack bots!");
+				await ns.exec(weakenHelperScript, deployServer.name, weakenThreads, hackTargetServer);
+				await ns.exec(growHelperScript, deployServer.name, growThreads, hackTargetServer);
+				await ns.exec(hackHelperScript, deployServer.name, hackThreads, hackTargetServer);
 			}
-
-			var freeRam = gsr.getServerRamObject(ns, deployServer.name).free;
-			// Algorithm v2
-			// Weakening and hacking should make up at least 10% of the RAM pool, the remainder goes towards growing
-			var ramPerWeakenHelperThread = ns.getScriptRam(weakenHelperScript);
-			var weakenReservedRamMinimumModifier = 0.10;
-			var weakenMinThreads = 1;
-			var weakenRamMinRequirement = freeRam * weakenReservedRamMinimumModifier;
-			var weakenThreads = Math.ceil(weakenRamMinRequirement / ramPerWeakenHelperThread);
-			if (weakenThreads < weakenMinThreads) {
-				weakenThreads = weakenMinThreads;
-			}
-			var weakenRamUsage = weakenThreads * ramPerWeakenHelperThread;
-
-			var ramPerHackHelperThread = ns.getScriptRam(hackHelperScript);
-			var hackReservedRamMinimumModifier = 0.10;
-			var hackMaxStealPercent = 0.01;
-			var hackPercentPerThread = ns.hackAnalyzePercent(hackTargetServer)/100;
-			var hackMaxThreadsRaw = hackMaxStealPercent/hackPercentPerThread;
-			var hackMaxThreads = Math.floor(hackMaxThreadsRaw);
-			var hackMinThreads = 1;
-			var hackRamMinRequirement = freeRam * hackReservedRamMinimumModifier;
-			var hackThreads = Math.ceil(hackRamMinRequirement / ramPerHackHelperThread);
-			if (hackThreads > hackMaxThreads) {
-				hackThreads = hackMaxThreads;
-			}
-			if (hackThreads < hackMinThreads) {
-				hackThreads = hackMinThreads;
-			}
-			var hackRamUsage = hackThreads * ramPerHackHelperThread;
-
-			var ramPerGrowHelperThread = ns.getScriptRam(growHelperScript);
-			var growRamPool = freeRam - (weakenRamUsage + hackRamUsage);
-			var growThreads = Math.floor(growRamPool / ramPerGrowHelperThread);
-
-			ns.print("=========== Thread Count Dump ===========");
-			ns.print("weakenThreads: " + weakenThreads);
-			ns.print("growThreads: " + growThreads);
-			ns.print("hackThreads: " + hackThreads);
-			ns.print("============= End Debug Dump ============");
-
-			// Copy the scripts
-			ns.print("Copying scripts...");
-			ns.scp(hackHelperScript, "home", deployServer.name);
-			ns.scp(growHelperScript, "home", deployServer.name);
-			ns.scp(weakenHelperScript, "home", deployServer.name);
-
-			// Run the scripts
-			ns.print("Launching the hack bots!");
-			await ns.exec(weakenHelperScript, deployServer.name, weakenThreads, hackTargetServer);
-			await ns.exec(growHelperScript, deployServer.name, growThreads, hackTargetServer);
-			await ns.exec(hackHelperScript, deployServer.name, hackThreads, hackTargetServer);
+		}
+		catch(error)
+		{
+			ns.tprint(error);
+			ns.tprint("Likely a server stopped existing");
 		}
 
 		await ns.sleep(1000);

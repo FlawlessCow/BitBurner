@@ -56,6 +56,7 @@ export async function main(ns) {
 	var primaryHackTarget = ns.peek(ePortIndex.PRIMARY_HACKING_TARGET); // Could start out as NULL PORT DATA
 	if(primaryHackTarget !== "NULL PORT DATA") {
 		gra.getRootAccess(ns, primaryHackTarget);
+		deployServerListArray = await bsi.buildServerInfoArray(ns);
 		await dhb.deployHackBots(ns, deployServerListArray, primaryHackTarget);
 	}
 	
@@ -80,6 +81,7 @@ export async function main(ns) {
 
 			// Re-deploy the hackbots at the new target
 			gra.getRootAccess(ns, primaryHackTarget);
+			deployServerListArray = await bsi.buildServerInfoArray(ns);
 			await dhb.deployHackBots(ns, deployServerListArray, primaryHackTarget);
 
 		}
