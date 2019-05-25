@@ -114,7 +114,7 @@ function main() {
                 
                 // buy a server
                 var servName = "pserv-" + sArgs.desiredRam + "GB";
-                var newHostname = ""
+                var newHostname = "";
     
                 while (newHostname === "") {
                     while(getServerMoneyAvailable("home")*sVars.availableCashMod < getPurchasedServerCost(sArgs.desiredRam))
