@@ -57,14 +57,14 @@ async function monitorModePrint(ns, scanFrequency) {
     while(true) {
         if (ns.peek(ePortIndex.PRIMARY_HACKING_TARGET) !== "NULL PORT DATA") {
             var scanTarget = ns.peek(ePortIndex.PRIMARY_HACKING_TARGET);
-            var securityCurrent = ns.getServerSecurityLevel(scanTarget);
-            var securityMinimum = ns.getServerMinSecurityLevel(scanTarget);
+            var securityCurrent = ns.nFormat(ns.getServerSecurityLevel(scanTarget), "0,0.0");
+            var securityMinimum = ns.nFormat(ns.getServerMinSecurityLevel(scanTarget), "0,0.0");
             var moneyCurrent = ns.nFormat(ns.getServerMoneyAvailable(scanTarget), "0,0.00");
             var moneyMax = ns.nFormat(ns.getServerMaxMoney(scanTarget), "0,0.00");
 
             ns.print("scanTarget: " + scanTarget);
-            ns.print("Security (Minimum): " + securityCurrent + "(" + securityMinimum + ")");
-            ns.print("Money (Max): " + moneyCurrent + "(" + moneyMax + ")");
+            ns.print("Security (Minimum): " + securityCurrent + " (" + securityMinimum + ")");
+            ns.print("Money (Max): " + moneyCurrent + " (" + moneyMax + ")");
         }
         else {
             ns.print("Bad peek results: " + ns.peek(ePortIndex.PRIMARY_HACKING_TARGET));
@@ -78,14 +78,14 @@ async function monitorModeTPrint(ns, scanFrequency) {
     while(true) {
         if (ns.peek(ePortIndex.PRIMARY_HACKING_TARGET) !== "NULL PORT DATA") {
             var scanTarget = ns.peek(ePortIndex.PRIMARY_HACKING_TARGET);
-            var securityCurrent = ns.getServerSecurityLevel(scanTarget);
-            var securityMinimum = ns.getServerMinSecurityLevel(scanTarget);
+            var securityCurrent = ns.nFormat(ns.getServerSecurityLevel(scanTarget), "0,0.0");
+            var securityMinimum = ns.nFormat(ns.getServerMinSecurityLevel(scanTarget), "0,0.0");
             var moneyCurrent = ns.nFormat(ns.getServerMoneyAvailable(scanTarget), "0,0.00");
             var moneyMax = ns.nFormat(ns.getServerMaxMoney(scanTarget), "0,0.00");
 
             ns.tprint("scanTarget: " + scanTarget);
-            ns.tprint("Security (Minimum): " + securityCurrent + "(" + securityMinimum + ")");
-            ns.tprint("Money (Max): " + moneyCurrent + "(" + moneyMax + ")");
+            ns.tprint("Security (Minimum): " + securityCurrent + " (" + securityMinimum + ")");
+            ns.tprint("Money (Max): " + moneyCurrent + " (" + moneyMax + ")");
         }
         else {
             ns.print("Bad peek results: " + ns.peek(ePortIndex.PRIMARY_HACKING_TARGET));
