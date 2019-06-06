@@ -51,7 +51,7 @@ export async function main(ns) {
 async function recruitmentMembers(ns) {
     while (ns.gang.canRecruitMember()) {
         var currentDateTime = new Date();
-        var newGangMemberName = "Android-" + currentDateTime.getMilliseconds;
+        var newGangMemberName = "Android-" + currentDateTime.getTime();
         ns.gang.recruitMember(newGangMemberName);
 
         await ns.sleep(100);
