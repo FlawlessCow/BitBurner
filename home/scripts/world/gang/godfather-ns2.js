@@ -11,7 +11,7 @@ function getScriptArgs(ns) {
 
 // ===== VARS ===================================
 var sVars = {
-    equipmentSpendLimit : 0.20,
+    equipmentSpendLimitMod : 0.50,
 };
 
 var tests = {
@@ -60,15 +60,60 @@ async function recruitmentMembers(ns) {
 }
 
 function updateGangMemberCombatEquipment(ns) {
+    if(ns.gang.getGangInformation().isHacking === false) {
+        ns.print("Buying combat equipment");
 
+        // Get a list of possible equipment
+        var equipmentNamesArray = ns.gang.getEquipmentNames();
+        
+        for(var i=0; i < equipmentNamesArray.length; i++) {
+            var equipment = equipmentNamesArray[i];
+
+            if(gang.getEquipmentType(equipment) !== "Rootkit" && gang.getEquipmentType(equipment) !== "Augmentation") {
+                purchaseEquipmentForAllGangMembers(ns, equipment);
+            }
+        }
+    }
 }
 
 function updateGangMemberHackingEquipment(ns) {
+    if(ns.gang.getGangInformation().isHacking === true) {
+        ns.print("Buying hacking equipment");
 
+        // Get a list of possible equipment
+        var equipmentNamesArray = ns.gang.getEquipmentNames();
+        
+        for(var i=0; i < equipmentNamesArray.length; i++) {
+            var equipment = equipmentNamesArray[i];
+    
+            if(gang.getEquipmentType(equipment) === "Rootkit" && gang.getEquipmentType(equipment) !== "Augmentation") {
+                purchaseEquipmentForAllGangMembers(ns, equipment);
+            }
+        }
+    }
 }
 
 function updateGangMemberTasks(ns) {
     // Task will be "Unassigned" if not assigned
+}
+
+function purchaseEquipmentForAllGangMembers(ns, equipment) {
+    var gangMemberNamesArray = ns.gang.getMemberNames();
+
+    var equipmentCost = ns.gang.getEquipmentCost(equipment);
+
+    for(var i=0; i < gangMemberNamesArray.length; i++) {
+        var gangMember = gangMemberNamesArray[i];
+        var equipmentSpendLimit = getMyMoney() * sVars.equipmentSpendLimitMod;
+
+        if(equipmentCost < equipmentSpendLimit) {
+            ns.gang.purchaseEquipment(gangMember, equipment);
+        }
+    }
+}
+
+function getMyMoney(ns) {
+    return ns.getServerMoneyAvailable("home");
 }
 
 // ===== TESTS ==================================
