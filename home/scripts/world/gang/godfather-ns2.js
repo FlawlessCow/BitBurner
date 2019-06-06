@@ -11,7 +11,7 @@ function getScriptArgs(ns) {
 
 // ===== VARS ===================================
 var sVars = {
-
+    equipmentSpendLimit : 0.20,
 };
 
 var tests = {
@@ -40,7 +40,8 @@ export async function main(ns) {
     
     while(true) {
         await recruitmentMembers(ns);
-        updateGangMemberEquipment(ns);
+        updateGangMemberCombatEquipment(ns);
+        updateGangMemberHackingEquipment(ns);
         updateGangMemberTasks(ns);
 
         await ns.sleep(100);
@@ -58,12 +59,16 @@ async function recruitmentMembers(ns) {
     }
 }
 
-function updateGangMemberEquipment(ns) {
+function updateGangMemberCombatEquipment(ns) {
+
+}
+
+function updateGangMemberHackingEquipment(ns) {
 
 }
 
 function updateGangMemberTasks(ns) {
-
+    // Task will be "Unassigned" if not assigned
 }
 
 // ===== TESTS ==================================
