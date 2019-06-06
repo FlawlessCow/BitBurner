@@ -36,11 +36,35 @@ export async function main(ns) {
 	
 	// - Real Script Logic ----------------------
 	ns.print("Starting script...");
-	ns.disableLog("ALL");
+    ns.disableLog("ALL");
+    
+    while(true) {
+        await recruitmentMembers(ns);
+        updateGangMemberEquipment(ns);
+        updateGangMemberTasks(ns);
+
+        await ns.sleep(100);
+    }
 }
 
 // ===== FUNCTIONS ==============================
+async function recruitmentMembers(ns) {
+    while (ns.gang.canRecruitMember()) {
+        var currentDateTime = new Date();
+        var newGangMemberName = "Android-" + currentDateTime.getMilliseconds;
+        ns.gang.recruitMember(newGangMemberName);
 
+        await ns.sleep(100);
+    }
+}
+
+function updateGangMemberEquipment(ns) {
+
+}
+
+function updateGangMemberTasks(ns) {
+
+}
 
 // ===== TESTS ==================================
 function executeTests(ns) {
