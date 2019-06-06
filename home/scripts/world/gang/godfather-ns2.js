@@ -104,7 +104,7 @@ function purchaseEquipmentForAllGangMembers(ns, equipment) {
 
     for(var i=0; i < gangMemberNamesArray.length; i++) {
         var gangMember = gangMemberNamesArray[i];
-        var equipmentSpendLimit = getMyMoney() * sVars.equipmentSpendLimitMod;
+        var equipmentSpendLimit = getMyMoney(ns) * sVars.equipmentSpendLimitMod;
 
         if(equipmentCost < equipmentSpendLimit) {
             ns.gang.purchaseEquipment(gangMember, equipment);
