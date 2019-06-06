@@ -1,6 +1,12 @@
 var target = args[0];
+var targetMaxMoney = args[1];
 
 while(true) {
-    hack(target);
+    targetCurrentMoney = getServerMoneyAvailable(target);
+    targetMoneyPercent = targetCurrentMoney/targetMaxMoney;
+    if(targetMoneyPercent > 0.50)
+    {
+        hack(target);
+    }
     sleep(100);
 }
