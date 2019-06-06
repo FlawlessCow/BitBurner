@@ -69,7 +69,7 @@ function updateGangMemberCombatEquipment(ns) {
         for(var i=0; i < equipmentNamesArray.length; i++) {
             var equipment = equipmentNamesArray[i];
 
-            if(gang.getEquipmentType(equipment) !== "Rootkit" && gang.getEquipmentType(equipment) !== "Augmentation") {
+            if(ns.gang.getEquipmentType(equipment) !== "Rootkit" && ns.gang.getEquipmentType(equipment) !== "Augmentation") {
                 purchaseEquipmentForAllGangMembers(ns, equipment);
             }
         }
@@ -86,7 +86,7 @@ function updateGangMemberHackingEquipment(ns) {
         for(var i=0; i < equipmentNamesArray.length; i++) {
             var equipment = equipmentNamesArray[i];
     
-            if(gang.getEquipmentType(equipment) === "Rootkit" && gang.getEquipmentType(equipment) !== "Augmentation") {
+            if(ns.gang.getEquipmentType(equipment) === "Rootkit" && ns.gang.getEquipmentType(equipment) !== "Augmentation") {
                 purchaseEquipmentForAllGangMembers(ns, equipment);
             }
         }
