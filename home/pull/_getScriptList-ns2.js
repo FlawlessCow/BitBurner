@@ -87,6 +87,8 @@ export function getScriptList(){
 		// templates
 		"/templates/ns1_template.js",
 		"/templates/ns2_template.js",
+		// world
+		"/world/gang/godfater-ns2.js",
 	];
 
 	return scripts;
