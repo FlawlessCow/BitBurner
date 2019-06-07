@@ -48,6 +48,8 @@ export function getScriptList(){
 		"/character/hacknet/hashmanager-ns2.js",
 		"/character/hacknet/node_autobuy-ns2.js",
 		"/character/hacknet/server_autobuy-ns2.js",
+		// walet
+		"/character/wallet-ns2.js",
 		// deploy
 		"/deploy/kill_all-ns2.js",
 		"/deploy/server_steal_basic-ns2.js",
