@@ -62,7 +62,7 @@ export function getSpendLimits() {
 }
 
 export async function async_waitForEnoughMoney(ns, spendLimitModifier, desiredMoney) {
-    availableMoney = getAvailableMoney(ns, spendLimitModifier);
+    var availableMoney = getAvailableMoney(ns, spendLimitModifier);
 
     while (availableMoney < desiredMoney) {
         debugDumpMoneyStats(ns, availableMoney, desiredMoney);
