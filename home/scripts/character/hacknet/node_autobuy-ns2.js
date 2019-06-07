@@ -87,7 +87,7 @@ export async function main(ns) {
 					await ns.sleep(5000);
 				}
 				ns.print("Buying a node");
-				purchaseAndUpgradeNode(ns);
+				await purchaseAndUpgradeNode(ns);
 				break;
 			case buy.level:
 				ns.print("Upgrading LEVELS of all nodes");
@@ -549,7 +549,7 @@ async function purchaseAndUpgradeNode(ns) {
 }
 
 async function upgradeAllToMatchBaseNodeAsync(ns) {
-    baseNodeStats = ns.hacknet.getNodeStats(0);
+    var baseNodeStats = ns.hacknet.getNodeStats(0);
     
     var desiredLevel = baseNodeStats.level;
     var desiredRam = baseNodeStats.ram;
