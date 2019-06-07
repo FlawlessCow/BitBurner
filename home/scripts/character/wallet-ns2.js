@@ -62,14 +62,15 @@ export function getSpendLimits() {
 }
 
 export async function async_waitForEnoughMoney(ns, spendLimitModifier, desiredMoney) {
-    while (getAvailableMoney(ns, spendLimitModifier) < ns.getPurchasedServerCost(desiredMoney)) {
-        debugDumpMoneyStats(ns, desiredMoney);
+    availableMoney = getAvailableMoney(ns, spendLimitModifier);
+
+    while (availableMoney < desiredMoney) {
+        debugDumpMoneyStats(ns, availableMoney, desiredMoney);
         await ns.sleep(60 * 1000);
     }
 }
 
-export function debugDumpMoneyStats(ns, spendLimitModifier, desiredMoney) {
-    var availableMoney = getAvailableMoney(ns, spendLimitModifier);
+export function debugDumpMoneyStats(ns, availableMoney, desiredMoney) {
     var percentageOfNeeded = (availableMoney/desiredMoney)*100;
 
     ns.print("DEBUG: Not enough money! " +
