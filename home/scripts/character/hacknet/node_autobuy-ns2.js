@@ -63,11 +63,11 @@ export async function main(ns) {
 		nodeCost = ns.hacknet.getPurchaseNodeCost();
 
 		ns.print("Waiting for more money to buy a node!");
-		ns.print("Want: $" + ns.nFormat(nodeCost/sVars.moneySpendLimitPercent, "0,0.00"));
 
-		while(nodeCost > wallet.getAvailableMoney(ns, wallet.spendLimts.hackent)) {
-			await ns.sleep(5000);
-		}
+		// Wait for enough money
+		await wallet.async_waitForEnoughMoney(ns, wallet.spendLimits.hacknet, nodeCost);
+		
+		// Buy the node
 		ns.hacknet.purchaseNode();
 	}
 
@@ -83,11 +83,10 @@ export async function main(ns) {
 				nodeCost = ns.hacknet.getPurchaseNodeCost();
 
 				ns.print("Waiting for more money to buy a node!");
-				ns.print("Want: $" + ns.nFormat(nodeCost/sVars.moneySpendLimitPercent, "0,0.00"));
 				
-				while(nodeCost > wallet.getMyMoney(ns) * sVars.moneySpendLimitPercent) {
-					await ns.sleep(5000);
-				}
+				// Wait for enough money
+				await wallet.async_waitForEnoughMoney(ns, wallet.spendLimits.hacknet, nodeCost);
+
 				ns.print("Buying a node");
 				await purchaseAndUpgradeNode(ns);
 				break;
@@ -493,10 +492,8 @@ async function upgradeNodeToDesiredLevelAsync(ns, nodeIndex, desiredLevel) {
         
         // Wait to have enough money to buy the next level
 		ns.print("Waiting for more money to buy a level");
-		ns.print("Want: $" + ns.nFormat(cost/sVars.moneySpendLimitPercent, "0,0.00"));
-        while (cost > wallet.getMyMoney(ns) * sVars.moneySpendLimitPercent) {
-            await ns.sleep(5000);
-        }
+
+		await wallet.async_waitForEnoughMoney(ns, wallet.spendLimits.hacknet, cost);
         
         ns.hacknet.upgradeLevel(nodeIndex, 1);
     }
@@ -509,10 +506,8 @@ async function upgradeNodeToDesiredRamAsync(ns, nodeIndex, desiredRam) {
         
         // Wait to have enough money to buy the next ram
 		ns.print("Waiting for more money to buy a RAM");
-		ns.print("Want: $" + ns.nFormat(cost/sVars.moneySpendLimitPercent, "0,0.00"));
-        while (cost > wallet.getMyMoney(ns) * sVars.moneySpendLimitPercent) {
-            await ns.sleep(5000);
-        }
+		
+		await wallet.async_waitForEnoughMoney(ns, wallet.spendLimits.hacknet, cost);
         
         ns.hacknet.upgradeRam(nodeIndex, 1);
     }
@@ -525,10 +520,8 @@ async function upgradeNodeToDesiredCoresAsync(ns, nodeIndex, desiredCores) {
         
         // Wait to have enough money to buy the next cores
 		ns.print("Waiting for more money to buy a core");
-		ns.print("Want: $" + ns.nFormat(cost/sVars.moneySpendLimitPercent, "0,0.00"));
-        while (cost > wallet.getMyMoney(ns) * sVars.moneySpendLimitPercent) {
-            await ns.sleep(5000);
-        }
+
+		await wallet.async_waitForEnoughMoney(ns, wallet.spendLimits.hacknet, cost);
         
         ns.hacknet.upgradeCore(nodeIndex, 1);
     }
