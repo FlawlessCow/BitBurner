@@ -96,6 +96,6 @@ function setup1PortBasicHacks(serverList, hackingScript, hackingScriptTarget) {
 clear(ePortIndex.PRIMARY_HACKING_TARGET);
 
 run("/master/character/hacknet/node_autobuy-ns2.js");
-run("/master/buy_server/buy_server-ns1.script", 1, sVars.pservHackTarget, sVars.pservStartingRamAmount);
+run("/master/buy_server/buy_server-ns2.js", 1, sVars.pservHackTarget, sVars.pservStartingRamAmount);
 run("/master/hacking/director-ns2.js");
 run("/master/hacking/monitor-ns2.js", 1, 300, "tprint");
