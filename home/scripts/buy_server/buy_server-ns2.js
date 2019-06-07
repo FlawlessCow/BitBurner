@@ -62,7 +62,7 @@ async function purchaseNewServers(ns, desiredRam) {
 
         // Attempt to buy a server
         var desiredServerName = "pserv-" + desiredRam + "GB";
-        var newHostname = await purchaseNewServer(ns, desiredServerName);
+        var newHostname = await purchaseNewServer(ns, desiredServerName, desiredRam);
 
         // Run setup script on the new server
         await ns.run(sVars.setupScriptName, 1, newHostname, sArgs.hackTarget);
@@ -92,7 +92,7 @@ async function upgradeExisitngServers(ns, desiredRam) {
 
             // buy a server
             var desiredServerName = "pserv-" + desiredRam + "GB";
-            var newHostname = await purchaseNewServer(ns, desiredServerName);
+            var newHostname = await purchaseNewServer(ns, desiredServerName, desiredRam);
 
             ns.print("DEBUG: New server named: " + newHostname);
 
@@ -106,20 +106,20 @@ async function deleteOldServer(ns, server) {
     while(ns.serverExists(server)) {
         // kill all scripts on the old server
         // ns.killall returns true if any scripts were killed, false if not. We're ready to move on if we haven't killed anything
-        while (ns.killall(oldHostname)) {
-            ns.print("Sleeping after trying to killall on " + oldHostname);
+        while (ns.killall(server)) {
+            ns.print("Sleeping after trying to killall on " + server);
             await ns.sleep(1000);
         }
     
         // delete the old server
-        ns.print("DEBUG: Deleting: " + oldHostname);
-        ns.deleteServer(oldHostname);
+        ns.print("DEBUG: Deleting: " + server);
+        ns.deleteServer(server);
 
         await ns.sleep(100);
     }
 }
 
-async function purchaseNewServer(ns, desiredServerName) {
+async function purchaseNewServer(ns, desiredServerName, desiredRam) {
     var newHostname = "";
 
     while (newHostname === "") {
