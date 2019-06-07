@@ -43,7 +43,7 @@ export async function main(ns) {
 
     var desiredRam = sArgs.desiredStartingRam;
     
-    while(desiredRam <= getPurchasedServerMaxRam()) {
+    while(desiredRam <= ns.getPurchasedServerMaxRam()) {
         await purchaseNewServers(ns, desiredRam);
         await upgradeExisitngServers(ns, desiredRam);
         desiredRam = incrementDesiredRam(desiredRam, sVars.ramIncreaseFactor);
