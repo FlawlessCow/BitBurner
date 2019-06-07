@@ -44,8 +44,8 @@ export async function main(ns) {
     var desiredRam = sArgs.desiredStartingRam;
     
     while(desiredRam <= ns.getPurchasedServerMaxRam()) {
-        await purchaseNewServers(ns, desiredRam);
-        await upgradeExisitngServers(ns, desiredRam);
+        await fillEmptyServerSlots(ns, sArgs, desiredRam);
+        await upgradeExisitngServers(ns, sArgs, desiredRam);
         desiredRam = incrementDesiredRam(desiredRam, sVars.ramIncreaseFactor);
 
         await ns.sleep(100);
@@ -53,7 +53,7 @@ export async function main(ns) {
 }
 
 // ===== FUNCTIONS ==============================
-async function purchaseNewServers(ns, desiredRam) {
+async function fillEmptyServerSlots(ns, sArgs, desiredRam) {
     while (ns.getPurchasedServers().length < ns.getPurchasedServerLimit()) {
         ns.print("DEBUG: Buying at " + desiredRam + "GB");
 
@@ -71,7 +71,7 @@ async function purchaseNewServers(ns, desiredRam) {
     }
 }
 
-async function upgradeExisitngServers(ns, desiredRam) {
+async function upgradeExisitngServers(ns, sArgs, desiredRam) {
     ns.print("DEBUG: Upgrading to " + desiredRam + "GB");
 
     // call get purchased servers
