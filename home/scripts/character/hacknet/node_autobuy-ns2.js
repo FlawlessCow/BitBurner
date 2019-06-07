@@ -69,6 +69,8 @@ export async function main(ns) {
 		ns.hacknet.purchaseNode();
 	}
 
+	await upgradeAllToMatchBaseNodeAsync(ns);
+
 	while (!done) {
 		// check to see what to buy
 		thingToBuy = evaluateHacknetPurchaseOptions(ns, sVars.nodeCountLimit, sVars.nodeLevelLimit, sVars.nodeRamLimit, sVars.nodeCoresLimit, playerMultipliers, sVars.recoupTimeCap);
