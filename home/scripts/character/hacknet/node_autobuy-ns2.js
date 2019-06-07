@@ -61,7 +61,7 @@ export async function main(ns) {
 		var nodeCost = ns.hacknet.getPurchaseNodeCost();
 
 		ns.print("Waiting for more money to buy a node!");
-		ns.print("Want: $" + ns.nFormat(nodeCost/sVars.moneySpendLimitPercent, "0,0.00"))
+		ns.print("Want: $" + ns.nFormat(nodeCost/sVars.moneySpendLimitPercent, "0,0.00"));
 
 		while(nodeCost > getMyMoney(ns) * sVars.moneySpendLimitPercent) {
 			await ns.sleep(5000);
@@ -81,7 +81,7 @@ export async function main(ns) {
 				var nodeCost = ns.hacknet.getPurchaseNodeCost();
 
 				ns.print("Waiting for more money to buy a node!");
-				ns.print("Want: $" + ns.nFormat(nodeCost/sVars.moneySpendLimitPercent, "0,0.00"))
+				ns.print("Want: $" + ns.nFormat(nodeCost/sVars.moneySpendLimitPercent, "0,0.00"));
 				
 				while(nodeCost > getMyMoney(ns) * sVars.moneySpendLimitPercent) {
 					await ns.sleep(5000);
@@ -495,7 +495,7 @@ async function upgradeNodeToDesiredLevelAsync(ns, nodeIndex, desiredLevel) {
         
         // Wait to have enough money to buy the next level
 		ns.print("Waiting for more money to buy a level");
-		ns.print("Want: $" + ns.nFormat(cost/sVars.moneySpendLimitPercent, "0,0.00"))
+		ns.print("Want: $" + ns.nFormat(cost/sVars.moneySpendLimitPercent, "0,0.00"));
         while (cost > getMyMoney(ns) * sVars.moneySpendLimitPercent) {
             await ns.sleep(5000);
         }
@@ -511,7 +511,7 @@ async function upgradeNodeToDesiredRamAsync(ns, nodeIndex, desiredRam) {
         
         // Wait to have enough money to buy the next ram
 		ns.print("Waiting for more money to buy a RAM");
-		ns.print("Want: $" + ns.nFormat(cost/sVars.moneySpendLimitPercent, "0,0.00"))
+		ns.print("Want: $" + ns.nFormat(cost/sVars.moneySpendLimitPercent, "0,0.00"));
         while (cost > getMyMoney(ns) * sVars.moneySpendLimitPercent) {
             await ns.sleep(5000);
         }
@@ -527,7 +527,7 @@ async function upgradeNodeToDesiredCoresAsync(ns, nodeIndex, desiredCores) {
         
         // Wait to have enough money to buy the next cores
 		ns.print("Waiting for more money to buy a core");
-		ns.print("Want: $" + ns.nFormat(cost/sVars.moneySpendLimitPercent, "0,0.00"))
+		ns.print("Want: $" + ns.nFormat(cost/sVars.moneySpendLimitPercent, "0,0.00"));
         while (cost > getMyMoney(ns) * sVars.moneySpendLimitPercent) {
             await ns.sleep(5000);
         }
