@@ -62,14 +62,14 @@ export function getSpendLimits() {
 }
 
 export async function async_waitForEnoughMoney(ns, spendLimitModifier, desiredMoney) {
-    while (wallet.getAvailableMoney(ns, spendLimitModifier) < ns.getPurchasedServerCost(desiredMoney)) {
+    while (getAvailableMoney(ns, spendLimitModifier) < ns.getPurchasedServerCost(desiredMoney)) {
         debugDumpMoneyStats(ns, desiredMoney);
         await ns.sleep(60 * 1000);
     }
 }
 
 export function debugDumpMoneyStats(ns, spendLimitModifier, desiredMoney) {
-    var availableMoney = wallet.getAvailableMoney(ns, spendLimitModifier);
+    var availableMoney = getAvailableMoney(ns, spendLimitModifier);
     var desiredMoney = ns.getPurchasedServerCost(desiredRam);
     var percentageOfNeeded = (availableMoney/desiredMoney)*100;
 
