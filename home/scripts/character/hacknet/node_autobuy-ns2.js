@@ -534,10 +534,10 @@ async function upgradeNodeToDesiredCoresAsync(ns, nodeIndex, desiredCores) {
 
 async function purchaseAndUpgradeNode(ns) {
     // buy a new node and get it's stats
-    newNodeIndex = ns.hacknet.purchaseNode();
+    var newNodeIndex = ns.hacknet.purchaseNode();
     
     // get stats for node 0, which should have the latest upgrades
-    baseNodeStats = ns.hacknet.getNodeStats(0);
+    var baseNodeStats = ns.hacknet.getNodeStats(0);
     
     var desiredLevel = baseNodeStats.level;
     var desiredRam = baseNodeStats.ram;
