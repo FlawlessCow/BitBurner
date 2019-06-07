@@ -11,7 +11,7 @@ function getScriptArgs(ns) {
 
 // ===== VARS ===================================
 var sVars = {
-    equipmentSpendLimitMod : 0.50,
+    equipmentSpendLimitMod : 0.10,
 };
 
 var tests = {
