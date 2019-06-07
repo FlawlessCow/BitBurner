@@ -1,4 +1,5 @@
 // ===== IMPORTS ================================
+import * as wallet from "/master/character/wallet-ns2.js";
 
 // ===== ARGS ===================================
 function getScriptArgs(ns) {
@@ -11,7 +12,7 @@ function getScriptArgs(ns) {
 
 // ===== VARS ===================================
 var sVars = {
-    equipmentSpendLimitMod : 0.10,
+    
 };
 
 var tests = {
@@ -104,16 +105,12 @@ function purchaseEquipmentForAllGangMembers(ns, equipment) {
 
     for(var i=0; i < gangMemberNamesArray.length; i++) {
         var gangMember = gangMemberNamesArray[i];
-        var equipmentSpendLimit = getMyMoney(ns) * sVars.equipmentSpendLimitMod;
+        var availableMoney = wallet.getAvailableMoney(ns, wallet.spendLimits.gangEquipment)
 
-        if(equipmentCost < equipmentSpendLimit) {
+        if(availableMoney > equipmentCost) {
             ns.gang.purchaseEquipment(gangMember, equipment);
         }
     }
-}
-
-function getMyMoney(ns) {
-    return ns.getServerMoneyAvailable("home");
 }
 
 // ===== TESTS ==================================
