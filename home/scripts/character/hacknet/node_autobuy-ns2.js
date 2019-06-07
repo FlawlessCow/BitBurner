@@ -288,16 +288,16 @@ function evaluateHacknetPurchaseOptions(ns, maxNodes, maxLevel, maxRam, maxCores
 	var coresRecoupTime = getCoresRecoupTime(ns, lowestCoresNodeStats, maxCores, playerMultipliers);
 	
 	// Do comparisons to see what to buy
-	ns.print("=== Ready to make a decision ===");
+	ns.print("=========================== Ready to make a decision ===========================");
+	ns.print("--- maxRecoupTime:" + ns.nFormat(sVars.recoupTimeCap, "0,0") + " seconds (" + ns.nFormat(sVars.recoupTimeCap/60, "0,0") + " minutes)");
+	ns.print("--------------------------------------------------------------------------------");
 	ns.print("Getting the minimum of: ");
 	ns.print("--- bareNodeRecoupTime:" + ns.nFormat(bareNodeRecoupTime, "0,0") + " seconds (" + ns.nFormat(bareNodeRecoupTime/60, "0,0") + " minutes)");
 	ns.print("--- upgradedNodeRecoupTime:" + ns.nFormat(upgradedNodeRecoupTime, "0,0") + " seconds (" + ns.nFormat(upgradedNodeRecoupTime/60, "0,0") + " minutes)");
 	ns.print("--- levelRecoupTime:" + ns.nFormat(levelRecoupTime, "0,0") + " seconds (" + ns.nFormat(levelRecoupTime/60, "0,0") + " minutes)");
 	ns.print("--- ramRecoupTime:" + ns.nFormat(ramRecoupTime, "0,0") + " seconds (" + ns.nFormat(ramRecoupTime/60, "0,0") + " minutes)");
 	ns.print("--- coresRecoupTime:" + ns.nFormat(coresRecoupTime, "0,0") + " seconds (" + ns.nFormat(coresRecoupTime/60, "0,0") + " minutes)");
-	ns.print("--- ------------------------ ---");
-	ns.print("--- maxRecoupTime:" + ns.nFormat(sVars.recoupTimeCap, "0,0") + " seconds (" + ns.nFormat(sVars.recoupTimeCap/60, "0,0") + " minutes)");
-	ns.print("=== ======================== ===");
+	ns.print("================================================================================");
 
 	var minRecoupTime = Math.min(bareNodeRecoupTime, upgradedNodeRecoupTime, levelRecoupTime, ramRecoupTime, coresRecoupTime);
 	
