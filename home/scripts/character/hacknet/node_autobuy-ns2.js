@@ -54,11 +54,12 @@ export async function main(ns) {
 	var done = false;
 	var thingToBuy = buy.nothing;
 	var playerMultipliers = ns.getHacknetMultipliers();
+	var nodeCost = ns.hacknet.getPurchaseNodeCost();
 
 	// I bet this script will break horribly if I don't have at least one node to start off with
 	if (ns.hacknet.numNodes() === 0) {
 		ns.print("Buying the first node");
-		var nodeCost = ns.hacknet.getPurchaseNodeCost();
+		nodeCost = ns.hacknet.getPurchaseNodeCost();
 
 		ns.print("Waiting for more money to buy a node!");
 		ns.print("Want: $" + ns.nFormat(nodeCost/sVars.moneySpendLimitPercent, "0,0.00"));
@@ -78,7 +79,7 @@ export async function main(ns) {
 		// buy the right thing
 		switch(thingToBuy){
 			case buy.node:
-				var nodeCost = ns.hacknet.getPurchaseNodeCost();
+				nodeCost = ns.hacknet.getPurchaseNodeCost();
 
 				ns.print("Waiting for more money to buy a node!");
 				ns.print("Want: $" + ns.nFormat(nodeCost/sVars.moneySpendLimitPercent, "0,0.00"));
