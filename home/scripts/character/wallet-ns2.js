@@ -70,7 +70,6 @@ export async function async_waitForEnoughMoney(ns, spendLimitModifier, desiredMo
 
 export function debugDumpMoneyStats(ns, spendLimitModifier, desiredMoney) {
     var availableMoney = getAvailableMoney(ns, spendLimitModifier);
-    var desiredMoney = ns.getPurchasedServerCost(desiredRam);
     var percentageOfNeeded = (availableMoney/desiredMoney)*100;
 
     ns.print("DEBUG: Not enough money! " +
