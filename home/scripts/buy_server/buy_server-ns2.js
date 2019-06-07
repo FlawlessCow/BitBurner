@@ -79,9 +79,9 @@ async function upgradeExisitngServers(ns, sArgs, desiredRam) {
 
     for (var servIndex = 0; servIndex < purchasedServers.length; servIndex++) {
         var oldHostname = purchasedServers[servIndex];
-        var oldHostRam = ns.getServerRam(oldHostname)[0];
-
         ns.print("DEBUG: Evaluating: " + oldHostname);
+
+        var oldHostRam = ns.getServerRam(oldHostname)[0];
 
         if (oldHostRam < desiredRam) {
             // Wait for enough money
@@ -147,16 +147,14 @@ function incrementDesiredRam(currentDesiredRam, ramMultiplier) {
 }
 
 function debugDumpMoneyStats(ns, desiredRam) {
-    var currentMoney = wallet.getMyMoney(ns);
     var availableMoney = wallet.getAvailableMoney(ns, wallet.spendLimits.newServer);
     var neededMoney = ns.getPurchasedServerCost(desiredRam);
     var percentageOfNeeded = (availableMoney/neededMoney)*100;
 
-    ns.print("DEBUG: Not enough money! Have/Available/Needed/%: " +
-        ns.nFormat(currentMoney, "0,0.00") + "/" +
-        ns.nFormat(availableMoney, "0,0.00") + "/" +
-        ns.nFormat(neededMoney, "0,0.00") + "/" +
-        ns.nFormat(percentageOfNeeded, "0"));
+    ns.print("DEBUG: Not enough money! Available / Needed / %: " +
+        ns.nFormat(availableMoney, "0,0.00") + " / " +
+        ns.nFormat(neededMoney, "0,0.00") + " / " +
+        ns.nFormat(percentageOfNeeded, "0.0") + "%");
 }
 
 // ===== TESTS ==================================
