@@ -1,4 +1,5 @@
 // ===== IMPORTS ================================
+import * as wallet from "/master/character/wallet-ns2.js";
 
 // ===== ARGS ===================================
 function getScriptArgs(ns) {
@@ -64,7 +65,7 @@ export async function main(ns) {
 		ns.print("Waiting for more money to buy a node!");
 		ns.print("Want: $" + ns.nFormat(nodeCost/sVars.moneySpendLimitPercent, "0,0.00"));
 
-		while(nodeCost > getMyMoney(ns) * sVars.moneySpendLimitPercent) {
+		while(nodeCost > wallet.getAvailableMoney(ns, wallet.spendLimts.hackent)) {
 			await ns.sleep(5000);
 		}
 		ns.hacknet.purchaseNode();
@@ -84,7 +85,7 @@ export async function main(ns) {
 				ns.print("Waiting for more money to buy a node!");
 				ns.print("Want: $" + ns.nFormat(nodeCost/sVars.moneySpendLimitPercent, "0,0.00"));
 				
-				while(nodeCost > getMyMoney(ns) * sVars.moneySpendLimitPercent) {
+				while(nodeCost > wallet.getMyMoney(ns) * sVars.moneySpendLimitPercent) {
 					await ns.sleep(5000);
 				}
 				ns.print("Buying a node");
@@ -112,10 +113,6 @@ export async function main(ns) {
 }
 
 // ===== FUNCTIONS ==============================
-function getMyMoney(ns) {
-    return ns.getServerMoneyAvailable("home");
-}
-
 function getHacknetNodeProduction(level, ram, cores, playerMultipliers) {
     var baseProduction = 1.6;
     var ramModifier = Math.pow(1.035, ram-1);
@@ -497,7 +494,7 @@ async function upgradeNodeToDesiredLevelAsync(ns, nodeIndex, desiredLevel) {
         // Wait to have enough money to buy the next level
 		ns.print("Waiting for more money to buy a level");
 		ns.print("Want: $" + ns.nFormat(cost/sVars.moneySpendLimitPercent, "0,0.00"));
-        while (cost > getMyMoney(ns) * sVars.moneySpendLimitPercent) {
+        while (cost > wallet.getMyMoney(ns) * sVars.moneySpendLimitPercent) {
             await ns.sleep(5000);
         }
         
@@ -513,7 +510,7 @@ async function upgradeNodeToDesiredRamAsync(ns, nodeIndex, desiredRam) {
         // Wait to have enough money to buy the next ram
 		ns.print("Waiting for more money to buy a RAM");
 		ns.print("Want: $" + ns.nFormat(cost/sVars.moneySpendLimitPercent, "0,0.00"));
-        while (cost > getMyMoney(ns) * sVars.moneySpendLimitPercent) {
+        while (cost > wallet.getMyMoney(ns) * sVars.moneySpendLimitPercent) {
             await ns.sleep(5000);
         }
         
@@ -529,7 +526,7 @@ async function upgradeNodeToDesiredCoresAsync(ns, nodeIndex, desiredCores) {
         // Wait to have enough money to buy the next cores
 		ns.print("Waiting for more money to buy a core");
 		ns.print("Want: $" + ns.nFormat(cost/sVars.moneySpendLimitPercent, "0,0.00"));
-        while (cost > getMyMoney(ns) * sVars.moneySpendLimitPercent) {
+        while (cost > wallet.getMyMoney(ns) * sVars.moneySpendLimitPercent) {
             await ns.sleep(5000);
         }
         

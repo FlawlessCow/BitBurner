@@ -61,6 +61,24 @@ export function getSpendLimits() {
     return spendLimits;
 }
 
+async function async_waitForEnoughMoney(ns, desiredMoney) {
+    while (wallet.getAvailableMoney(ns, wallet.spendLimits.newServer) < ns.getPurchasedServerCost(desiredMoney)) {
+        debugDumpMoneyStats(ns, desiredMoney);
+        await ns.sleep(60 * 1000);
+    }
+}
+
+function debugDumpMoneyStats(ns, desiredMoney) {
+    var availableMoney = wallet.getAvailableMoney(ns, wallet.spendLimits.newServer);
+    var desiredMoney = ns.getPurchasedServerCost(desiredRam);
+    var percentageOfNeeded = (availableMoney/desiredMoney)*100;
+
+    ns.print("DEBUG: Not enough money! " +
+        "Available: " + ns.nFormat(availableMoney, "0,0.00") + " / " +
+        "Desired: " + ns.nFormat(desiredMoney, "0,0.00") + " / " +
+        ns.nFormat(percentageOfNeeded, "0.0") + "%");
+}
+
 // ===== TESTS ==================================
 function executeTests(ns) {
 	if (tests.testEnabled_exampleFunction)
