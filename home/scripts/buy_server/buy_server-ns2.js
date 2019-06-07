@@ -135,7 +135,7 @@ async function purchaseNewServer(ns, desiredServerName, desiredRam) {
 
 async function waitForEnoughMoney(ns, desiredRam) {
     while (wallet.getAvailableMoney(ns, wallet.spendLimits.newServer) < ns.getPurchasedServerCost(desiredRam)) {
-        debugDumpMoneyStats(ns, desiredRam)
+        debugDumpMoneyStats(ns, desiredRam);
         await ns.sleep(60 * 1000);
     }
 }
