@@ -95,7 +95,35 @@ function updateGangMemberHackingEquipment(ns) {
 }
 
 function updateGangMemberTasks(ns) {
+    // Determine if the gang is a hacking gang or not
+
+    if (ns.gang.getGangInformation().isHacking === true) {
+        assignHackingTasks(ns);
+    }
+    else if (ns.gang.getGangInformation().isHacking === false) {
+        assignCombatTasks(ns);
+    }
+}
+
+function assignHackingTasks(ns) {
+
+}
+
+function assignCombatTasks(ns) {
     // Task will be "Unassigned" if not assigned
+    // Build a list of gang members
+    var gangMemberNamesArray = ns.gang.getMemberNames()
+
+    // iterate thru the gang members
+    for(var i=0; i < gangMemberNamesArray.length; i++) {
+        var gangMemberName = gangMemberNamesArray[i];
+        var gangMemberTask = getMemberInformation(gangMemberName).task;
+        // if "Unassigned" set to "Vigalante Justice"
+        if (gangMemberTask === "Unassigned") {
+            setMemberTask(gangMemberName, "Vigalante Justice")
+        }
+
+    }    
 }
 
 function purchaseEquipmentForAllGangMembers(ns, equipment) {
