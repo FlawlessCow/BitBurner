@@ -66,7 +66,8 @@ export async function async_waitForEnoughMoney(ns, spendLimitModifier, desiredMo
 
     while (availableMoney < desiredMoney) {
         debugDumpMoneyStats(ns, availableMoney, desiredMoney);
-        await ns.sleep(60 * 1000);
+        await ns.sleep(10 * 1000);
+        availableMoney = getAvailableMoney(ns, spendLimitModifier);
     }
 }
 
