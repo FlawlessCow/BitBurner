@@ -6,87 +6,12 @@ var ePortIndex = enumLib.getEnumPortIndexVersion(1);
 
 // ========== VARS ============
 var sVars = {
-    // Array of all servers that don't need any ports opened to gain root access. These have 16 GB of RAM
-    servers0Port: ["foodnstuff",
-        "sigma-cosmetics",
-        "joesguns",
-        "nectar-net",
-        "hong-fang-tea",
-        "harakiri-sushi"
-    ],
-
-    // Array of all servers that only need 1 port opened to gain root access. These have 32 GB of RAM
-    servers1Port: ["neo-net",
-        "zer0",
-        "max-hardware",
-        "iron-gym"
-    ],
-
-    // Script to use for our basic hacks
-    basicHackingScript: "/master/hacking/basic/install_and_run-ns1.script",
-    basicHackingScriptTarget: "joesguns",
-
     // PSERV settings
     pservStartingRamAmount: 8,
     pservHackTarget: "joesguns",
-
-    // home hacking  settings
-    homeHackTarget: "joesguns",
-};
-
-var eRamStats = {
-    total : 0,
-    used : 1,
 };
 
 // ========= FUNCTIONS ========= 
-function setup0PortBasicHacks(serverList, hackingScript, hackingScriptTarget) {
-    // Copy our scripts onto each server that requires 0 ports
-    // to gain root access. Then use nuke() to gain admin access and
-    // run the scripts.
-    for (var i = 0; i < serverList.length; ++i) {
-        var serv = serverList[i];
-
-        nuke(serv);
-
-        var waitingToInstall = true;
-        while(waitingToInstall) {
-            homeRam = getServerRam(getHostname());
-            homeFreeRam = homeRam[eRamStats.total] - homeRam[eRamStats.used];
-            if (homeFreeRam >= getScriptRam(hackingScript)) {
-                run(hackingScript, 1, serv, hackingScriptTarget);
-                waitingToInstall = false;
-            }
-        }
-    }
-}
-
-function setup1PortBasicHacks(serverList, hackingScript, hackingScriptTarget) {
-    // Wait until we acquire the "BruteSSH.exe" program
-    while (!fileExists("BruteSSH.exe")) {
-        sleep(60000);
-    }
-
-    // Copy our scripts onto each server that requires 1 port
-    // to gain root access. Then use brutessh() and nuke()
-    // to gain admin access and run the scripts.
-    for (var i = 0; i < serverList.length; ++i) {
-        var serv = serverList[i];
-
-        brutessh(serv);
-        nuke(serv);
-
-        var waitingToInstall = true;
-        while(waitingToInstall) {
-            homeRam = getServerRam(getHostname());
-            homeFreeRam = homeRam[eRamStats.total] - homeRam[eRamStats.used];
-            if (homeFreeRam >= getScriptRam(hackingScript)) {
-                run(hackingScript, 1, serv, hackingScriptTarget);
-                waitingToInstall = false;
-            }
-        }
-    }
-}
 
 // ========== LOGIC ==========
 // For BN-9 when we go back...
