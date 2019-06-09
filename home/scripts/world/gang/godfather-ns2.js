@@ -53,6 +53,7 @@ export async function main(ns) {
 async function recruitmentMembers(ns) {
     while (ns.gang.canRecruitMember()) {
         var currentDateTime = new Date();
+        // $TODO: Someday name a gang member "Android-function getMilliseconds() { [native code] }", for the funny
         var newGangMemberName = "Android-" + currentDateTime.getTime();
         ns.gang.recruitMember(newGangMemberName);
 
