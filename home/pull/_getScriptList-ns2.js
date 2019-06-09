@@ -91,6 +91,7 @@ export function getScriptList(){
 		"/templates/ns1_template.js",
 		"/templates/ns2_template.js",
 		// world
+		"/world/contracts/foreman-ns2.js",
 		"/world/gang/godfather-ns2.js",
 	];
 
