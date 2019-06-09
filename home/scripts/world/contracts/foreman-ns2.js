@@ -15,6 +15,25 @@ var sVars = {
 
 };
 
+var e_contractTypes = {
+	findLargestPrimeFactor : "Find Largest Prime Factor",
+	subarrayWithMaximumSum : "Subarray with Maximum Sum",
+	totalWaysToSum : "Total Ways to Sum",
+	spiralizeMatrix : "Spiralize Matrix",
+	arrayJumpingGame : "Array Jumping Game",
+	mergeOverlappingIntervals : "Merge Overlapping Intervals",
+	generateIPAddresses : "Generate IP Addresses",
+	algorithmicStockTraderI : "Algorithmic Stock Trader I",
+	algorithmicStockTraderII : "Algorithmic Stock Trader II",
+	algorithmicStockTraderIII : "Algorithmic Stock Trader III",
+	algorithmicStockTraderIV : "Algorithmic Stock Trader IV",
+	minimumPathSumInATriangle : "Minimum Path Sum in a Triangle",
+	uniquePathsInAGridI : "Unique Paths in a Grid I",
+	uniquePathsInAGridI : "Unique Paths in a Grid II",
+	sanitizeParenthesesInExpression : "Sanitize Parentheses in Expression",
+	findAllValidMathExpressions : "Find All Valid Math Expressions",
+}
+
 var tests = {
 	enabled : false, // Master override for all tests
 	disableMain : false, // Disables all non-testing logic in main
@@ -40,19 +59,19 @@ export async function main(ns) {
 	ns.disableLog("ALL");
 
 	while(true) {
-		reportContracts(ns);
+		await async_reportContracts(ns);
 
 		await ns.sleep(60*1000);
 	}
 }
 
 // ===== FUNCTIONS ==============================
-function reportContracts(ns) {
+async function async_reportContracts(ns) {
 	// Build a server list
 	var serverListArray = await bsi.buildServerInfoArray(ns);
 	
 	// Iterate thru the list of servers
-	for(i=0; i<serverListArray.length; i++) {
+	for(var i=0; i<serverListArray.length; i++) {
 		var server = serverListArray[i].name;
 
 		// Do an ls() on the server
@@ -60,7 +79,11 @@ function reportContracts(ns) {
 
 		// If there are results matching the contract extension, spit info out to the terminal window
 		if(lsResults.length > 0) {
-			ns.tprint("Found contract(s) on server: " + server);
+			for(var j=0; j<lsResults.length; j++) {
+				var contractName = lsResults[j];
+				var contractType = ns.codingcontract.getContractType(contractName, server);
+				ns.tprint("Server: " + server + " / Contract: " + contractName + " / Contract Type: " + contractType);
+			}
 		}
 	}
 }
