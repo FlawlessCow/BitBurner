@@ -34,6 +34,25 @@ var e_contractTypes = {
 	findAllValidMathExpressions : "Find All Valid Math Expressions",
 }
 
+var e_allowedToSolve = {
+	findLargestPrimeFactor : true,
+	subarrayWithMaximumSum : true,
+	totalWaysToSum : true,
+	spiralizeMatrix : true,
+	arrayJumpingGame : true,
+	mergeOverlappingIntervals : true,
+	generateIPAddresses : true,
+	algorithmicStockTraderI : true,
+	algorithmicStockTraderII : true,
+	algorithmicStockTraderIII : true,
+	algorithmicStockTraderIV : true,
+	minimumPathSumInATriangle : true,
+	uniquePathsInAGridI : true,
+	uniquePathsInAGridI : true,
+	sanitizeParenthesesInExpression : true,
+	findAllValidMathExpressions : true,
+}
+
 var tests = {
 	enabled : false, // Master override for all tests
 	disableMain : false, // Disables all non-testing logic in main
@@ -59,14 +78,14 @@ export async function main(ns) {
 	ns.disableLog("ALL");
 
 	while(true) {
-		await async_reportContracts(ns);
+		await async_findContractsAndLaunchSolver(ns);
 
 		await ns.sleep(60*1000);
 	}
 }
 
 // ===== FUNCTIONS ==============================
-async function async_reportContracts(ns) {
+async function async_findContractsAndLaunchSolver(ns) {
 	// Build a server list
 	var serverListArray = await bsi.buildServerInfoArray(ns);
 	
@@ -81,11 +100,125 @@ async function async_reportContracts(ns) {
 		if(lsResults.length > 0) {
 			for(var j=0; j<lsResults.length; j++) {
 				var contractName = lsResults[j];
-				var contractType = ns.codingcontract.getContractType(contractName, server);
-				ns.tprint("Server: " + server + " / Contract: " + contractName + " / Contract Type: " + contractType);
+				launchRelevantSolver(ns, contractName, server)
 			}
 		}
 	}
+}
+
+function launchRelevantSolver (ns, contractName, server) {
+	var contractType = ns.codingcontract.getContractType(contractName, server);
+
+	// buy the right thing
+	switch(contractType){
+		case e_contractTypes.algorithmicStockTraderI:
+			solver_algorithmicStockTraderI(ns, contractName, server);
+			break;
+		default:
+			tprint("No solver for type [" + contractType + "] on server [" + server + "] for contract [" + contractName + "]")
+	}
+}
+
+function solver_findLargestPrimeFactor(ns, contractName, server) {
+	ns.tprint("No solver for: " + server + " / " + contractName);
+}
+
+function solver_subarrayWithMaximumSum(ns, contractName, server) {
+	ns.tprint("No solver for: " + server + " / " + contractName);
+}
+
+function solver_totalWaysToSum(ns, contractName, server) {
+	ns.tprint("No solver for: " + server + " / " + contractName);
+}
+
+function solver_spiralizeMatrix(ns, contractName, server) {
+	ns.tprint("No solver for: " + server + " / " + contractName);
+}
+
+function solver_arrayJumpingGame(ns, contractName, server) {
+	ns.tprint("No solver for: " + server + " / " + contractName);
+}
+
+function solver_mergeOverlappingIntervals(ns, contractName, server) {
+	ns.tprint("No solver for: " + server + " / " + contractName);
+}
+
+function solver_generateIPAddresses(ns, contractName, server) {
+	ns.tprint("No solver for: " + server + " / " + contractName);
+}
+
+function solver_algorithmicStockTraderI(ns, contractName, server) {
+	/* ===== Problem Definition ====================================================================================================== **
+	You are given the following array of stock prices (which are numbers) where the i-th element represents the stock price on day i:
+		Ex. 169,81,124,99,97,182,81,176,32,172,135
+	Determine the maximum possible profit you can earn using at most one transaction (i.e. you can only buy and sell the stock once).
+	If no profit can be made then the answer should be 0. Note that you have to buy the stock before you can sell it
+	** =============================================================================================================================== */
+	if (e_allowedToSolve.algorithmicStockTraderI) {
+		var contractData = ns.codingcontract.getData(contractName, server);
+	
+		var stockPriceList = contractData;
+		var maxBuyIndex = stockPriceList.length - 1;
+		var maxSellIndex = stockPriceList.length;
+	
+		var bestProfit = 0;
+	
+		for(var buyPriceIndex = 0; buyPriceIndex < maxBuyIndex; buyPriceIndex++) {
+			for(var sellPriceIndex = buyPriceIndex + 1; sellPriceIndex < maxSellIndex; sellPriceIndex++) {
+				var testProfit = stockPriceList[buyPriceIndex] - stockPriceList[sellPriceIndex];
+	
+				if (testProfit > bestProfit) {
+					bestProfit = testProfit;
+				}
+			}
+		}
+	
+		result = ns.codingcontract.attempt(bestProfit, contractName, server, {returnReward : true});
+
+		if(result = false) {
+			e_allowedToSolve.algorithmicStockTraderI = false;
+			ns.tprint("CONTRACT FAILED Type: [" + ns.codingcontract.getContractType(contractName, server) + "], FileName: [" + contractName + "], Server: [" + server + "]");
+		}
+		else {
+			ns.tprint(result);
+		}
+	}
+	else {
+		ns.tprint("Solver disabled for type: [" + ns.codingcontract.getContractType(contractName, server) + "]");
+		ns.tprint("There is a contract of this type named [" + contractName + "] on server [" + server + "]")
+	}
+}
+
+function solver_algorithmicStockTraderII(ns, contractName, server) {
+	ns.tprint("No solver for: " + server + " / " + contractName);
+}
+
+function solver_algorithmicStockTraderIII(ns, contractName, server) {
+	ns.tprint("No solver for: " + server + " / " + contractName);
+}
+
+function solver_algorithmicStockTraderIV(ns, contractName, server) {
+	ns.tprint("No solver for: " + server + " / " + contractName);
+}
+
+function solver_minimumPathSumInATriangle(ns, contractName, server) {
+	ns.tprint("No solver for: " + server + " / " + contractName);
+}
+
+function solver_uniquePathsInAGridI(ns, contractName, server) {
+	ns.tprint("No solver for: " + server + " / " + contractName);
+}
+
+function solver_uniquePathsInAGridI(ns, contractName, server) {
+	ns.tprint("No solver for: " + server + " / " + contractName);
+}
+
+function solver_sanitizeParenthesesInExpression(ns, contractName, server) {
+	ns.tprint("No solver for: " + server + " / " + contractName);
+}
+
+function solver_findAllValidMathExpressions(ns, contractName, server) {
+	ns.tprint("No solver for: " + server + " / " + contractName);
 }
 
 // ===== TESTS ==================================
