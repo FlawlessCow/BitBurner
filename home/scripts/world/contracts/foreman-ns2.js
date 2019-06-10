@@ -115,7 +115,7 @@ function launchRelevantSolver (ns, contractName, server) {
 			solver_algorithmicStockTraderI(ns, contractName, server);
 			break;
 		default:
-			tprint("No solver for type [" + contractType + "] on server [" + server + "] for contract [" + contractName + "]");
+			ns.tprint("No solver for type [" + contractType + "] on server [" + server + "] for contract [" + contractName + "]");
 	}
 }
 
