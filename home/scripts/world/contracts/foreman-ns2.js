@@ -155,6 +155,7 @@ function solver_algorithmicStockTraderI(ns, contractName, server) {
 	If no profit can be made then the answer should be 0. Note that you have to buy the stock before you can sell it
 	** =============================================================================================================================== */
 	if (e_allowedToSolve.algorithmicStockTraderI) {
+		var contractType = ns.codingcontract.getContractType(contractName, server);
 		var contractData = ns.codingcontract.getData(contractName, server);
 	
 		var stockPriceList = contractData;
@@ -177,14 +178,15 @@ function solver_algorithmicStockTraderI(ns, contractName, server) {
 
 		if(result === false) {
 			e_allowedToSolve.algorithmicStockTraderI = false;
-			ns.tprint("CONTRACT FAILED Type: [" + ns.codingcontract.getContractType(contractName, server) + "], FileName: [" + contractName + "], Server: [" + server + "]");
+			ns.tprint("CONTRACT FAILED: Type: [" + contractType + "], FileName: [" + contractName + "], Server: [" + server + "]");
 		}
 		else {
+			ns.tprint("Completed Completed: Type: [" + contractType + "], fileName: [" + contractName + "], Server [" + server + "]");
 			ns.tprint(result);
 		}
 	}
 	else {
-		ns.tprint("Solver disabled for type: [" + ns.codingcontract.getContractType(contractName, server) + "]");
+		ns.tprint("Solver disabled for type: [" + contractType + "]");
 		ns.tprint("There is a contract of this type named [" + contractName + "] on server [" + server + "]");
 	}
 }
