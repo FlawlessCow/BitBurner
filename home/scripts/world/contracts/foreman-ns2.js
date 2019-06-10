@@ -29,10 +29,10 @@ var e_contractTypes = {
 	algorithmicStockTraderIV : "Algorithmic Stock Trader IV",
 	minimumPathSumInATriangle : "Minimum Path Sum in a Triangle",
 	uniquePathsInAGridI : "Unique Paths in a Grid I",
-	uniquePathsInAGridI : "Unique Paths in a Grid II",
+	uniquePathsInAGridII : "Unique Paths in a Grid II",
 	sanitizeParenthesesInExpression : "Sanitize Parentheses in Expression",
 	findAllValidMathExpressions : "Find All Valid Math Expressions",
-}
+};
 
 var e_allowedToSolve = {
 	findLargestPrimeFactor : true,
@@ -48,10 +48,10 @@ var e_allowedToSolve = {
 	algorithmicStockTraderIV : true,
 	minimumPathSumInATriangle : true,
 	uniquePathsInAGridI : true,
-	uniquePathsInAGridI : true,
+	uniquePathsInAGridII : true,
 	sanitizeParenthesesInExpression : true,
 	findAllValidMathExpressions : true,
-}
+};
 
 var tests = {
 	enabled : false, // Master override for all tests
@@ -100,7 +100,7 @@ async function async_findContractsAndLaunchSolver(ns) {
 		if(lsResults.length > 0) {
 			for(var j=0; j<lsResults.length; j++) {
 				var contractName = lsResults[j];
-				launchRelevantSolver(ns, contractName, server)
+				launchRelevantSolver(ns, contractName, server);
 			}
 		}
 	}
@@ -115,7 +115,7 @@ function launchRelevantSolver (ns, contractName, server) {
 			solver_algorithmicStockTraderI(ns, contractName, server);
 			break;
 		default:
-			tprint("No solver for type [" + contractType + "] on server [" + server + "] for contract [" + contractName + "]")
+			tprint("No solver for type [" + contractType + "] on server [" + server + "] for contract [" + contractName + "]");
 	}
 }
 
@@ -175,7 +175,7 @@ function solver_algorithmicStockTraderI(ns, contractName, server) {
 	
 		result = ns.codingcontract.attempt(bestProfit, contractName, server, {returnReward : true});
 
-		if(result = false) {
+		if(result === false) {
 			e_allowedToSolve.algorithmicStockTraderI = false;
 			ns.tprint("CONTRACT FAILED Type: [" + ns.codingcontract.getContractType(contractName, server) + "], FileName: [" + contractName + "], Server: [" + server + "]");
 		}
@@ -185,7 +185,7 @@ function solver_algorithmicStockTraderI(ns, contractName, server) {
 	}
 	else {
 		ns.tprint("Solver disabled for type: [" + ns.codingcontract.getContractType(contractName, server) + "]");
-		ns.tprint("There is a contract of this type named [" + contractName + "] on server [" + server + "]")
+		ns.tprint("There is a contract of this type named [" + contractName + "] on server [" + server + "]");
 	}
 }
 
@@ -209,7 +209,7 @@ function solver_uniquePathsInAGridI(ns, contractName, server) {
 	ns.tprint("No solver for: " + server + " / " + contractName);
 }
 
-function solver_uniquePathsInAGridI(ns, contractName, server) {
+function solver_uniquePathsInAGridII(ns, contractName, server) {
 	ns.tprint("No solver for: " + server + " / " + contractName);
 }
 
