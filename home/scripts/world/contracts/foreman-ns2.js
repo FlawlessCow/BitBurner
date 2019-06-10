@@ -176,7 +176,7 @@ function solver_algorithmicStockTraderI(ns, contractName, server) {
 	
 		var result = ns.codingcontract.attempt(bestProfit, contractName, server, {returnReward : true});
 
-		if(result === false) {
+		if(result === false || result === "") {
 			e_allowedToSolve.algorithmicStockTraderI = false;
 			ns.tprint("CONTRACT FAILED: Type: [" + contractType + "], FileName: [" + contractName + "], Server: [" + server + "]");
 		}
