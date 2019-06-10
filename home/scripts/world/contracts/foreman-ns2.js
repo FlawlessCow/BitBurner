@@ -173,7 +173,7 @@ function solver_algorithmicStockTraderI(ns, contractName, server) {
 			}
 		}
 	
-		result = ns.codingcontract.attempt(bestProfit, contractName, server, {returnReward : true});
+		var result = ns.codingcontract.attempt(bestProfit, contractName, server, {returnReward : true});
 
 		if(result === false) {
 			e_allowedToSolve.algorithmicStockTraderI = false;
