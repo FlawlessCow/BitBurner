@@ -166,7 +166,9 @@ function solver_algorithmicStockTraderI(ns, contractName, server) {
 	
 		for(var buyPriceIndex = 0; buyPriceIndex < maxBuyIndex; buyPriceIndex++) {
 			for(var sellPriceIndex = buyPriceIndex + 1; sellPriceIndex < maxSellIndex; sellPriceIndex++) {
-				var testProfit = stockPriceList[buyPriceIndex] - stockPriceList[sellPriceIndex];
+				var buyPrice = stockPriceList[buyPriceIndex];
+				var sellPrice = stockPriceList[sellPriceIndex];
+				var testProfit = sellPrice - buyPrice;
 	
 				if (testProfit > bestProfit) {
 					bestProfit = testProfit;
