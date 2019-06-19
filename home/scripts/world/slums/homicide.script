@@ -1,0 +1,63 @@
+// ===== IMPORTS ================================
+
+// ===== ARGS ===================================
+function getScriptArgs() {
+    var scriptArgs = {
+        firstArg : args[0]
+    };
+    
+    return scriptArgs;
+}
+
+// ===== VARS ===================================
+var sVars = {
+
+};
+
+var tests = {
+	enabled : false, // Master override for all tests
+	disableMain : false, // Disables all non-testing logic in main
+	testEnabled_exampleFunction : false,
+};
+
+// ===== MAIN ===================================
+main();
+
+function main() {
+	var sArgs = getScriptArgs();
+	
+	// - Tests ----------------------------------
+	if (tests.enabled)
+		executeTests();
+	
+	// - Early out ------------------------------
+	if (tests.disableMain) {
+		tprint("WARNING: SCRIPT IS IN TEST ONLY MODE");
+		exit();
+	}
+	
+	// - Real Script Logic ----------------------
+	print("Starting script...");
+    disableLog("ALL");
+    
+    while(true) {
+		if (isBusy() === false) {
+			commitCrime("homicide");
+		}
+		sleep(1000);
+    }
+}
+
+// ===== FUNCTIONS ==============================
+
+
+// ===== TESTS ==================================
+function executeTests() {
+    if (tests.testEnabled_exampleFunction)
+        test_exampleFunction();
+}
+
+function test_exampleFunction() {
+	print("==== TEST: test_exampleFunction ====");
+
+}
