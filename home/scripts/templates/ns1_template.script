@@ -3,7 +3,7 @@
 // ===== ARGS ===================================
 function getScriptArgs() {
     var scriptArgs = {
-        firstArg : ns.args[0]
+        firstArg : args[0]
     };
     
     return scriptArgs;
@@ -51,6 +51,6 @@ function executeTests() {
 }
 
 function test_exampleFunction() {
-	ns.print("==== TEST: test_exampleFunction ====");
+	print("==== TEST: test_exampleFunction ====");
 
 }
