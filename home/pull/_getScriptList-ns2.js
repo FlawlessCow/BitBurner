@@ -93,6 +93,7 @@ export function getScriptList(){
 		// world
 		"/world/contracts/foreman-ns2.js",
 		"/world/gang/godfather-ns2.js",
+		"/world/slums/homicide-ns1.script",
 	];
 
 	return scripts;
