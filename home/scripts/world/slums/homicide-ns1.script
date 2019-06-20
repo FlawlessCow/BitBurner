@@ -3,7 +3,7 @@
 // ===== ARGS ===================================
 function getScriptArgs() {
     var scriptArgs = {
-        firstArg : args[0]
+        crimesToCommit : args[0]
     };
     
     return scriptArgs;
@@ -38,9 +38,9 @@ function main() {
 	
 	// - Real Script Logic ----------------------
 	print("Starting script...");
-    disableLog("ALL");
-    
-    while(true) {
+	disableLog("ALL");
+	
+	for( i=0; i < sArgs.crimesToCommit; i++ ) {
 		if (isBusy() === false) {
 			commitCrime("homicide");
 		}
