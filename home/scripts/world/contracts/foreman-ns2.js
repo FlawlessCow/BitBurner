@@ -210,10 +210,64 @@ function solver_minimumPathSumInATriangle(ns, contractName, server) {
 }
 
 function solver_uniquePathsInAGridI(ns, contractName, server) {
+	/* ===== Problem Definition ====================================================================================================== **
+	You are given an array with two numbers: [m, n]. These numbers represent a
+	m x n grid. Assume you are initially positioned in the top-left corner of that
+	grid and that you are trying to reach the bottom-right corner. On each step,
+	you may only move down or to the right.
+	
+	Determine how many unique paths there are from start to finish.
+	** =============================================================================================================================== */
+	
+
 	ns.tprint("No solver for: " + server + " / " + contractName);
 }
 
 function solver_uniquePathsInAGridII(ns, contractName, server) {
+	/* ===== Problem Definition ====================================================================================================== **
+	You are attempting to solve a Coding Contract. You have 10 tries remaining, after which the contract will self-destruct.
+
+	You are located in the top-left corner of the following grid:
+	
+	0,0,
+	0,0,
+	0,1,
+	0,1,
+	0,0,
+	0,0,
+	0,0,
+	
+	You are trying reach the bottom-right corner of the grid, but you can only move down or right on each step. Furthermore, are
+	obstacles on the grid that you cannot move onto. These obstacles are denoted by '1', while empty spaces are denoted by 0.
+
+	Determine how many unique paths there are from start to finish.
+	NOTE: The data returned for this contract is an 2D array of numbers representing the grid.
+	** =============================================================================================================================== */
+	if (e_allowedToSolve.uniquePathsInAGridII) {
+		var contractType = ns.codingcontract.getContractType(contractName, server);
+		var contractData = ns.codingcontract.getData(contractName, server);
+		
+
+
+
+		var answer;
+		var result = "Solver in testing! Not actually complete!" //ns.codingcontract.attempt(answer, contractName, server, {returnReward : true});
+
+		if(result === false || result === "") {
+			e_allowedToSolve.uniquePathsInAGridII = false;
+			ns.tprint("CONTRACT FAILED: Type: [" + contractType + "], FileName: [" + contractName + "], Server: [" + server + "]");
+		}
+		else {
+			ns.tprint("Completed Completed: Type: [" + contractType + "], fileName: [" + contractName + "], Server [" + server + "]");
+			ns.tprint(result);
+		}
+	}
+	else {
+		ns.tprint("Solver disabled for type: [" + contractType + "]");
+		ns.tprint("There is a contract of this type named [" + contractName + "] on server [" + server + "]");
+	}
+
+
 	ns.tprint("No solver for: " + server + " / " + contractName);
 }
 
