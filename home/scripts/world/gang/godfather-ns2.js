@@ -118,10 +118,10 @@ function assignCombatTasks(ns) {
     // iterate thru the gang members
     for(var i=0; i < gangMemberNamesArray.length; i++) {
         var gangMemberName = gangMemberNamesArray[i];
-        var gangMemberTask = getMemberInformation(gangMemberName).task;
+        var gangMemberTask = ns.gang.getMemberInformation(gangMemberName).task;
         // if "Unassigned" set to "Vigalante Justice"
         if (gangMemberTask === "Unassigned") {
-            setMemberTask(gangMemberName, "Vigalante Justice")
+            ns.gang.setMemberTask(gangMemberName, "Vigalante Justice")
         }
 
     }    
